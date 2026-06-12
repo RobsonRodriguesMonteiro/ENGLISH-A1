@@ -2,14 +2,26 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#cfe0ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="format-detection" content="telephone=no">
     <title>English - Study App (A1)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        * { -webkit-tap-highlight-color: transparent; }
+        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        html, body { overscroll-behavior-y: none; }
         body {
             font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            min-height: 100dvh;
             background-color: #f5f5f7;
             background-image:
                 radial-gradient(at 20% 0%, hsla(215, 100%, 85%, 0.9) 0px, transparent 50%),
@@ -27,13 +39,13 @@
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
         .app-icon { border-radius: 22.5%; box-shadow: 0 15px 30px rgba(0,0,0,0.1), inset 0 1px 1px rgba(255,255,255,0.9), inset 0 -1px 2px rgba(0,0,0,0.1); transition: all 0.3s ease; }
         .app-icon:active { transform: scale(0.95); }
-        .glass-folder-icon { background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.3) 100%); backdrop-filter: blur(20px) saturate(180%); border-color: rgba(255,255,255,0.8); }
-        .folder-overlay { background: rgba(255,255,255,0.15); backdrop-filter: blur(50px) saturate(200%); }
+        .glass-folder-icon { background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.3) 100%); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%); border-color: rgba(255,255,255,0.8); }
+        .folder-overlay { background: rgba(255,255,255,0.15); -webkit-backdrop-filter: blur(50px) saturate(200%); backdrop-filter: blur(50px) saturate(200%); }
         .folder-container { background: rgba(255,255,255,0.4); border-radius: 40px; padding: 5%; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 32px 64px rgba(0,0,0,0.1), inset 0 1px 2px rgba(255,255,255,1); max-height: 90vh; overflow-y: auto; }
-        .lesson-card { background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2)); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.8); border-radius: 28px; padding: 24px; cursor: pointer; transition: all 0.3s cubic-bezier(0.25,1,0.5,1); box-shadow: 0 10px 30px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,1); }
+        .lesson-card { background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2)); -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.8); border-radius: 28px; padding: 24px; cursor: pointer; transition: all 0.3s cubic-bezier(0.25,1,0.5,1); box-shadow: 0 10px 30px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,1); }
         .lesson-card:hover { transform: translateY(-4px) scale(1.02); background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4)); box-shadow: 0 20px 40px rgba(0,0,0,0.1), inset 0 1px 1px rgba(255,255,255,1); }
-        .glass-panel { background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.3) 100%); backdrop-filter: blur(48px) saturate(200%); }
-        .glass-inner { background: linear-gradient(135deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.2) 100%); backdrop-filter: blur(24px) saturate(180%); box-shadow: 0 8px 32px rgba(0,0,0,0.04), inset 0 1px 1px rgba(255,255,255,0.8); transition: all 0.3s; }
+        .glass-panel { background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.3) 100%); -webkit-backdrop-filter: blur(48px) saturate(200%); backdrop-filter: blur(48px) saturate(200%); }
+        .glass-inner { background: linear-gradient(135deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.2) 100%); -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%); box-shadow: 0 8px 32px rgba(0,0,0,0.04), inset 0 1px 1px rgba(255,255,255,0.8); transition: all 0.3s; }
         .glass-inner:hover { transform: scale(1.02); background: rgba(255,255,255,0.6); box-shadow: 0 15px 30px rgba(0,0,0,0.08), inset 0 1px 1px rgba(255,255,255,0.8); }
         .mode-tab { transition: all 0.3s ease; border: 1px solid transparent; }
         .mode-tab:hover { background: rgba(255,255,255,0.4); }
@@ -47,7 +59,7 @@
         .practice-icon { width:120px; height:120px; border-radius:32px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#0066cc,#3388ff); color:#fff; box-shadow:0 15px 30px rgba(0,102,204,0.30); border:1px solid rgba(255,255,255,0.4); }
         .practice-icon-xl { width:160px; height:160px; border-radius:40px; display:flex; align-items:center; justify-content:center; margin:0 auto; background:linear-gradient(135deg,#0066cc,#3388ff); color:#fff; box-shadow:0 18px 40px rgba(0,102,204,0.32); border:1px solid rgba(255,255,255,0.4); }
         /* ===== PRÁTICA ===== */
-        .practice-btn { background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.6)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 8px 20px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,1); transition: all 0.2s cubic-bezier(0.25,1,0.5,1); }
+        .practice-btn { background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.6)); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 8px 20px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,1); transition: all 0.2s cubic-bezier(0.25,1,0.5,1); }
         .practice-btn:active:not(:disabled) { transform: scale(0.96); }
         .practice-btn-primary { background: linear-gradient(135deg, #0066cc, #005bb5); color: white; border: none; box-shadow: 0 8px 20px rgba(0,102,204,0.3); }
         .practice-btn-primary:hover:not(:disabled) { box-shadow: 0 12px 25px rgba(0,102,204,0.4); transform: translateY(-2px); }
@@ -55,14 +67,14 @@
         .practice-btn-success:hover:not(:disabled) { box-shadow: 0 12px 25px rgba(20,184,166,0.4); transform: translateY(-2px); }
         .practice-btn-danger { background: linear-gradient(135deg, #f43f5e, #e11d48); color: white; border: none; box-shadow: 0 8px 20px rgba(244,63,94,0.3); }
         .practice-btn:disabled { background: rgba(255,255,255,0.6); color: rgba(0,0,0,0.3); box-shadow: none; border-color: rgba(255,255,255,0.4); cursor: not-allowed; transform: none; }
-        .practice-card { background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.5)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 8px 20px rgba(0,0,0,0.04), inset 0 1px 1px rgba(255,255,255,1); transition: all 0.2s cubic-bezier(0.25,1,0.5,1); cursor: pointer; }
+        .practice-card { background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.5)); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 8px 20px rgba(0,0,0,0.04), inset 0 1px 1px rgba(255,255,255,1); transition: all 0.2s cubic-bezier(0.25,1,0.5,1); cursor: pointer; }
         .practice-card:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(0,0,0,0.08), inset 0 1px 1px rgba(255,255,255,1); }
         .practice-card.selected { border-color: #0066cc; background: rgba(0,102,204,0.05); box-shadow: 0 0 0 2px rgba(0,102,204,0.2); transform: scale(0.98); }
         .practice-card.matched { opacity: 0; pointer-events: none; transform: scale(0.9); }
         .practice-card.error { border-color: #f43f5e; background: rgba(244,63,94,0.05); animation: shake 0.4s; }
         .practice-card.correct { border-color: #14b8a6; background: rgba(20,184,166,0.08); }
         .img-option { width: 100%; height: 110px; object-fit: cover; border-radius: 12px; margin-bottom: 8px; background: rgba(0,0,0,0.04); }
-        .word-block { background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,1); box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.2s; }
+        .word-block { background: rgba(255,255,255,0.9); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,1); box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.2s; }
         .word-block:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
         .word-block.used { background: rgba(0,0,0,0.04); color: transparent; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); pointer-events: none; border-color: transparent; }
         .drop-zone { min-height: 4rem; border-bottom: 2px dashed rgba(148,163,184,0.5); padding-bottom: 0.5rem; }
@@ -1082,119 +1094,196 @@
 
     // ===================== UNIT 8 =====================
     courseData.push({ id:8, title:"Unit 8", subtitle:"Abilities (Can)", colors:["bg-amber-400/80","bg-yellow-500/80","bg-orange-500/80","bg-lime-500/80"], lessons:[
-        { title:"Lesson 8.1", name:"What You Can Do", content:{
+        { title:"Lesson 8.1", name:"Skills & Abilities", content:{
             verbs:[
                 { en:"to dance", pt:"dançar", c:["I dance","you dance","he / she / it dances","we dance","you dance","they dance"] },
                 { en:"to draw", pt:"desenhar", c:["I draw","you draw","he / she / it draws","we draw","you draw","they draw"] },
+                { en:"to paint", pt:"pintar", c:["I paint","you paint","he / she / it paints","we paint","you paint","they paint"] },
+                { en:"to sing", pt:"cantar", c:["I sing","you sing","he / she / it sings","we sing","you sing","they sing"] },
                 { en:"to swim", pt:"nadar", c:["I swim","you swim","he / she / it swims","we swim","you swim","they swim"] },
-                { en:"to sing", pt:"cantar", c:["I sing","you sing","he / she / it sings","we sing","you sing","they sing"] }
+                { en:"to surf", pt:"surfar", c:["I surf","you surf","he / she / it surfs","we surf","you surf","they surf"] },
+                { en:"to skateboard", pt:"andar de skate", c:["I skateboard","you skateboard","he / she / it skateboards","we skateboard","you skateboard","they skateboard"] },
+                { en:"to snowboard", pt:"praticar snowboard", c:["I snowboard","you snowboard","he / she / it snowboards","we snowboard","you snowboard","they snowboard"] },
+                { en:"to play the guitar", pt:"tocar violão", c:["I play the guitar","you play the guitar","he / she / it plays the guitar","we play the guitar","you play the guitar","they play the guitar"] },
+                { en:"to read music", pt:"ler partitura", c:["I read music","you read music","he / she / it reads music","we read music","you read music","they read music"] },
+                { en:"to fix things", pt:"consertar coisas", c:["I fix things","you fix things","he / she / it fixes things","we fix things","you fix things","they fix things"] },
+                { en:"to speak two languages", pt:"falar dois idiomas", c:["I speak two languages","you speak two languages","he / she / it speaks two languages","we speak two languages","you speak two languages","they speak two languages"] },
+                { en:"to cook", pt:"cozinhar", c:["I cook","you cook","he / she / it cooks","we cook","you cook","they cook"] },
+                { en:"to drive", pt:"dirigir", c:["I drive","you drive","he / she / it drives","we drive","you drive","they drive"] },
+                { en:"to teach", pt:"ensinar", c:["I teach","you teach","he / she / it teaches","we teach","you teach","they teach"] },
+                { en:"to play soccer", pt:"jogar futebol", c:["I play soccer","you play soccer","he / she / it plays soccer","we play soccer","you play soccer","they play soccer"] },
+                { en:"to know", pt:"saber / conhecer", c:["I know","you know","he / she / it knows","we know","you know","they know"] }
             ],
             nouns:[
                 { en:"guitar", pt:"violão / guitarra", img:"guitar" },
                 { en:"piano", pt:"piano", img:"piano" },
+                { en:"music", pt:"música", img:"music" },
+                { en:"band", pt:"banda", img:"music band" },
                 { en:"mechanic", pt:"mecânico", img:"mechanic" },
                 { en:"artist", pt:"artista", img:"artist painting" },
-                { en:"car", pt:"carro", img:"car repair" }
+                { en:"car", pt:"carro", img:"car" },
+                { en:"skill", pt:"habilidade", img:"skill" },
+                { en:"ability", pt:"habilidade", img:"ability" }
             ],
             adjectives:[
                 { en:"good", pt:"bom(boa)", img:"good" },
                 { en:"terrible", pt:"péssimo(a)", img:"terrible" },
-                { en:"great", pt:"ótimo(a)", img:"great" }
+                { en:"great", pt:"ótimo(a)", img:"great" },
+                { en:"cool", pt:"legal", img:"cool" }
             ],
             adverbs:[
+                { en:"can", pt:"poder / saber (habilidade)" },
+                { en:"can't", pt:"não poder / não saber" },
                 { en:"well", pt:"bem" },
                 { en:"really", pt:"realmente / muito" },
                 { en:"so", pt:"então" }
             ],
             grammar:[
-                { title:"CAN / CAN'T (ability)", rules:["can + verbo: I can swim. = Eu sei nadar.","can't + verbo: She can't drive. = Ela não sabe dirigir.","I can speak three languages."] }
+                { title:"CAN / CAN'T (ability)", rules:["can + verbo: I can swim. = Eu sei nadar.","can't + verbo: She can't drive. = Ela não sabe dirigir.","I can speak two languages. = Eu sei falar dois idiomas."] },
+                { title:"can vs like/want/have to", rules:["He likes to sing → He can sing.","I want to dance → I can dance.","They have to work → They can work."] }
             ]
         }, phrases:[
             { en:"I can play the guitar", pt:"Eu sei tocar violão" },
-            { en:"She can't drive", pt:"Ela não sabe dirigir" }
+            { en:"She can't drive", pt:"Ela não sabe dirigir" },
+            { en:"They can speak two languages", pt:"Eles sabem falar dois idiomas" },
+            { en:"I can swim very well", pt:"Eu sei nadar muito bem" }
         ]},
         { title:"Lesson 8.2", name:"Questions with Can", content:{
             verbs:[
                 { en:"to fix", pt:"consertar", c:["I fix","you fix","he / she / it fixes","we fix","you fix","they fix"] },
                 { en:"to speak", pt:"falar", c:["I speak","you speak","he / she / it speaks","we speak","you speak","they speak"] },
-                { en:"to surf", pt:"surfar", c:["I surf","you surf","he / she / it surfs","we surf","you surf","they surf"] }
+                { en:"to use", pt:"usar", c:["I use","you use","he / she / it uses","we use","you use","they use"] },
+                { en:"to find", pt:"encontrar", c:["I find","you find","he / she / it finds","we find","you find","they find"] },
+                { en:"to buy", pt:"comprar", c:["I buy","you buy","he / she / it buys","we buy","you buy","they buy"] },
+                { en:"to send", pt:"enviar", c:["I send","you send","he / she / it sends","we send","you send","they send"] },
+                { en:"to help", pt:"ajudar", c:["I help","you help","he / she / it helps","we help","you help","they help"] },
+                { en:"to take a break", pt:"fazer uma pausa", c:["I take a break","you take a break","he / she / it takes a break","we take a break","you take a break","they take a break"] },
+                { en:"to have a meeting", pt:"fazer uma reunião", c:["I have a meeting","you have a meeting","he / she / it has a meeting","we have a meeting","you have a meeting","they have a meeting"] }
             ],
             nouns:[
                 { en:"meeting", pt:"reunião", img:"business meeting" },
                 { en:"office", pt:"escritório", img:"office" },
                 { en:"coworker", pt:"colega de trabalho", img:"coworkers" },
-                { en:"break", pt:"pausa / intervalo", img:"coffee break" }
+                { en:"break", pt:"pausa / intervalo", img:"coffee break" },
+                { en:"lake", pt:"lago", img:"lake" },
+                { en:"mall", pt:"shopping", img:"shopping mall" },
+                { en:"computer", pt:"computador", img:"computer" },
+                { en:"dishes", pt:"louça", img:"dishes" }
             ],
             adjectives:[
                 { en:"right", pt:"certo(a)", img:"correct right" },
-                { en:"busy", pt:"ocupado(a)", img:"busy office" }
+                { en:"busy", pt:"ocupado(a)", img:"busy office" },
+                { en:"happy", pt:"feliz", img:"happy" }
             ],
             adverbs:[
                 { en:"now", pt:"agora" },
                 { en:"actually", pt:"na verdade" },
-                { en:"let's", pt:"vamos" }
+                { en:"let's", pt:"vamos" },
+                { en:"work from home", pt:"trabalhar de casa" }
             ],
             grammar:[
-                { title:"Can in questions", rules:["Can you speak English? Yes, I can. / No, I can't.","Can we have a meeting in the office?","Let's take a break. = Vamos fazer uma pausa."] }
+                { title:"Can in questions", rules:["Can you speak English? Yes, I can. / No, I can't.","Can we have a meeting in the office?","Can she fix the car? = Ela consegue consertar o carro?"] },
+                { title:"Let's (suggestions)", rules:["Let's take a break. = Vamos fazer uma pausa.","Let's have lunch. = Vamos almoçar.","Let's walk. = Vamos caminhar."] }
             ]
         }, phrases:[
             { en:"Can you speak English", pt:"Você sabe falar inglês" },
-            { en:"Let's take a break", pt:"Vamos fazer uma pausa" }
+            { en:"Let's take a break", pt:"Vamos fazer uma pausa" },
+            { en:"Can we have a meeting in the office", pt:"Podemos fazer uma reunião no escritório" },
+            { en:"Can I use your cell phone", pt:"Posso usar seu celular" }
         ]},
         { title:"Lesson 8.3", name:"Teamwork", content:{
             verbs:[
                 { en:"to think", pt:"pensar / achar", c:["I think","you think","he / she / it thinks","we think","you think","they think"] },
-                { en:"to work", pt:"trabalhar", c:["I work","you work","he / she / it works","we work","you work","they work"] }
+                { en:"to work", pt:"trabalhar", c:["I work","you work","he / she / it works","we work","you work","they work"] },
+                { en:"to answer", pt:"responder", c:["I answer","you answer","he / she / it answers","we answer","you answer","they answer"] },
+                { en:"to explain", pt:"explicar", c:["I explain","you explain","he / she / it explains","we explain","you explain","they explain"] },
+                { en:"to communicate", pt:"comunicar-se", c:["I communicate","you communicate","he / she / it communicates","we communicate","you communicate","they communicate"] },
+                { en:"to practice", pt:"praticar", c:["I practice","you practice","he / she / it practices","we practice","you practice","they practice"] },
+                { en:"to mean", pt:"querer dizer", c:["I mean","you mean","he / she / it means","we mean","you mean","they mean"] },
+                { en:"to interview", pt:"entrevistar", c:["I interview","you interview","he / she / it interviews","we interview","you interview","they interview"] }
             ],
             nouns:[
                 { en:"team", pt:"equipe / time", img:"team" },
+                { en:"teamwork", pt:"trabalho em equipe", img:"teamwork" },
                 { en:"company", pt:"empresa", img:"company" },
                 { en:"money", pt:"dinheiro", img:"money" },
                 { en:"singer", pt:"cantor(a)", img:"singer" },
-                { en:"job", pt:"emprego", img:"job" }
+                { en:"job", pt:"emprego", img:"job" },
+                { en:"group", pt:"grupo", img:"group people" },
+                { en:"technology", pt:"tecnologia", img:"technology" },
+                { en:"video game", pt:"videogame", img:"video game" },
+                { en:"sport", pt:"esporte", img:"sport" },
+                { en:"interview", pt:"entrevista", img:"job interview" }
             ],
             adjectives:[
                 { en:"important", pt:"importante", img:"important" },
                 { en:"boring", pt:"chato(a)", img:"boring" },
-                { en:"useful", pt:"útil", img:"useful tool" }
+                { en:"useful", pt:"útil", img:"useful tool" },
+                { en:"interesting", pt:"interessante", img:"interesting" },
+                { en:"free", pt:"livre", img:"free time" }
             ],
             adverbs:[
                 { en:"why", pt:"por que" },
                 { en:"I think so", pt:"eu acho que sim" },
-                { en:"I don't think so", pt:"eu acho que não" }
+                { en:"I don't think so", pt:"eu acho que não" },
+                { en:"on a team", pt:"em uma equipe" }
             ],
             grammar:[
-                { title:"Wh- questions", rules:["What do you think? = O que você acha?","Why do people want a job?","Where can we have lunch?"] }
+                { title:"Wh- questions", rules:["What do you think? = O que você acha?","Why do people want a job?","Where can we have lunch?"] },
+                { title:"Giving opinions", rules:["I think so. / I don't think so.","I mean, it's a group of people.","What do you think? = O que você acha?"] }
             ]
         }, phrases:[
             { en:"A team is a group of people", pt:"Uma equipe é um grupo de pessoas" },
-            { en:"Why do you think that", pt:"Por que você acha isso" }
+            { en:"Why do you think that", pt:"Por que você acha isso" },
+            { en:"I am a really good worker", pt:"Eu sou um trabalhador muito bom" }
         ]},
         { title:"Lesson 8.4", name:"Good At Something", content:{
             verbs:[
                 { en:"to make", pt:"fazer / criar", c:["I make","you make","he / she / it makes","we make","you make","they make"] },
-                { en:"to pay", pt:"pagar", c:["I pay","you pay","he / she / it pays","we pay","you pay","they pay"] }
+                { en:"to pay", pt:"pagar", c:["I pay","you pay","he / she / it pays","we pay","you pay","they pay"] },
+                { en:"to do", pt:"fazer", c:["I do","you do","he / she / it does","we do","you do","they do"] },
+                { en:"to drive", pt:"dirigir", c:["I drive","you drive","he / she / it drives","we drive","you drive","they drive"] },
+                { en:"to draw", pt:"desenhar", c:["I draw","you draw","he / she / it draws","we draw","you draw","they draw"] },
+                { en:"to take", pt:"pegar / levar", c:["I take","you take","he / she / it takes","we take","you take","they take"] },
+                { en:"to sit", pt:"sentar", c:["I sit","you sit","he / she / it sits","we sit","you sit","they sit"] }
             ],
             nouns:[
                 { en:"business", pt:"negócio", img:"business" },
                 { en:"movie", pt:"filme", img:"movie film" },
-                { en:"skin care", pt:"cuidados com a pele", img:"skincare" }
+                { en:"skin care", pt:"cuidados com a pele", img:"skincare" },
+                { en:"farm", pt:"fazenda", img:"farm" },
+                { en:"ranch", pt:"rancho", img:"ranch" },
+                { en:"boat", pt:"barco", img:"boat" },
+                { en:"plane", pt:"avião", img:"airplane" },
+                { en:"train", pt:"trem", img:"train" },
+                { en:"postcard", pt:"cartão-postal", img:"postcard" },
+                { en:"ticket", pt:"passagem", img:"ticket" },
+                { en:"tour guide", pt:"guia turístico", img:"tour guide" },
+                { en:"country", pt:"campo / interior", img:"countryside" }
             ],
             adjectives:[
                 { en:"good at", pt:"bom em", img:"skilled expert" },
-                { en:"bad at", pt:"ruim em", img:"fail" }
+                { en:"bad at", pt:"ruim em", img:"fail" },
+                { en:"comfortable", pt:"confortável", img:"comfortable" },
+                { en:"expensive", pt:"caro(a)", img:"expensive" },
+                { en:"simple", pt:"simples", img:"simple" },
+                { en:"local", pt:"local", img:"local" }
             ],
             adverbs:[
                 { en:"at the office", pt:"no escritório" },
                 { en:"at the mall", pt:"no shopping" },
-                { en:"at eight", pt:"às oito" }
+                { en:"in front of", pt:"na frente de" },
+                { en:"next to", pt:"ao lado de" },
+                { en:"on the right", pt:"à direita" }
             ],
             grammar:[
-                { title:"good at + -ing", rules:["I'm good at cooking. = Eu sou bom de cozinhar.","People from Brazil are good at playing soccer.","She is bad at driving."] }
+                { title:"good at + -ing", rules:["I'm good at cooking. = Eu sou bom de cozinhar.","People from Brazil are good at playing soccer.","She is bad at driving."] },
+                { title:"Preposition AT (place / time)", rules:["at the office, at the mall, at school (lugares).","I have class at 8 p.m. (horário).","People from USA are good at making movies."] }
             ]
         }, phrases:[
             { en:"I am good at cooking", pt:"Eu sou bom de cozinhar" },
-            { en:"People from Brazil are good at playing soccer", pt:"Os brasileiros são bons de jogar futebol" }
+            { en:"People from Brazil are good at playing soccer", pt:"Os brasileiros são bons de jogar futebol" },
+            { en:"She is good at computers", pt:"Ela é boa com computadores" }
         ]}
     ]});
 
@@ -1521,15 +1610,18 @@
     ]});
 
     // ==========================================
-    // MOTOR DE ÁUDIO (TEXT-TO-SPEECH) - voz natural em inglês
+    // MOTOR DE ÁUDIO (TEXT-TO-SPEECH)
+    // Voz neural na nuvem (mesma voz natural em qualquer dispositivo/navegador),
+    // com a voz nativa do aparelho apenas como reserva caso falte internet.
     // ==========================================
     let speechVoices = [];
-    const synth = window.speechSynthesis;
-    function loadVoices(){ speechVoices = synth.getVoices(); }
+    const synth = window.speechSynthesis || null;
+    function loadVoices(){ if (synth) speechVoices = synth.getVoices(); }
     loadVoices();
     if (synth && synth.onvoiceschanged !== undefined) { synth.onvoiceschanged = loadVoices; }
     let bestVoice = null;
     function pickBestVoice(){
+        if (!synth) return null;
         if (!speechVoices.length) speechVoices = synth.getVoices();
         const en = speechVoices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
         if (!en.length) return null;
@@ -1539,73 +1631,111 @@
             || en.find(v => /en-US/i.test(v.lang))
             || en[0];
     }
-    window.playAudio = (text, event) => {
-        if (event) { event.stopPropagation(); event.preventDefault(); }
+    function speakFallback(text){
         if (!synth) return;
-        let cleanText = text
+        try { synth.cancel(); } catch(e){}
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'en-US'; u.rate = 0.95; u.pitch = 1.0; u.volume = 1;
+        if (!bestVoice) bestVoice = pickBestVoice();
+        if (bestVoice) u.voice = bestVoice;
+        synth.speak(u);
+    }
+    function cleanForSpeech(text){
+        return (text || '')
             .replace(/\([^)]*\)/g, ' ')
             .replace(/\s*\/\s*/g, ', ')
             .replace(/ - /g, '. ')
             .replace(/\.\.\./g, '. ')
+            .replace(/&quot;/g, ' ')
             .replace(/\s+/g, ' ')
             .trim();
-        if (!cleanText) return;
-        synth.cancel();
-        const u = new SpeechSynthesisUtterance(cleanText);
-        u.lang = 'en-US';
-        u.rate = 0.92;
-        u.pitch = 1.0;
-        u.volume = 1;
-        if (!bestVoice) bestVoice = pickBestVoice();
-        if (bestVoice) u.voice = bestVoice;
-        synth.speak(u);
+    }
+    // Vozes neurais (Amazon Polly via StreamElements). O <audio> reproduz mídia
+    // de outra origem sem exigir CORS, então funciona em qualquer navegador.
+    const TTS_VOICES = ["Joanna", "Matthew"]; // en-US natural
+    let _ttsAudio = null;
+    function stopAudio(){
+        try { if (_ttsAudio) { _ttsAudio.onerror = null; _ttsAudio.pause(); _ttsAudio.src = ''; _ttsAudio = null; } } catch(e){}
+        try { if (synth) synth.cancel(); } catch(e){}
+    }
+    window.playAudio = (text, event) => {
+        if (event) { event.stopPropagation(); event.preventDefault(); }
+        const clean = cleanForSpeech(text);
+        if (!clean) return;
+        stopAudio();
+        // StreamElements tem limite de tamanho; para textos longos use a voz local.
+        if (clean.length > 280) { speakFallback(clean); return; }
+        let used = false;
+        try {
+            const url = 'https://api.streamelements.com/kb/v2/speech?voice=' + TTS_VOICES[0] +
+                        '&text=' + encodeURIComponent(clean);
+            const a = new Audio();
+            a.crossOrigin = 'anonymous';
+            _ttsAudio = a;
+            a.src = url;
+            a.onerror = () => { if (used) return; used = true; speakFallback(clean); };
+            const p = a.play();
+            if (p && p.catch) { p.catch(() => { if (used) return; used = true; speakFallback(clean); }); }
+        } catch(e) {
+            speakFallback(clean);
+        }
     };
 
-    // ---------- IMAGENS REALISTAS (fontes confiáveis, carregadas sob demanda) ----------
-    function imgKeyword(item){
-        let kw = (item.img || item.en || '').toLowerCase()
-            .replace(/\([^)]*\)/g,'').replace(/^to\s+/,'')
+    // ---------- ÍCONES QUE REPRESENTAM CADA PALAVRA (Lucide) ----------
+    function normTerm(s){
+        return (s||'').toLowerCase().replace(/\([^)]*\)/g,'').replace(/^to\s+/,'')
             .replace(/\b(past|negative|affirmative)\b/g,'')
-            .replace(/[^a-z\s]/g,' ').replace(/\s+/g,' ').trim();
-        return kw || 'object';
+            .replace(/[^a-z\s']/g,' ').replace(/\s+/g,' ').trim();
     }
-    function imgAttrs(item){ return `data-imgq="${imgKeyword(item)}" data-imgverb="${item.c?1:0}"`; }
-    const imgCache = {};
-    function loremFallback(q){ return `https://loremflickr.com/400/300/${encodeURIComponent(q.replace(/\s+/g,','))}`; }
-    async function wikiImage(q){
-        try{
-            const url = `https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&piprop=thumbnail&pithumbsize=500&format=json&origin=*&redirects=1&titles=${encodeURIComponent(q)}`;
-            const r = await fetch(url); if(!r.ok) return null;
-            const j = await r.json(); const pages = j && j.query && j.query.pages; if(!pages) return null;
-            const p = Object.values(pages)[0];
-            return (p && p.thumbnail && p.thumbnail.source) ? p.thumbnail.source : null;
-        }catch(e){ return null; }
-    }
-    async function openverseImage(q){
-        try{
-            const r = await fetch(`https://api.openverse.org/v1/images/?q=${encodeURIComponent(q)}&page_size=1&mature=false`);
-            if(!r.ok) return null;
-            const j = await r.json();
-            if(j && j.results && j.results.length){ return j.results[0].thumbnail || j.results[0].url || null; }
-            return null;
-        }catch(e){ return null; }
-    }
-    async function resolveImage(q, isVerb){
-        if(imgCache[q] !== undefined) return imgCache[q];
-        let url = null;
-        if(!isVerb) url = await wikiImage(q);     // substantivos/adjetivos concretos
-        if(!url)    url = await openverseImage(q); // busca de foto por palavra-chave
-        if(!url && isVerb) url = await wikiImage(q);
-        imgCache[q] = url; return url;
-    }
-    function hydrateImages(root){
-        if(!root) return;
-        root.querySelectorAll('img[data-imgq]').forEach(el => {
-            if(el.dataset.loaded) return; el.dataset.loaded = '1';
-            const q = el.dataset.imgq; const isVerb = el.dataset.imgverb === '1';
-            resolveImage(q, isVerb).then(u => { el.src = u || loremFallback(q); })
-                                   .catch(() => { el.src = loremFallback(q); });
-        });
+    const ICONS = {
+        // pessoas
+        "student":"graduation-cap","teacher":"presentation","friend":"users","friends":"users","best friend":"users",
+        "people":"users","family":"users","parents":"users","partner":"users","coworker":"users","coworkers":"users",
+        "boyfriend":"heart","father":"user","dad":"user","husband":"user","man":"user","uncle":"user","son":"user","boy":"user","grandfather":"user","grandpa":"user","aunt":"user-round",
+        "mother":"user-round","mom":"user-round","wife":"user-round","woman":"user-round","sister":"user-round","daughter":"user-round","girl":"user-round","grandmother":"user-round","grandma":"user-round",
+        "baby":"baby","babies":"baby","child":"baby","children":"users","kids":"users","cousin":"users","cousins":"users","person":"user","adult":"user",
+        "salesperson":"shopping-bag","clerk":"user-round","hotel clerk":"concierge-bell","owner":"key","server":"utensils","doctor":"stethoscope","chef":"chef-hat","mechanic":"wrench","artist":"palette","artists":"palette","singer":"mic","host":"users","worker":"hard-hat","customer":"user-round","tour guide":"map","guide":"map","bus drivers":"bus","soccer players":"goal",
+        // lugares
+        "company":"building-2","office":"building-2","business":"briefcase","city":"building-2","town":"building-2","country":"globe","countries":"globe","world":"globe","school":"school","high school":"school","college":"graduation-cap","university":"graduation-cap","hospital":"hospital","hospitals":"hospital","hotel":"concierge-bell","hotels":"concierge-bell","mall":"shopping-bag","movie theater":"film","theater":"film","cinema":"film","museum":"landmark","museums":"landmark","park":"trees","restaurant":"utensils","restaurants":"utensils","supermarket":"shopping-cart","store":"store","stores":"store","grocery store":"shopping-cart","bookstore":"book","cafe":"coffee","café":"coffee","bank":"landmark","bakery":"croissant","gas station":"fuel","airport":"plane","station":"train-front","train station":"train-front","subway station":"train-front","bus station":"bus","bus stop":"bus","market":"shopping-basket","street market":"shopping-basket","ranch":"fence","farm":"wheat","building":"building","buildings":"building","apartment":"building","house":"house","home":"house","hometown":"house","neighborhood":"house","yard":"fence","garden":"flower-2","street":"signpost","avenue":"signpost","road":"signpost","block":"building","corner":"corner-up-right","square":"map-pin","place":"map-pin","island":"tree-palm","desert":"sun","deserts":"sun","workplace":"briefcase","english class":"book-open","gym":"dumbbell","boat":"sailboat","line":"users",
+        // casa / móveis
+        "bedroom":"bed","bathroom":"bath","restroom":"bath","toilet":"bath","living room":"sofa","kitchen":"cooking-pot","dining area":"utensils","room":"door-open","rooms":"door-open","bed":"bed","chair":"armchair","chairs":"armchair","table":"table","desk":"lamp-desk","couch":"sofa","sofa":"sofa","television":"tv","tv":"tv","refrigerator":"refrigerator","lamp":"lamp","wall":"brick-wall","walls":"brick-wall","window":"blinds","windows":"blinds","door":"door-open","front door":"door-open","floor":"grid-3x3","bookcase":"library","shower":"shower-head","sink":"utensils-crossed","rug":"square","furniture":"sofa","space":"maximize","shopping":"shopping-bag",
+        "picture":"image","pictures":"image","photo":"image","photos":"image","image":"image","video":"video","video chat":"video","videos":"video","camera":"camera","postcard":"mail","billboard":"image",
+        // comida / bebida
+        "coffee":"coffee","tea":"cup-soda","milk":"milk","sugar":"candy","cookie":"cookie","cookies":"cookie","biscuit":"cookie","chocolate cookie":"cookie","cup":"coffee","mug":"coffee","snack":"cookie","breakfast":"egg","lunch":"utensils","dinner":"utensils-crossed","meal":"utensils","food":"utensils","bread":"croissant","egg":"egg","water":"droplet","water bottle":"droplet","drink":"cup-soda","strawberry":"cherry","beef":"beef","meat":"beef","lunch break":"coffee","lunchtime":"coffee",
+        // tecnologia
+        "cell phone":"smartphone","phone":"smartphone","cellphone":"smartphone","smartphone":"smartphone","ipad":"tablet","phone number":"phone","cell phone number":"phone","area code":"phone","computer":"monitor","laptop":"laptop","notebook":"notebook-pen","tablet":"tablet","smartwatch":"watch","watch":"watch","earphones":"headphones","headphones":"headphones","game":"gamepad-2","games":"gamepad-2","video game":"gamepad-2","video games":"gamepad-2","go-kart":"gamepad-2","app":"smartphone","apps":"smartphone","application":"smartphone","internet":"wifi","data":"wifi","wifi":"wifi","online":"wifi","browser":"globe","email":"mail","emails":"mail","email address":"mail","mail":"mail","message":"message-square","messages":"message-square","text message":"message-square","text messages":"message-square","text":"message-square","texto":"message-square","comment":"message-square","comments":"message-square","voice message":"mic","voice messages":"mic","voice":"mic","social media":"thumbs-up","podcast":"mic","talk time":"phone","phone plan":"smartphone","movie":"film","movies":"film","music":"music","letter":"mail","card":"credit-card","birthday card":"mail","review":"star","reviews":"star","product review":"star","opinion":"message-circle","conversation":"messages-square","interview":"mic","technology":"cpu",
+        // natureza / clima
+        "beach":"umbrella","beaches":"umbrella","mountain":"mountain","mountains":"mountain","hill":"mountain","river":"waves","lake":"waves","ocean":"waves","sea":"waves","water":"droplet","waterfall":"waves","waterfalls":"waves","tree":"trees","trees":"trees","forest":"trees","rainforests":"trees","flower":"flower","flowers":"flower","plant":"sprout","plants":"sprout","grass":"sprout","nature":"leaf","sun":"sun","sunrise":"sunrise","sunset":"sunset","sky":"cloud","moon":"moon","star":"star","rain":"cloud-rain","snow":"snowflake","cloud":"cloud","umbrella":"umbrella","palm":"tree-palm","monkey":"paw-print","bird":"bird","birds":"bird","dog":"dog","cat":"cat","fish":"fish","horse":"paw-print","animal":"paw-print","animals":"paw-print","zoo":"paw-print","zoos":"paw-print",
+        "spring":"flower","summer":"sun","fall":"leaf","autumn":"leaf","winter":"snowflake","season":"cloud-sun","seasons":"cloud-sun","dry season":"sun","rainy season":"cloud-rain",
+        // viagem
+        "flight":"plane","plane":"plane","airport":"plane","ticket":"ticket","subway ticket":"ticket","bus ticket":"ticket","trip":"luggage","business trip":"luggage","study trip":"luggage","vacation":"tree-palm","destination":"map-pin","travel":"plane","travel guide":"book-open","tourist guide":"book-open","guidebook":"book-open","magazine":"book-open","map":"map","tour":"map","transportation":"bus","bag":"shopping-bag","backpack":"backpack","seat":"armchair","sunscreen":"sun","sun glasses":"glasses","sunglasses":"glasses","luggage":"luggage","baggage":"luggage","light cloths":"shirt","travel insurance":"shield-check","hotel reservation":"calendar-check","restaurant reservation":"calendar-check","diving clothing":"waves","item":"package","dollars":"dollar-sign","price":"tag",
+        // tempo / palavras
+        "morning":"sunrise","afternoon":"sun","evening":"sunset","night":"moon","midnight":"moon","noon":"sun","day":"calendar-days","school day":"calendar-days","days":"calendar-days","month":"calendar","months":"calendar","year":"calendar","week":"calendar-days","weekday":"calendar-days","weekdays":"calendar-days","weekend":"calendar-days","hour":"clock","hours":"clock","time":"clock","free time":"clock","minute":"clock","minutes":"clock","moment":"clock","kilometer":"ruler","birthday":"cake","party":"party-popper","family parties":"party-popper","birthday party":"party-popper","beach party":"party-popper","holiday":"party-popper","event":"calendar-days","invitation":"mail","surprise":"party-popper","name":"tag","first name":"tag","last name":"tag","number":"hash","date":"calendar","age":"cake","color":"palette","colors":"palette","flashback":"history","memory":"history","memories":"history","story":"book-open","history":"history","news":"newspaper","good news":"newspaper","bad news":"newspaper","ordinary news":"newspaper","report":"file-text","podcast":"mic",
+        // corpo
+        "face":"smile","faces":"smile","hand":"hand","hands":"hand","eye":"eye","ear":"ear","hair":"scissors","teeth":"smile","tooth":"smile","body":"user","heart":"heart","smile":"smile",
+        // trabalho / estudo / esporte
+        "job":"briefcase","work":"briefcase","new job":"briefcase","meeting":"users","team":"users","teamwork":"users","money":"banknote","homework":"book-open","class":"presentation","classes":"presentation","art classes":"palette","singing lessons":"mic","dance lessons":"music","music class":"music","lesson":"book-open","book":"book","books":"book","report":"file-text","guitar":"guitar","piano":"music","band":"music","soccer":"goal","soccer player":"goal","basketball":"dribbble","ball":"circle","gym":"dumbbell","workout":"dumbbell","exercise":"dumbbell","exercises":"dumbbell","sport":"medal","sports":"medal","skill":"sparkles","skills":"sparkles","ability":"sparkles","art":"palette","skin care":"sparkles","athlete":"medal","fitness coach":"dumbbell","trophy":"trophy",
+        // roupas
+        "shirt":"shirt","t-shirt":"shirt","top shirt":"shirt","pants":"shirt","jeans":"shirt","jean":"shirt","dress":"shirt","skirt":"shirt","skirts":"shirt","coat":"shirt","sweater":"shirt","hat":"shirt","shorts":"shirt","short":"shirt","clothes":"shirt","clothing":"shirt","shoe":"footprints","shoes":"footprints","boots":"footprints","glasses":"glasses","bijou":"gem","toy":"blocks","toys":"blocks",
+        // veículos / cidade
+        "car":"car","bus":"bus","train":"train-front","subway":"train-front","bike":"bike","bikes":"bike","plane":"plane","boat":"sailboat","dishes":"utensils-crossed",
+        // diversos
+        "idea":"lightbulb","ideas":"lightbulb","problem":"alert-triangle","chaos":"wind","noise":"volume-2","key":"key","pen":"pen-tool","period":"circle-dot","gift":"gift","cake":"cake","statue":"landmark","example":"list","examples":"list","question":"help-circle","questions":"help-circle","answer":"check","answers":"check","sentence":"type","word":"type","words":"type","chart":"bar-chart-3","page":"file","glossary":"book-a","detail":"search","information":"info","sound":"volume-2","letter":"mail","note":"sticky-note","mistake":"x","correct":"check","life":"heart-pulse","way":"signpost","reason":"help-circle","change":"shuffle","difference":"shuffle","part":"puzzle","group":"users","cradle":"baby","owl":"bird",
+        // verbos
+        "be":"badge-check","spell":"spell-check","live":"house","have":"hand","work":"briefcase","study":"book-open","read":"book-open","come":"footprints","go":"footprints","go out":"door-open","go to bed":"bed","get up":"alarm-clock","get together":"users","get":"hand","mean":"languages","say":"message-circle","tell":"message-circle","speak":"languages","talk":"message-circle","drink":"cup-soda","eat":"utensils","want":"hand","understand":"lightbulb","know":"brain","send":"send","watch":"eye","listen":"headphones","hear":"ear","like":"thumbs-up","love":"heart","write":"pencil","look":"eye","look at":"eye","buy":"shopping-cart","call":"phone","use":"hand","rest":"armchair","wash":"droplets","work out":"dumbbell","apply":"file-text","clean":"sparkles","cook":"cooking-pot","brush":"brush","share":"share-2","take":"hand","drive":"car","ride":"bike","wait":"hourglass","carry":"package","help":"heart-handshake","sing":"mic","dance":"music","draw":"pencil","paint":"palette","swim":"waves","fix":"wrench","fix things":"wrench","surf":"waves","think":"brain","pay":"credit-card","travel":"plane","fly":"plane-takeoff","arrive":"plane","leave":"door-open","need":"hand","ask":"help-circle","stay":"map-pin","reserve":"calendar-check","book":"calendar-check","recommend":"thumbs-up","suggest":"lightbulb","plan":"clipboard-list","meet":"handshake","rain":"cloud-rain","wear":"shirt","remember":"brain","turn":"corner-up-right","walk":"footprints","run":"footprints","celebrate":"party-popper","visit":"map-pin","play":"gamepad-2","play soccer":"goal","play music":"music","play the guitar":"guitar","read music":"music","sleep":"bed","make":"hammer","do":"check-check","welcome":"hand","compare":"git-compare","complete":"check","check":"check-square","circle":"circle","practice":"repeat","repeat":"repeat","post":"send","chat":"message-circle","agree":"thumbs-up","start":"play","find":"search","choose":"list-checks","give":"gift","show":"eye","sit":"armchair","teach":"presentation","fix":"wrench","decide":"list-checks","imagine":"cloud","follow":"arrow-right","describe":"type","answer":"check","stress":"volume-2","open":"door-open","close":"door-closed","finish":"flag","thank":"heart","change":"shuffle","feel":"heart","skim":"book-open","skateboard":"activity","snowboard":"snowflake","pet":"cat","dive":"waves","scuba dive":"waves","get old":"hourglass","happen":"zap","explain":"message-circle","communicate":"message-circle","interview":"mic","take turns":"repeat","focus":"target","order":"clipboard-list","free":"unlock","recognize":"scan-eye","underline":"minus","mention":"message-circle","forget":"x","cross out":"x","take out":"door-open","belong":"check","invent":"lightbulb","organize":"list","transcribe":"file-text","unscramble":"shuffle","include":"plus","reply":"reply","forward":"forward","tour":"map","zoom in":"zoom-in","zoom out":"zoom-out","walk down":"footprints","sound":"volume-2","out":"door-open","discuss":"messages-square","begin":"play","put":"package","build":"hammer","wake up":"alarm-clock","train":"dumbbell","go shopping":"shopping-bag","take a break":"coffee","have fun":"party-popper",
+        // adjetivos
+        "big":"maximize","large":"maximize","small":"minimize","new":"sparkles","old":"hourglass","tall":"move-vertical","short":"minus","funny":"laugh","shy":"meh","smart":"brain","friendly":"smile","interesting":"lightbulb","boring":"meh","happy":"smile","sad":"frown","tired":"battery-low","sleepy":"battery-low","busy":"loader","free":"gift","great":"thumbs-up","good":"thumbs-up","bad":"thumbs-down","beautiful":"sparkles","cool":"sparkles","cute":"heart","kind":"heart-handshake","different":"shuffle","same":"equal","expensive":"banknote","cheap":"tag","favorite":"star","nice":"smile","comfortable":"sofa","correct":"check","difficult":"frown","ordinary":"minus","right":"check","useful":"wrench","important":"star","quiet":"volume-x","noisy":"volume-2","awful":"frown","terrible":"frown","ready":"check","hot":"flame","cold":"snowflake","early":"sunrise","late":"clock","long":"move-horizontal","equal":"equal","local":"map-pin","wonderful":"sparkles","famous":"star","tropical":"tree-palm","exciting":"zap","surprised":"party-popper","sick":"thermometer","fun":"party-popper","true":"check","false":"x","real":"check","young":"baby","fast":"gauge","slow":"snail","asleep":"moon","awful":"frown","rude":"frown","gross":"frown","ugly":"frown","easy":"check","clear":"eye","clean":"sparkles","comfortable":"sofa","simple":"check","unusual":"sparkles","light":"sun","bold":"bold","gray":"palette","red":"palette","blue":"palette","green":"palette","yellow":"palette","purple":"palette","brown":"palette","black":"palette","white":"palette","orange":"palette","pink":"palette","brazilian":"flag","american":"flag","chinese":"flag","french":"flag","mexican":"flag","japanese":"flag","colombian":"flag","spanish":"flag","canadian":"flag","italian":"flag","korean":"flag","english":"flag","very":"plus","really":"plus",
+        // advérbios / conectores
+        "from":"arrow-right","in":"map-pin","yes":"check","no":"x","and":"plus","or":"git-fork","but":"minus","with":"plus","because":"corner-down-right","because of":"corner-down-right","for example":"lightbulb","good morning":"sunrise","good afternoon":"sun","good evening":"sunset","good night":"moon","hello":"hand","hi":"hand","hey":"hand","please":"hand","thank you":"heart","thanks":"heart","here":"map-pin","there":"map-pin","both":"users","now":"clock","right now":"clock","together":"users","also":"plus","too":"plus","always":"infinity","usually":"clock","often":"clock","sometimes":"clock","hardly ever":"clock","never":"ban","before":"arrow-left","after":"arrow-right","when":"clock","where":"map-pin","why":"help-circle","how":"help-circle","what":"help-circle","who":"help-circle","left":"arrow-left","right":"arrow-right","straight":"arrow-up","over there":"map-pin","over here":"map-pin","near":"map-pin","nearby":"map-pin","close to":"map-pin","next to":"map-pin","between":"move-horizontal","inside":"log-in","outside":"trees","by car":"car","by train":"train-front","by bike":"bike","by plane":"plane","by bus":"bus","tomorrow":"calendar","tonight":"moon","today":"calendar-days","yesterday":"calendar","maybe":"help-circle","me too":"users","of course":"check","really":"plus","excuse me":"hand","sorry":"frown","let's":"play","o'clock":"clock","a.m.":"sunrise","p.m.":"moon"
+    };
+    function wordIcon(item){
+        const en = normTerm(item.en);
+        const img = normTerm(item.img||'');
+        if(ICONS[en]) return ICONS[en];
+        if(img && ICONS[img]) return ICONS[img];
+        for(const t of (en+' '+img).split(' ')){ if(t && ICONS[t]) return ICONS[t]; }
+        if(item.c) return 'activity';     // fallback verbos
+        return 'shapes';                  // fallback geral
     }
 
     // ==========================================
@@ -1691,10 +1821,9 @@
             }).join('');
             return `<div class="max-w-4xl mx-auto space-y-6 animate-fade-in">${grammarHTML}</div>`;
         }
-        const showImg = (state.activeTab === 'nouns' || state.activeTab === 'verbs' || state.activeTab === 'adjectives');
         let cardsHTML = data.map((item, idx) => {
             let escapedEn = item.en.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-            let imgHTML = showImg ? `<img class="vocab-img mb-3" loading="lazy" ${imgAttrs(item)} alt="${item.en}" onerror="this.style.display='none'">` : '';
+            let icon = wordIcon(item);
             let conjHTML = ''; let conjId = `conj-${state.activeTab}-${idx}`;
             if (item.c) {
                 let conjItems = item.c.map(conj => {
@@ -1707,9 +1836,18 @@
                 </div>`;
             }
             return `<div class="glass-inner border border-white/60 p-5 rounded-2xl flex flex-col justify-between">
-                <div>${imgHTML}<div class="flex justify-between items-start mb-2"><h4 class="text-lg md:text-xl font-extrabold text-[#1d1d1f] leading-tight pr-2">${item.en}</h4>
-                <button onclick="window.playAudio('${escapedEn}', event)" class="p-2 rounded-full bg-white/60 text-[#0066cc] hover:bg-[#0066cc] hover:text-white transition-colors shadow-sm shrink-0 border border-white"><i data-lucide="volume-2" class="w-4 h-4"></i></button></div>
-                <p class="text-[#86868b] font-semibold text-sm md:text-base mb-2 uppercase tracking-wide">${item.pt}</p></div>${conjHTML}</div>`;
+                <div>
+                    <div class="flex items-center gap-3 mb-1">
+                        <div class="vocab-icon shrink-0"><i data-lucide="${icon}" class="w-7 h-7"></i></div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start gap-2">
+                                <h4 class="text-lg md:text-xl font-extrabold text-[#1d1d1f] leading-tight">${item.en}</h4>
+                                <button onclick="window.playAudio('${escapedEn}', event)" class="p-2 rounded-full bg-white/60 text-[#0066cc] hover:bg-[#0066cc] hover:text-white transition-colors shadow-sm shrink-0 border border-white"><i data-lucide="volume-2" class="w-4 h-4"></i></button>
+                            </div>
+                            <p class="text-[#86868b] font-semibold text-xs md:text-sm uppercase tracking-wide mt-0.5">${item.pt}</p>
+                        </div>
+                    </div>
+                </div>${conjHTML}</div>`;
         }).join('');
         return `<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 animate-fade-in">${cardsHTML}</div>`;
     };
@@ -1760,7 +1898,6 @@
         else if (state.currentView === 'folder') app.innerHTML = renderFolderTemplate();
         else if (state.currentView === 'app') app.innerHTML = renderAppTemplate();
         lucide.createIcons();
-        hydrateImages(app);
     };
 
     // ==========================================
@@ -1790,32 +1927,29 @@
         let phrases = (lesson.phrases || []).filter(p => p.en.split(/\s+/).length >= 2);
         if (vocab.length < 4) return [];
         let acts = [];
-        // 1. Aquecimento: repetição com imagem
-        sample(vocab.filter(v=>v.img), 2).forEach(it => acts.push({ type:'repeat', item:it }));
-        // 2. Memória (3 pares)
+        // 1. Memória (3 pares) — só texto (inglês / português)
         acts.push({ type:'memory', pairs: sample(vocab,3) });
-        // 3. Reconhecer imagem -> escolher palavra em inglês
-        sample(vocab, 2).forEach(it => {
-            let opts = [it.en, ...sample(vocab.filter(x=>x.en!==it.en),3).map(x=>x.en)];
-            acts.push({ type:'imageChoose', item:it, options: shuffle(opts) });
-        });
-        // 4. Associar pares
+        // 2. Associar pares (inglês <-> português)
         acts.push({ type:'match', pairs: sample(vocab,4) });
-        // 5. EN -> PT (com imagem)
+        // 3. Palavra em inglês -> escolher a tradução (PT)
         sample(vocab, 2).forEach(it => {
             let opts = [it.pt, ...sample(vocab.filter(x=>x.pt!==it.pt),3).map(x=>x.pt)];
             acts.push({ type:'choosePt', item:it, options: shuffle(opts) });
         });
-        // 6. PT -> EN (como se diz em inglês)
+        // 4. Português -> escolher a palavra em inglês
         sample(vocab, 2).forEach(it => {
             let opts = [it.en, ...sample(vocab.filter(x=>x.en!==it.en),3).map(x=>x.en)];
             acts.push({ type:'chooseEn', item:it, options: shuffle(opts) });
         });
-        // 7. Escutar e identificar
+        // 5. Escutar e identificar (áudio em inglês -> escolher)
         sample(vocab, 2).forEach(it => {
             let opts = [it.en, ...sample(vocab.filter(x=>x.en!==it.en),3).map(x=>x.en)];
             acts.push({ type:'listen', item:it, options: shuffle(opts) });
         });
+        // 6. Digitar o que OUVIU (áudio em inglês -> digitar em inglês)
+        sample(vocab, 2).forEach(it => acts.push({ type:'typeHear', item:it }));
+        // 7. Digitar o que LEU (lê em português -> digita em inglês)
+        sample(vocab, 2).forEach(it => acts.push({ type:'typeRead', item:it }));
         // 8. Traduzir frase PARA o inglês (montar com blocos)
         phrases.forEach(p => {
             let answer = p.en.split(/\s+/).filter(Boolean);
@@ -1862,19 +1996,18 @@
         const container = document.getElementById('activityContainer');
         const title = document.getElementById('activityTitle');
         container.innerHTML = '';
-        const titles = { match:"Associe os pares", memory:"Encontre os pares (Memória)", listen:"O que você ouviu?", choosePt:"Qual é a tradução?", chooseEn:"Como se diz em inglês?", imageChoose:"Que palavra é esta?", translateEn:"Traduza para o inglês", fillBlank:"Complete a frase", repeat:"Ouça e repita" };
+        const titles = { match:"Associe os pares", memory:"Encontre os pares (Memória)", listen:"O que você ouviu?", choosePt:"Qual é a tradução?", chooseEn:"Como se diz em inglês?", translateEn:"Traduza para o inglês", fillBlank:"Complete a frase", typeHear:"Digite o que você ouviu", typeRead:"Digite a tradução em inglês" };
         title.innerText = titles[activity.type] || '';
         if (activity.type==='match') renderMatch(activity, container);
         else if (activity.type==='memory') renderMemory(activity, container);
         else if (activity.type==='listen') renderListen(activity, container);
         else if (activity.type==='choosePt') renderChoose(activity, container, 'pt');
         else if (activity.type==='chooseEn') renderChoose(activity, container, 'en');
-        else if (activity.type==='imageChoose') renderImageChoose(activity, container);
         else if (activity.type==='translateEn') renderTranslateEn(activity, container);
         else if (activity.type==='fillBlank') renderFillBlank(activity, container);
-        else if (activity.type==='repeat') renderRepeat(activity, container);
+        else if (activity.type==='typeHear') renderType(activity, container, 'hear');
+        else if (activity.type==='typeRead') renderType(activity, container, 'read');
         lucide.createIcons();
-        hydrateImages(container);
     }
     // ----- MATCH -----
     function renderMatch(activity, container){
@@ -1977,10 +2110,9 @@
         practiceState.listenSelection = null;
         const promptText = target === 'pt' ? activity.item.en : activity.item.pt;
         const audioEn = target === 'pt' ? activity.item.en : null;
-        const imgHTML = (target === 'pt') ? `<img class="img-option mb-4 max-w-[220px] mx-auto" loading="lazy" ${imgAttrs(activity.item)} onerror="this.style.display='none'">` : '';
         const box = document.createElement('div');
         box.className = 'w-full max-w-2xl mx-auto p-6 md:p-8 bg-white/60 backdrop-blur-xl border border-white/80 rounded-[2rem] shadow-sm flex flex-col items-center justify-center gap-3 mb-8';
-        box.innerHTML = imgHTML + `<div class="flex items-center justify-center gap-4"><div class="text-2xl md:text-3xl font-extrabold text-[#1d1d1f] tracking-tight text-center">${promptText}</div>` + (audioEn ? `<button onclick="window.playAudio('${audioEn.replace(/'/g,"\\'")}', event)" class="w-12 h-12 bg-blue-50/80 text-[#0066cc] rounded-xl flex items-center justify-center hover:bg-blue-100 transition shadow-sm border border-blue-100 shrink-0"><i data-lucide="volume-2" class="w-5 h-5"></i></button>` : '') + `</div>`;
+        box.innerHTML = `<div class="flex items-center justify-center gap-4"><div class="text-2xl md:text-3xl font-extrabold text-[#1d1d1f] tracking-tight text-center">${promptText}</div>` + (audioEn ? `<button onclick="window.playAudio('${audioEn.replace(/'/g,"\\'")}', event)" class="w-12 h-12 bg-blue-50/80 text-[#0066cc] rounded-xl flex items-center justify-center hover:bg-blue-100 transition shadow-sm border border-blue-100 shrink-0"><i data-lucide="volume-2" class="w-5 h-5"></i></button>` : '') + `</div>`;
         container.appendChild(box);
         const group = document.createElement('div'); group.className = 'flex flex-col gap-3 w-full max-w-xl mx-auto';
         activity.options.forEach(opt => {
@@ -1993,22 +2125,35 @@
         container.appendChild(group);
         if (audioEn) setTimeout(() => window.playAudio(audioEn, null), 350);
     }
-    // ----- IMAGE CHOOSE (foto -> palavra em inglês) -----
-    function renderImageChoose(activity, container){
-        practiceState.listenSelection = null;
+    // ----- DIGITAR (o que você ouviu / o que você leu) -----
+    function normAnswer(s){ return (s||'').toLowerCase().replace(/[^a-z0-9']+/g,' ').replace(/\s+/g,' ').trim(); }
+    function renderType(activity, container, mode){
+        const it = activity.item;
         const box = document.createElement('div');
-        box.className = 'w-full max-w-md mx-auto mb-8';
-        box.innerHTML = `<img class="w-full h-56 object-cover rounded-3xl border border-white/80 shadow-md" loading="lazy" ${imgAttrs(activity.item)} onerror="this.parentElement.innerHTML='<div class=\\'h-56 flex items-center justify-center text-slate-400 bg-white/50 rounded-3xl\\'>imagem indisponível</div>'">`;
+        box.className = 'w-full max-w-xl mx-auto flex flex-col items-center gap-6 mt-2';
+        if (mode === 'hear'){
+            box.innerHTML = `
+                <button onclick="window.playAudio('${it.en.replace(/'/g,"\\'")}', event)" class="w-24 h-24 rounded-[2rem] flex items-center justify-center bg-gradient-to-tr from-[#0066cc] to-[#3388ff] text-white shadow-[0_15px_30px_rgba(0,102,204,0.3)] hover:scale-105 active:scale-95 transition-all"><i data-lucide="volume-2" class="w-10 h-10"></i></button>
+                <p class="text-sm text-slate-500 font-medium">Ouça e digite em inglês</p>`;
+        } else {
+            box.innerHTML = `
+                <div class="w-full p-6 md:p-8 bg-white/60 backdrop-blur-xl border border-white/80 rounded-[2rem] shadow-sm text-center">
+                    <p class="text-[10px] uppercase tracking-widest text-[#86868b] font-bold mb-1">Em português</p>
+                    <div class="text-2xl md:text-3xl font-extrabold text-[#1d1d1f] tracking-tight leading-snug">${it.pt}</div>
+                </div>
+                <p class="text-sm text-slate-500 font-medium">Digite a palavra/frase em inglês</p>`;
+        }
+        const inputWrap = document.createElement('div');
+        inputWrap.className = 'w-full max-w-md';
+        inputWrap.innerHTML = `<input id="typeInput" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="text" placeholder="Type in English..." class="w-full px-5 py-4 text-lg md:text-xl font-bold text-center text-[#1d1d1f] bg-white/85 border border-white rounded-2xl shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0066cc]/40">`;
+        box.appendChild(inputWrap);
         container.appendChild(box);
-        const group = document.createElement('div'); group.className = 'grid grid-cols-2 gap-3 w-full max-w-xl mx-auto';
-        activity.options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'practice-card w-full text-center p-4 rounded-2xl text-base md:text-lg text-slate-700 font-bold';
-            btn.innerText = opt;
-            btn.onclick = () => { selectOption(group, btn, opt); practiceState.listenSelection = opt; window.playAudio(opt, null); };
-            group.appendChild(btn);
-        });
-        container.appendChild(group);
+        const inp = inputWrap.querySelector('#typeInput');
+        inp.addEventListener('input', () => enableCheckButton(inp.value.trim().length > 0));
+        inp.addEventListener('keydown', (e) => { if (e.key === 'Enter'){ e.preventDefault(); const b=document.getElementById('btnCheck'); if (!b.disabled) checkAnswer(); } });
+        setTimeout(() => { try { inp.focus(); } catch(e){} }, 200);
+        enableCheckButton(false);
+        if (mode === 'hear') setTimeout(() => window.playAudio(it.en, null), 400);
     }
     function selectOption(group, btn, opt){
         if (practiceState.isChecking) return;
@@ -2071,13 +2216,13 @@
     function renderRepeat(activity, container){
         const it = activity.item;
         const box = document.createElement('div');
-        box.className = 'w-full max-w-xl mx-auto flex flex-col items-center gap-6 mt-2';
-        const imgHTML = `<img class="w-56 h-44 object-cover rounded-3xl border border-white/80 shadow-md" loading="lazy" ${imgAttrs(it)} onerror="this.style.display='none'">`;
-        box.innerHTML = imgHTML + `
-            <button onclick="window.playAudio('${it.en.replace(/'/g,"\\'")}', event)" class="w-28 h-28 rounded-[2.2rem] flex items-center justify-center bg-gradient-to-tr from-[#0066cc] to-[#3388ff] text-white shadow-[0_15px_30px_rgba(0,102,204,0.3)] hover:scale-105 active:scale-95 transition-all"><i data-lucide="volume-2" class="w-12 h-12"></i></button>
+        box.className = 'w-full max-w-xl mx-auto flex flex-col items-center gap-5 mt-2';
+        box.innerHTML = `
+            <div class="practice-icon-xl"><i data-lucide="${wordIcon(it)}" class="w-24 h-24"></i></div>
             <div class="text-center"><div class="text-3xl md:text-4xl font-extrabold text-[#1d1d1f] tracking-tight">${it.en}</div>
             <p class="text-[#86868b] font-semibold text-lg mt-2 uppercase tracking-wide">${it.pt}</p></div>
-            <p class="text-sm text-slate-400 font-medium flex items-center gap-2"><i data-lucide="mic" class="w-4 h-4"></i> Toque no botão e repita em voz alta</p>`;
+            <button onclick="window.playAudio('${it.en.replace(/'/g,"\\'")}', event)" class="practice-btn practice-btn-primary px-6 py-3 rounded-2xl font-bold flex items-center gap-2"><i data-lucide="volume-2" class="w-5 h-5 text-white"></i><span class="text-white">Ouvir</span></button>
+            <p class="text-sm text-slate-400 font-medium flex items-center gap-2"><i data-lucide="mic" class="w-4 h-4"></i> Toque para ouvir e repita em voz alta</p>`;
         container.appendChild(box);
         enableCheckButton(true);
         setTimeout(() => window.playAudio(it.en, null), 350);
@@ -2095,12 +2240,16 @@
         } else if (activity.type === 'fillBlank'){
             isCorrect = (practiceState.listenSelection||'').toLowerCase() === activity.answer.toLowerCase();
             correctAnswerText = activity.en; audioText = activity.en;
-        } else if (activity.type === 'listen' || activity.type === 'chooseEn' || activity.type === 'imageChoose'){
+        } else if (activity.type === 'typeHear' || activity.type === 'typeRead'){
+            const inp = document.getElementById('typeInput');
+            const val = inp ? inp.value : '';
+            isCorrect = normAnswer(val) === normAnswer(activity.item.en);
+            correctAnswerText = activity.item.en; audioText = activity.item.en;
+        } else if (activity.type === 'listen' || activity.type === 'chooseEn'){
             isCorrect = practiceState.listenSelection === activity.item.en; correctAnswerText = activity.item.en; audioText = activity.item.en;
         } else if (activity.type === 'choosePt'){
             isCorrect = practiceState.listenSelection === activity.item.pt; correctAnswerText = activity.item.pt; audioText = activity.item.en;
-        } else if (activity.type === 'repeat'){ isCorrect = true; correctAnswerText = activity.item.en; audioText = activity.item.en; }
-        else if (activity.type === 'match' || activity.type === 'memory') return;
+        } else if (activity.type === 'match' || activity.type === 'memory') return;
         practiceState.isChecking = true;
         if (!isCorrect) loseHeart();
         if (audioText) window.playAudio(audioText, null);
