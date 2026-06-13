@@ -127,1487 +127,455 @@
     //  Lições podem ter "phrases" = frases para montar/completar/responder.
     // ============================================================
     const courseData = [];
-
+    function autoConj(en){
+      let base=(en||'').replace(/^to\s+/,'').replace(/\([^)]*\)/g,'').trim();
+      let parts=base.split(' '); let head=parts[0]; let rest=parts.slice(1).join(' '); let tail=rest?' '+rest:'';
+      if(head==='be') return ['I am','you are','he / she / it is','we are','you are','they are'];
+      if(head==='have') return ['I have'+tail,'you have'+tail,'he / she / it has'+tail,'we have'+tail,'you have'+tail,'they have'+tail];
+      if(head==='can') return ['I can'+tail,'you can'+tail,'he / she / it can'+tail,'we can'+tail,'you can'+tail,'they can'+tail];
+      function third(h){ if(/(o|s|x|ch|sh|z)$/.test(h)) return h+'es'; if(/[^aeiou]y$/.test(h)) return h.slice(0,-1)+'ies'; return h+'s'; }
+      let b=head+tail;
+      return ['I '+b,'you '+b,'he / she / it '+third(head)+tail,'we '+b,'you '+b,'they '+b];
+    }
     // ===================== UNIT 1 =====================
     courseData.push({ id:1, title:"Unit 1", subtitle:"Identity & Greetings", colors:["bg-blue-500/80","bg-indigo-500/80","bg-sky-500/80","bg-cyan-500/80"], lessons:[
-        { title:"Lesson 1.1", name:"Countries & Nationalities", content:{
-            verbs:[
-                { en:"to be", pt:"ser / estar", c:["I am","you are","he / she / it is","we are","you are","they are"] },
-                { en:"to be (negative)", pt:"não ser / não estar", c:["I'm not","you aren't","he / she / it isn't","we aren't","you aren't","they aren't"] }
-            ],
-            nouns:[
-                { en:"student", pt:"aluno(a)", img:"student" },
-                { en:"teacher", pt:"professor(a)", img:"teacher" },
-                { en:"company", pt:"empresa", img:"office building" },
-                { en:"city", pt:"cidade", img:"city" },
-                { en:"friend", pt:"amigo(a)", img:"friends" },
-                { en:"key", pt:"chave", img:"key" },
-                { en:"room", pt:"quarto", img:"hotel room" },
-                { en:"hotel", pt:"hotel", img:"hotel" }
-            ],
-            adjectives:[
-                { en:"Brazilian", pt:"brasileiro(a)", img:"brazil flag" },
-                { en:"American", pt:"americano(a)", img:"usa flag" },
-                { en:"Chinese", pt:"chinês(a)", img:"china flag" },
-                { en:"French", pt:"francês(a)", img:"france flag" },
-                { en:"Mexican", pt:"mexicano(a)", img:"mexico flag" },
-                { en:"Japanese", pt:"japonês(a)", img:"japan flag" },
-                { en:"Colombian", pt:"colombiano(a)", img:"colombia flag" },
-                { en:"Spanish", pt:"espanhol(a)", img:"spain flag" }
-            ],
-            adverbs:[
-                { en:"from", pt:"de (origem)" },
-                { en:"in", pt:"em / no / na" },
-                { en:"yes", pt:"sim" },
-                { en:"no", pt:"não" },
-                { en:"and", pt:"e" }
-            ],
-            grammar:[
-                { title:"Verb TO BE - Affirmative", rules:["I am Brazilian. = Eu sou brasileiro.","You are from Mexico City. = Você é da Cidade do México.","She is a student. = Ela é estudante.","We are in the company. = Nós estamos na empresa."] },
-                { title:"Questions with TO BE", rules:["Am I a student? = Eu sou aluno?","Are you Brazilian? = Você é brasileiro?","Is he Brazilian? = Ele é brasileiro?","Is the company in the city? = A empresa fica na cidade?"] },
-                { title:"Short answers", rules:["Yes, I am. / No, I'm not.","Yes, you are. / No, you aren't.","Yes, she is. / No, she isn't."] }
-            ]
-        }, phrases:[
-            { en:"I am a student", pt:"Eu sou um aluno" },
-            { en:"You are Brazilian", pt:"Você é brasileiro" },
-            { en:"She is from Mexico", pt:"Ela é do México" },
-            { en:"We are in the company", pt:"Nós estamos na empresa" }
-        ]},
-        { title:"Lesson 1.2", name:"Greetings & Numbers", content:{
-            verbs:[
-                { en:"to be", pt:"ser / estar", c:["I am","you are","he / she / it is","we are","you are","they are"] },
-                { en:"to spell", pt:"soletrar", c:["I spell","you spell","he / she / it spells","we spell","you spell","they spell"] }
-            ],
-            nouns:[
-                { en:"cell phone", pt:"celular", img:"cell phone" },
-                { en:"phone number", pt:"número de telefone", img:"phone number" },
-                { en:"email address", pt:"endereço de e-mail", img:"email" },
-                { en:"country", pt:"país", img:"world map" },
-                { en:"conference", pt:"conferência", img:"conference" },
-                { en:"morning", pt:"manhã", img:"morning sunrise" },
-                { en:"night", pt:"noite", img:"night sky" }
-            ],
-            adjectives:[
-                { en:"great", pt:"ótimo(a)", img:"thumbs up" },
-                { en:"good", pt:"bom(boa)", img:"ok hand" },
-                { en:"new", pt:"novo(a)", img:"new" }
-            ],
-            adverbs:[
-                { en:"good morning", pt:"bom dia" },
-                { en:"good afternoon", pt:"boa tarde" },
-                { en:"good evening", pt:"boa noite (chegada)" },
-                { en:"good night", pt:"boa noite (despedida)" },
-                { en:"please", pt:"por favor" },
-                { en:"thank you", pt:"obrigado(a)" }
-            ],
-            grammar:[
-                { title:"Numbers 0-10", rules:["zero, one, two, three, four","five, six, seven, eight","nine, ten"] },
-                { title:"Asking for information", rules:["What's your first name? = Qual é o seu primeiro nome?","What's your last name? = Qual é o seu sobrenome?","What's your email address? = Qual é o seu e-mail?","What's your cell phone number? = Qual é o seu número de celular?"] }
-            ]
-        }, phrases:[
-            { en:"Good morning", pt:"Bom dia" },
-            { en:"What is your name", pt:"Qual é o seu nome" },
-            { en:"My company name is Google", pt:"O nome da minha empresa é Google" }
-        ]},
-        { title:"Lesson 1.3", name:"Jobs & Introductions", content:{
-            verbs:[
-                { en:"to live", pt:"viver / morar", c:["I live","you live","he / she / it lives","we live","you live","they live"] },
-                { en:"to have", pt:"ter", c:["I have","you have","he / she / it has","we have","you have","they have"] },
-                { en:"to work", pt:"trabalhar", c:["I work","you work","he / she / it works","we work","you work","they work"] }
-            ],
-            nouns:[
-                { en:"salesperson", pt:"vendedor(a)", img:"salesperson" },
-                { en:"artist", pt:"artista", img:"artist painter" },
-                { en:"doctor", pt:"médico(a)", img:"doctor" },
-                { en:"chef", pt:"chef de cozinha", img:"chef" },
-                { en:"server", pt:"garçom / garçonete", img:"waiter" },
-                { en:"hotel clerk", pt:"recepcionista de hotel", img:"hotel reception" },
-                { en:"school", pt:"escola", img:"school" },
-                { en:"team", pt:"time / equipe", img:"team work" }
-            ],
-            adjectives:[
-                { en:"beautiful", pt:"bonito(a)", img:"beautiful landscape" },
-                { en:"big", pt:"grande", img:"big building" },
-                { en:"small", pt:"pequeno(a)", img:"small mouse" }
-            ],
-            adverbs:[
-                { en:"hello", pt:"olá (formal)" },
-                { en:"hi", pt:"oi (informal)" },
-                { en:"hey", pt:"oi (bem informal)" },
-                { en:"but", pt:"mas" },
-                { en:"or", pt:"ou" }
-            ],
-            grammar:[
-                { title:"Articles A / AN", rules:["a = um/uma (antes de consoante): a student, a salesperson.","an = um/uma (antes de vogal): an artist, an apple, an orange."] },
-                { title:"Talking about where you live", rules:["I am in São Paulo but I live in Rio.","He is in São Paulo but he lives in Rio.","She lives in Rio. (3ª pessoa: + s)"] }
-            ]
-        }, phrases:[
-            { en:"I am a doctor", pt:"Eu sou médico" },
-            { en:"I live in Rio", pt:"Eu moro no Rio" },
-            { en:"He works in a hotel", pt:"Ele trabalha em um hotel" }
-        ]},
-        { title:"Lesson 1.4", name:"Family & Age", content:{
-            verbs:[
-                { en:"to have", pt:"ter", c:["I have","you have","he / she / it has","we have","you have","they have"] },
-                { en:"to live", pt:"morar / viver", c:["I live","you live","he / she / it lives","we live","you live","they live"] }
-            ],
-            nouns:[
-                { en:"family", pt:"família", img:"family" },
-                { en:"father", pt:"pai", img:"father" },
-                { en:"mother", pt:"mãe", img:"mother" },
-                { en:"brother", pt:"irmão", img:"brothers" },
-                { en:"sister", pt:"irmã", img:"sisters" },
-                { en:"son", pt:"filho", img:"son boy" },
-                { en:"daughter", pt:"filha", img:"daughter girl" },
-                { en:"grandfather", pt:"avô", img:"grandfather" },
-                { en:"grandmother", pt:"avó", img:"grandmother" },
-                { en:"husband", pt:"marido", img:"husband" },
-                { en:"wife", pt:"esposa", img:"wife" },
-                { en:"party", pt:"festa", img:"birthday party" }
-            ],
-            adjectives:[
-                { en:"old", pt:"velho(a)", img:"old man" },
-                { en:"young", pt:"jovem", img:"young person" },
-                { en:"happy", pt:"feliz", img:"happy person" }
-            ],
-            adverbs:[
-                { en:"here", pt:"aqui" },
-                { en:"both", pt:"ambos(as)" },
-                { en:"nice to meet you", pt:"prazer em conhecer" }
-            ],
-            grammar:[
-                { title:"Asking about age (TO BE)", rules:["How old are you? = Quantos anos você tem?","I am twenty-two (years old). = Eu tenho 22 anos.","How old is he? — He's eight. = Ele tem 8 anos."] },
-                { title:"Possessive with 's", rules:["Liz is Marcus's sister.","John is Liz's grandfather.","Anna is Paul's wife."] },
-                { title:"Numbers 11-100", rules:["eleven, twelve, thirteen... twenty.","twenty-one, thirty, forty, fifty.","sixty, seventy, eighty, ninety, one hundred."] }
-            ]
-        }, phrases:[
-            { en:"This is my mother", pt:"Esta é minha mãe" },
-            { en:"How old are you", pt:"Quantos anos você tem" },
-            { en:"He is my brother", pt:"Ele é meu irmão" }
-        ]}
+      { title:"Lesson 1.1", name:"Countries, To Be & Home", content:{
+        verbs:[{en:"to be",pt:"ser / estar"},{en:"to live",pt:"viver / morar"},{en:"to have",pt:"ter"},{en:"to work",pt:"trabalhar"}],
+        nouns:[{en:"student",pt:"aluno(a)"},{en:"teacher",pt:"professor(a)"},{en:"company",pt:"empresa"},{en:"city",pt:"cidade"},{en:"friend",pt:"amigo(a)"},{en:"best friend",pt:"melhor amigo(a)"},{en:"mom",pt:"mãe"},{en:"mother",pt:"mãe"},{en:"dad",pt:"pai"},{en:"father",pt:"pai"},{en:"grandma",pt:"avó"},{en:"grandmother",pt:"avó"},{en:"grandpa",pt:"avô"},{en:"grandfather",pt:"avô"},{en:"wife",pt:"esposa"},{en:"husband",pt:"esposo"},{en:"daughter",pt:"filha"},{en:"son",pt:"filho"},{en:"cat",pt:"gato(a)"},{en:"dog",pt:"cachorro(a)"},{en:"room",pt:"cômodo"},{en:"bedroom",pt:"quarto"},{en:"bathroom",pt:"banheiro"},{en:"living room",pt:"sala de estar"},{en:"kitchen",pt:"cozinha"},{en:"dining area",pt:"área de jantar"},{en:"apartment",pt:"apartamento"},{en:"house",pt:"casa"},{en:"college student",pt:"estudante universitário"},{en:"email address",pt:"endereço de e-mail"},{en:"name",pt:"nome"},{en:"first name",pt:"primeiro nome"},{en:"last name",pt:"sobrenome"},{en:"college",pt:"faculdade"},{en:"company name",pt:"nome da empresa"},{en:"conference",pt:"conferência"}],
+        adjectives:[{en:"Brazilian",pt:"brasileiro(a)"},{en:"Chilean",pt:"chileno(a)"},{en:"Chinese",pt:"chinês(a)"},{en:"Colombian",pt:"colombiano(a)"},{en:"Ecuadorian",pt:"equatoriano(a)"},{en:"French",pt:"francês(a)"},{en:"Honduran",pt:"hondurenho(a)"},{en:"Japanese",pt:"japonês(a)"},{en:"Mexican",pt:"mexicano(a)"},{en:"Peruvian",pt:"peruano(a)"},{en:"Russian",pt:"russo(a)"},{en:"South Korean",pt:"sul-coreano(a)"},{en:"Spanish",pt:"espanhol(a)"},{en:"American",pt:"americano(a)"},{en:"Canadian",pt:"canadense"},{en:"favorite",pt:"favorito(a)"},{en:"second",pt:"segundo(a)"},{en:"great",pt:"ótimo(a)"}],
+        adverbs:[{en:"from",pt:"de (origem)"},{en:"in the",pt:"no / na (lugar)"},{en:"of",pt:"de"},{en:"and",pt:"e"},{en:"yes",pt:"sim"},{en:"no",pt:"não"},{en:"my",pt:"meu / minha"},{en:"your",pt:"seu / sua"}],
+        grammar:[
+          {title:"Verb TO BE (affirmative)",rules:["I am Brazilian. = Eu sou brasileiro.","You are from Mexico City. = Você é da Cidade do México.","She is a student. He is a teacher.","We are in the company. They are my friends."]},
+          {title:"TO BE (negative & contractions)",rules:["I'm not from Lima. You aren't from Bogotá.","He isn't Canadian. She isn't in Colombia.","I'm, you're, he's, she's, it's, we're, they're."]},
+          {title:"Questions & short answers",rules:["Am I a student? Are you Brazilian? Is he in Brazil?","Is the company in the city? Is it Google?","Yes, I am. / No, I'm not. Yes, she is. / No, she isn't."]},
+          {title:"What's...? / It's...",rules:["What's your first name? What's your last name?","What is the name of your college / company?","It's Cambridge. It's Google. My name is..."]},
+          {title:"Useful phrases",rules:["Welcome to Brazil. Welcome to my house.","This is my key. Is this your room? Here is your key.","No, it's the key for room three. You're in room 3A."]}
+        ]}, phrases:[{en:"I am a student",pt:"Eu sou um aluno"},{en:"Are you Brazilian",pt:"Você é brasileiro"},{en:"She is in the company",pt:"Ela está na empresa"},{en:"My friend is from Japan",pt:"Meu amigo é do Japão"},{en:"This is my key",pt:"Esta é minha chave"}]},
+      { title:"Lesson 1.2", name:"Greetings, Numbers & Hotel", content:{
+        verbs:[{en:"to be",pt:"ser / estar"},{en:"to spell",pt:"soletrar"}],
+        nouns:[{en:"hotel",pt:"hotel"},{en:"check-in",pt:"check-in"},{en:"key",pt:"chave"},{en:"room",pt:"quarto"},{en:"room number",pt:"número do quarto"},{en:"cell phone",pt:"celular"},{en:"cell phone number",pt:"número de celular"},{en:"email address",pt:"endereço de e-mail"},{en:"company",pt:"empresa"},{en:"city",pt:"cidade"},{en:"name",pt:"nome"},{en:"pen",pt:"caneta"},{en:"information",pt:"informação"},{en:"night",pt:"noite"},{en:"morning",pt:"manhã"},{en:"country",pt:"país"},{en:"conference",pt:"conferência / reunião"},{en:"area code",pt:"código de área"}],
+        adjectives:[{en:"great",pt:"ótimo(a)"}],
+        adverbs:[{en:"good morning",pt:"bom dia"},{en:"good afternoon",pt:"boa tarde"},{en:"good evening",pt:"boa noite (chegada)"},{en:"good night",pt:"boa noite (despedida)"},{en:"here",pt:"aqui"},{en:"for",pt:"por / para"},{en:"of",pt:"de / do / da"}],
+        grammar:[
+          {title:"Numbers 0-10",rules:["zero, one, two, three, four, five","six, seven, eight, nine, ten"]},
+          {title:"Asking for information",rules:["What's your company name? What's your college name?","What's your cell phone number? It's 1-1-9-8-3...","What's the name of your mom? My country name is Brazil."]},
+          {title:"Symbols",rules:[". = dot ; @ = at ; _ = underscore","USA = United States of America"]}
+        ]}, phrases:[{en:"Good morning",pt:"Bom dia"},{en:"What is your cell phone number",pt:"Qual é o seu número de celular"},{en:"Welcome to the hotel",pt:"Bem-vindo ao hotel"},{en:"This is your key",pt:"Esta é a sua chave"}]},
+      { title:"Lesson 1.3", name:"Jobs & A / An", content:{
+        verbs:[{en:"to live",pt:"viver / morar"},{en:"to have",pt:"ter"},{en:"to go",pt:"ir"}],
+        nouns:[{en:"salesperson",pt:"vendedor(a)"},{en:"artist",pt:"artista"},{en:"teacher",pt:"professor(a)"},{en:"student",pt:"estudante"},{en:"hotel clerk",pt:"recepcionista de hotel"},{en:"doctor",pt:"médico(a)"},{en:"chef",pt:"chef de cozinha"},{en:"server",pt:"garçom / garçonete"},{en:"fitness coach",pt:"personal trainer"},{en:"profile",pt:"perfil"},{en:"company",pt:"empresa"},{en:"school",pt:"escola"},{en:"city",pt:"cidade"},{en:"nationality",pt:"nacionalidade"},{en:"email",pt:"e-mail"},{en:"phone number",pt:"número de telefone"},{en:"home",pt:"casa / lar"},{en:"class",pt:"aula"},{en:"business",pt:"negócio"},{en:"sales",pt:"vendas"},{en:"team",pt:"time / equipe"},{en:"store",pt:"loja"},{en:"apple",pt:"maçã"},{en:"orange",pt:"laranja"}],
+        adjectives:[{en:"beautiful",pt:"bonito(a)"}],
+        adverbs:[{en:"a",pt:"um / uma"},{en:"an",pt:"um / uma (vogal)"},{en:"but",pt:"mas"},{en:"or",pt:"ou"},{en:"hello",pt:"olá (formal)"},{en:"hi",pt:"oi (informal)"},{en:"hey",pt:"oi (bem informal)"},{en:"how",pt:"como"}],
+        grammar:[
+          {title:"Articles A / AN",rules:["a = antes de consoante: a student, a salesperson.","an = antes de vogal: an artist, an apple, an orange."]},
+          {title:"Hello / Hi / Hey",rules:["Hello = formal, no trabalho ou contextos oficiais.","Hi = informal, com amigos e família.","Hey = bem informal, com amigos próximos."]},
+          {title:"Spelling & questions",rules:["How do you spell your name?","do = auxiliar para pergunta. I do it for you."]}
+        ]}, phrases:[{en:"I am a doctor",pt:"Eu sou médico"},{en:"I am not a salesperson",pt:"Eu não sou vendedor"},{en:"How do you spell your name",pt:"Como se soletra seu nome"},{en:"I live in Rio",pt:"Eu moro no Rio"}]},
+      { title:"Lesson 1.4", name:"Family, Age & Numbers", content:{
+        verbs:[{en:"to have",pt:"ter"},{en:"to live",pt:"morar / viver"},{en:"to work",pt:"trabalhar"}],
+        nouns:[{en:"family",pt:"família"},{en:"father",pt:"pai"},{en:"mother",pt:"mãe"},{en:"parents",pt:"pais"},{en:"husband",pt:"marido"},{en:"wife",pt:"esposa"},{en:"brother",pt:"irmão"},{en:"sister",pt:"irmã"},{en:"son",pt:"filho"},{en:"daughter",pt:"filha"},{en:"child",pt:"criança / filho"},{en:"children",pt:"crianças / filhos"},{en:"grandfather",pt:"avô"},{en:"grandmother",pt:"avó"},{en:"grandparents",pt:"avós"},{en:"uncle",pt:"tio"},{en:"aunt",pt:"tia"},{en:"cousin",pt:"primo(a)"},{en:"friends",pt:"amigos"},{en:"party",pt:"festa"},{en:"photo",pt:"foto"},{en:"age",pt:"idade"},{en:"birthday",pt:"aniversário"}],
+        adjectives:[{en:"both",pt:"ambos(as)"}],
+        adverbs:[{en:"here",pt:"aqui"},{en:"at home",pt:"em casa"},{en:"nice to meet you",pt:"prazer em conhecer"},{en:"and you?",pt:"e você?"}],
+        grammar:[
+          {title:"Numbers 11-100",rules:["eleven, twelve, thirteen... nineteen, twenty.","twenty-one, twenty-two, thirty, forty, fifty.","sixty, seventy, eighty, ninety, one hundred."]},
+          {title:"Talking about age (TO BE)",rules:["How old are you? I am twenty-two (years old).","How old is he? He's eight. How old is she? She's ten.","My brother is nineteen. My sister is twenty-one."]},
+          {title:"Possessive 's (relations)",rules:["Liz is Marcus's sister. John is Liz's grandfather.","Anna is Paul's wife. Tim is Liz's cousin. Kyle is Liz's uncle."]},
+          {title:"Introducing & asking",rules:["This is my mother. These are my children. They're my parents.","Are your parents here? Is your mother at home?","Do you have a big family? This is my friend Sara. Nice to meet you."]}
+        ]}, phrases:[{en:"This is my mother",pt:"Esta é minha mãe"},{en:"How old are you",pt:"Quantos anos você tem"},{en:"He is my brother",pt:"Ele é meu irmão"},{en:"Are your parents here",pt:"Seus pais estão aqui"}]}
     ]});
 
     // ===================== UNIT 2 =====================
     courseData.push({ id:2, title:"Unit 2", subtitle:"People & Birthdays", colors:["bg-orange-400/80","bg-amber-500/80","bg-yellow-400/80","bg-red-400/80"], lessons:[
-        { title:"Lesson 2.1", name:"Describing People", content:{
-            verbs:[
-                { en:"to be", pt:"ser / estar", c:["I am","you are","he / she / it is","we are","you are","they are"] },
-                { en:"to come (from)", pt:"vir / ser de", c:["I come","you come","he / she / it comes","we come","you come","they come"] },
-                { en:"to study", pt:"estudar", c:["I study","you study","he / she / it studies","we study","you study","they study"] }
-            ],
-            nouns:[
-                { en:"family", pt:"família", img:"family portrait" },
-                { en:"best friend", pt:"melhor amigo(a)", img:"best friends" },
-                { en:"college", pt:"faculdade", img:"college campus" },
-                { en:"picture", pt:"foto", img:"photograph" },
-                { en:"home", pt:"casa / lar", img:"home house" },
-                { en:"uncle", pt:"tio", img:"uncle man" },
-                { en:"dog", pt:"cachorro", img:"dog" }
-            ],
-            adjectives:[
-                { en:"tall", pt:"alto(a)", img:"tall person" },
-                { en:"short", pt:"baixo(a)", img:"short person" },
-                { en:"funny", pt:"engraçado(a)", img:"funny clown" },
-                { en:"shy", pt:"tímido(a)", img:"shy" },
-                { en:"smart", pt:"inteligente", img:"smart brain" },
-                { en:"friendly", pt:"simpático(a)", img:"friendly smile" },
-                { en:"interesting", pt:"interessante", img:"interesting book" },
-                { en:"boring", pt:"chato(a)", img:"bored" }
-            ],
-            adverbs:[
-                { en:"very", pt:"muito" },
-                { en:"really", pt:"realmente / muito" },
-                { en:"too", pt:"também / demais" },
-                { en:"not", pt:"não" },
-                { en:"at home", pt:"em casa" }
-            ],
-            grammar:[
-                { title:"Describing with TO BE", rules:["He is not very tall. = Ele não é muito alto.","She is really funny. = Ela é muito engraçada.","They are very friendly. = Eles são muito simpáticos."] },
-                { title:"Origin", rules:["I'm from Japan. = Eu sou do Japão.","She's from Peru. = Ela é do Peru.","We're from Los Angeles."] }
-            ]
-        }, phrases:[
-            { en:"She is very smart", pt:"Ela é muito inteligente" },
-            { en:"He is from Japan", pt:"Ele é do Japão" },
-            { en:"They are friendly", pt:"Eles são simpáticos" }
-        ]},
-        { title:"Lesson 2.2", name:"Months & Birthdays", content:{
-            verbs:[
-                { en:"to have", pt:"ter", c:["I have","you have","he / she / it has","we have","you have","they have"] },
-                { en:"to mean", pt:"significar", c:["I mean","you mean","he / she / it means","we mean","you mean","they mean"] },
-                { en:"to say", pt:"dizer", c:["I say","you say","he / she / it says","we say","you say","they say"] }
-            ],
-            nouns:[
-                { en:"birthday", pt:"aniversário", img:"birthday cake" },
-                { en:"party", pt:"festa", img:"party celebration" },
-                { en:"month", pt:"mês", img:"calendar month" },
-                { en:"day", pt:"dia", img:"day calendar" },
-                { en:"year", pt:"ano", img:"year calendar" },
-                { en:"boy", pt:"menino", img:"boy" },
-                { en:"girl", pt:"menina", img:"girl child" }
-            ],
-            adjectives:[
-                { en:"nice", pt:"agradável / legal", img:"nice flowers" },
-                { en:"great", pt:"ótimo(a)", img:"great success" },
-                { en:"correct", pt:"correto(a)", img:"correct check" }
-            ],
-            adverbs:[
-                { en:"happy birthday", pt:"feliz aniversário" },
-                { en:"oh, right", pt:"ah, é verdade" },
-                { en:"sorry", pt:"desculpa" },
-                { en:"when", pt:"quando" }
-            ],
-            grammar:[
-                { title:"Months of the year", rules:["January, February, March, April.","May, June, July, August.","September, October, November, December."] },
-                { title:"Ordinal numbers (dates)", rules:["first (1st), second (2nd), third (3rd).","fourth, fifth, sixth, seventh.","Her birthday is in April. His party is on March 29th."] },
-                { title:"Asking the date", rules:["When's your birthday? = Quando é o seu aniversário?","My birthday is on July 3rd.","How old is he/she?"] }
-            ]
-        }, phrases:[
-            { en:"My birthday is in April", pt:"Meu aniversário é em abril" },
-            { en:"When is your birthday", pt:"Quando é o seu aniversário" },
-            { en:"Happy birthday", pt:"Feliz aniversário" }
-        ]},
-        { title:"Lesson 2.3", name:"In a Band", content:{
-            verbs:[
-                { en:"to have", pt:"ter", c:["I have","you have","he / she / it has","we have","you have","they have"] },
-                { en:"to live", pt:"morar", c:["I live","you live","he / she / it lives","we live","you live","they live"] },
-                { en:"to talk", pt:"conversar", c:["I talk","you talk","he / she / it talks","we talk","you talk","they talk"] }
-            ],
-            nouns:[
-                { en:"band", pt:"banda", img:"music band" },
-                { en:"photo", pt:"foto", img:"photo camera" },
-                { en:"people", pt:"pessoas", img:"crowd people" },
-                { en:"name", pt:"nome", img:"name tag" }
-            ],
-            adjectives:[
-                { en:"cool", pt:"legal", img:"cool sunglasses" },
-                { en:"fun", pt:"divertido(a)", img:"fun party" },
-                { en:"interesting", pt:"interessante", img:"interesting" }
-            ],
-            adverbs:[
-                { en:"on the left", pt:"à esquerda" },
-                { en:"on the right", pt:"à direita" },
-                { en:"between", pt:"entre" },
-                { en:"next to", pt:"ao lado de" }
-            ],
-            grammar:[
-                { title:"Contractions (short forms)", rules:["I'm = I am ; He's = He is ; She's = She is.","It's = It is ; Here's = Here is.","What's = What is ; When's = When is."] },
-                { title:"Location", rules:["He's on the right. = Ele está à direita.","She's on the left.","Guy is between Nuwa and me."] }
-            ]
-        }, phrases:[
-            { en:"We are in a band", pt:"Nós estamos em uma banda" },
-            { en:"He is on the right", pt:"Ele está à direita" },
-            { en:"She is interesting and smart", pt:"Ela é interessante e inteligente" }
-        ]},
-        { title:"Lesson 2.4", name:"Review: People", content:{
-            verbs:[
-                { en:"to be", pt:"ser / estar", c:["I am","you are","he / she / it is","we are","you are","they are"] },
-                { en:"to live", pt:"morar", c:["I live","you live","he / she / it lives","we live","you live","they live"] }
-            ],
-            nouns:[
-                { en:"friend", pt:"amigo(a)", img:"friends group" },
-                { en:"city", pt:"cidade", img:"city skyline" },
-                { en:"country", pt:"país", img:"country flag" },
-                { en:"home", pt:"casa", img:"house home" }
-            ],
-            adjectives:[
-                { en:"different", pt:"diferente", img:"different colors" },
-                { en:"same", pt:"igual / o mesmo", img:"same twins" },
-                { en:"kind", pt:"gentil", img:"kindness" }
-            ],
-            adverbs:[
-                { en:"now", pt:"agora" },
-                { en:"there", pt:"lá / ali" },
-                { en:"together", pt:"juntos(as)" },
-                { en:"also", pt:"também" }
-            ],
-            grammar:[
-                { title:"TO BE - all forms", rules:["Affirmative: I'm, you're, he's, she's, we're, they're.","Negative: I'm not, you aren't, he isn't, they aren't.","Questions: Am I? Are you? Is he? Are they?"] }
-            ]
-        }, phrases:[
-            { en:"We live together", pt:"Nós moramos juntos" },
-            { en:"They are from the same city", pt:"Eles são da mesma cidade" }
-        ]}
+      { title:"Lesson 2.1", name:"Describing People", content:{
+        verbs:[{en:"to be",pt:"ser / estar"},{en:"to have",pt:"ter"},{en:"to live",pt:"morar"},{en:"to read",pt:"ler"},{en:"to study",pt:"estudar"},{en:"to like",pt:"gostar"},{en:"to come",pt:"vir / ser de"},{en:"to work",pt:"trabalhar"},{en:"to go",pt:"ir"}],
+        nouns:[{en:"family",pt:"família"},{en:"parents",pt:"pais"},{en:"sister",pt:"irmã"},{en:"brother",pt:"irmão"},{en:"children",pt:"crianças / filhos"},{en:"student",pt:"estudante"},{en:"friend",pt:"amigo(a)"},{en:"best friend",pt:"melhor amigo(a)"},{en:"school",pt:"escola"},{en:"college",pt:"faculdade"},{en:"teacher",pt:"professor(a)"},{en:"uncle",pt:"tio"},{en:"dog",pt:"cachorro"},{en:"age",pt:"idade"},{en:"picture",pt:"foto"},{en:"home",pt:"casa / lar"},{en:"room",pt:"quarto / sala"},{en:"city",pt:"cidade"},{en:"country",pt:"país"},{en:"difference",pt:"diferença"},{en:"change",pt:"mudança"},{en:"news",pt:"notícia(s)"},{en:"part",pt:"parte"},{en:"sentence",pt:"frase"},{en:"partner",pt:"parceiro(a)"},{en:"example",pt:"exemplo"}],
+        adjectives:[{en:"old",pt:"velho(a)"},{en:"young",pt:"jovem"},{en:"short",pt:"baixo(a)"},{en:"tall",pt:"alto(a)"},{en:"boring",pt:"chato(a)"},{en:"funny",pt:"engraçado(a)"},{en:"interesting",pt:"interessante"},{en:"friendly",pt:"simpático(a)"},{en:"shy",pt:"tímido(a)"},{en:"smart",pt:"inteligente"},{en:"nice",pt:"legal / agradável"},{en:"good",pt:"bom(boa)"},{en:"bad",pt:"mau / ruim"},{en:"great",pt:"ótimo(a)"},{en:"happy",pt:"feliz"},{en:"sad",pt:"triste"},{en:"true",pt:"verdadeiro"},{en:"false",pt:"falso"},{en:"different",pt:"diferente"},{en:"same",pt:"igual / o mesmo"},{en:"beautiful",pt:"bonito(a)"},{en:"cute",pt:"fofo(a)"},{en:"kind",pt:"gentil"}],
+        adverbs:[{en:"very",pt:"muito"},{en:"really",pt:"realmente / muito"},{en:"not",pt:"não"},{en:"too",pt:"também / demais"},{en:"so",pt:"tão / então"},{en:"but",pt:"mas"},{en:"and",pt:"e"},{en:"now",pt:"agora"},{en:"here",pt:"aqui"},{en:"there",pt:"lá / ali"},{en:"at home",pt:"em casa"},{en:"at college",pt:"na faculdade"},{en:"together",pt:"juntos(as)"},{en:"today",pt:"hoje"},{en:"again",pt:"novamente"},{en:"also",pt:"também"},{en:"still",pt:"ainda"},{en:"always",pt:"sempre"}],
+        grammar:[
+          {title:"Describing with TO BE",rules:["He is not very tall. She is really funny.","They are very friendly. He is very smart.","not old, not boring, really funny."]},
+          {title:"Origin (from)",rules:["I'm from Japan. She's from Peru.","We're from Los Angeles. He's from Brazil.","in Texas, in Miami."]}
+        ]}, phrases:[{en:"She is very smart",pt:"Ela é muito inteligente"},{en:"He is from Japan",pt:"Ele é do Japão"},{en:"They are very friendly",pt:"Eles são muito simpáticos"},{en:"I am not boring",pt:"Eu não sou chato"}]},
+      { title:"Lesson 2.2", name:"Months & Ages", content:{
+        verbs:[{en:"to be",pt:"ser / estar"},{en:"to have",pt:"ter"},{en:"to mean",pt:"significar / querer dizer"},{en:"to say",pt:"dizer"}],
+        nouns:[{en:"birthday",pt:"aniversário"},{en:"party",pt:"festa"},{en:"picture",pt:"foto / imagem"},{en:"children",pt:"crianças"},{en:"daughter",pt:"filha"},{en:"son",pt:"filho"},{en:"name",pt:"nome"},{en:"month",pt:"mês"},{en:"day",pt:"dia"},{en:"age",pt:"idade"},{en:"year",pt:"ano"},{en:"brother",pt:"irmão"},{en:"sister",pt:"irmã"},{en:"family",pt:"família"},{en:"boy",pt:"menino"},{en:"girl",pt:"menina"},{en:"cradle",pt:"berço"},{en:"idea",pt:"ideia"},{en:"number",pt:"número"},{en:"mistake",pt:"erro"},{en:"date",pt:"data"},{en:"question",pt:"pergunta"},{en:"answer",pt:"resposta"}],
+        adjectives:[{en:"old",pt:"velho / de idade"},{en:"nice",pt:"agradável / legal"},{en:"great",pt:"ótimo"},{en:"correct",pt:"correto"}],
+        adverbs:[{en:"but",pt:"mas"},{en:"her",pt:"dela"},{en:"and",pt:"e"},{en:"thanks",pt:"obrigado(a)"},{en:"Oh, right!",pt:"Ah, é verdade!"},{en:"sorry",pt:"desculpa"}],
+        grammar:[
+          {title:"Months of the year",rules:["January, February, March, April, May, June","July, August, September, October, November, December"]},
+          {title:"Ordinal numbers (dates)",rules:["first, second, third, fourth, fifth... tenth.","twentieth, twenty-first... thirtieth, thirty-first."]},
+          {title:"TO BE for age",rules:["I am eight. = Eu tenho oito anos. She is three.","He isn't four. I'm eight years old."]},
+          {title:"TO HAVE / mean / say",rules:["I have a brother. She has a party. He doesn't have children.","Sorry, I mean twelve. Say 'Happy birthday!' from me."]},
+          {title:"Asking the date / age",rules:["How old are you? When's your birthday?","Her birthday is in April. His party is on March 29.","Happy birthday!"]}
+        ]}, phrases:[{en:"My birthday is in April",pt:"Meu aniversário é em abril"},{en:"When is your birthday",pt:"Quando é o seu aniversário"},{en:"Happy birthday",pt:"Feliz aniversário"},{en:"I am thirty two years old",pt:"Eu tenho trinta e dois anos"}]},
+      { title:"Lesson 2.3", name:"In a Band & Location", content:{
+        verbs:[{en:"to be",pt:"ser / estar"},{en:"to have",pt:"ter"},{en:"to live",pt:"morar"},{en:"to study",pt:"estudar"},{en:"to talk",pt:"conversar"}],
+        nouns:[{en:"band",pt:"banda"},{en:"photo",pt:"foto"},{en:"college",pt:"faculdade"},{en:"people",pt:"pessoas"},{en:"name",pt:"nome"},{en:"birthday",pt:"aniversário"},{en:"age",pt:"idade"}],
+        adjectives:[{en:"great",pt:"ótimo"},{en:"fun",pt:"divertido"},{en:"boring",pt:"chato"},{en:"cool",pt:"legal"},{en:"friendly",pt:"amigável"},{en:"funny",pt:"engraçado"},{en:"interesting",pt:"interessante"},{en:"shy",pt:"tímido"},{en:"smart",pt:"inteligente"}],
+        adverbs:[{en:"right",pt:"direita"},{en:"left",pt:"esquerda"},{en:"between",pt:"entre"},{en:"next to",pt:"ao lado de"},{en:"in",pt:"em / no / na"},{en:"on the left",pt:"à esquerda"},{en:"on the right",pt:"à direita"}],
+        grammar:[
+          {title:"Ordinal dates",rules:["1st, 2nd, 3rd, 4th, 5th, 21st, 22nd, 23rd.","My birthday is on July 3rd. I am twenty-seven today."]},
+          {title:"TO BE recap",rules:["I am / you are / he is / we are / they are.","Negative: I'm not, you aren't, he isn't.","Yes, I am. / No, I'm not. Yes, he is. / No, he isn't."]},
+          {title:"Contractions",rules:["I'm, he's, she's, it's, here's, what's, when's.","Here's my band. It's great. She's smart."]},
+          {title:"Location",rules:["He's on the right. She's on the left.","Guy is next to me. Guy is between Nuwa and me.","We're in Seattle, and we're in a band."]}
+        ]}, phrases:[{en:"We are in a band",pt:"Nós estamos em uma banda"},{en:"He is on the right",pt:"Ele está à direita"},{en:"She is interesting and smart",pt:"Ela é interessante e inteligente"},{en:"My birthday is on July third",pt:"Meu aniversário é em três de julho"}]},
+      { title:"Lesson 2.4", name:"Review: People", content:{
+        verbs:[{en:"to be",pt:"ser / estar"},{en:"to have",pt:"ter"},{en:"to live",pt:"morar"},{en:"to study",pt:"estudar"},{en:"to come",pt:"vir"},{en:"to work",pt:"trabalhar"}],
+        nouns:[{en:"family",pt:"família"},{en:"friend",pt:"amigo(a)"},{en:"city",pt:"cidade"},{en:"country",pt:"país"},{en:"home",pt:"casa"},{en:"picture",pt:"foto"},{en:"party",pt:"festa"},{en:"people",pt:"pessoas"}],
+        adjectives:[{en:"tall",pt:"alto(a)"},{en:"short",pt:"baixo(a)"},{en:"funny",pt:"engraçado(a)"},{en:"friendly",pt:"simpático(a)"},{en:"smart",pt:"inteligente"},{en:"interesting",pt:"interessante"},{en:"boring",pt:"chato(a)"},{en:"happy",pt:"feliz"},{en:"different",pt:"diferente"},{en:"same",pt:"igual"},{en:"nice",pt:"legal"},{en:"great",pt:"ótimo"}],
+        adverbs:[{en:"very",pt:"muito"},{en:"really",pt:"realmente"},{en:"not",pt:"não"},{en:"also",pt:"também"},{en:"together",pt:"juntos"},{en:"here",pt:"aqui"},{en:"there",pt:"lá"},{en:"now",pt:"agora"}],
+        grammar:[
+          {title:"Verb TO BE (full recap)",rules:["Affirmative: I'm, you're, he's, she's, we're, they're.","Negative: I'm not, you aren't, he isn't, they aren't.","Questions: Am I? Are you? Is he? Are they?"]},
+          {title:"This is / These are",rules:["This is my friend. These are my parents.","What a great party!"]}
+        ]}, phrases:[{en:"They are from the same city",pt:"Eles são da mesma cidade"},{en:"We live together",pt:"Nós moramos juntos"},{en:"She is very friendly",pt:"Ela é muito simpática"}]}
     ]});
-
     // ===================== UNIT 3 =====================
     courseData.push({ id:3, title:"Unit 3", subtitle:"Home & Possessions", colors:["bg-green-400/80","bg-emerald-500/80","bg-teal-400/80","bg-lime-500/80"], lessons:[
-        { title:"Lesson 3.1", name:"Rooms & Furniture", content:{
-            verbs:[
-                { en:"to live", pt:"morar", c:["I live","you live","he / she / it lives","we live","you live","they live"] },
-                { en:"to go", pt:"ir", c:["I go","you go","he / she / it goes","we go","you go","they go"] },
-                { en:"to celebrate", pt:"comemorar", c:["I celebrate","you celebrate","he / she / it celebrates","we celebrate","you celebrate","they celebrate"] }
-            ],
-            nouns:[
-                { en:"bedroom", pt:"quarto", img:"bedroom" },
-                { en:"bathroom", pt:"banheiro", img:"bathroom" },
-                { en:"living room", pt:"sala de estar", img:"living room" },
-                { en:"kitchen", pt:"cozinha", img:"kitchen" },
-                { en:"bed", pt:"cama", img:"bed" },
-                { en:"chair", pt:"cadeira", img:"chair" },
-                { en:"table", pt:"mesa", img:"table" },
-                { en:"desk", pt:"escrivaninha", img:"desk" },
-                { en:"couch", pt:"sofá", img:"couch sofa" },
-                { en:"television", pt:"televisão", img:"television" },
-                { en:"refrigerator", pt:"geladeira", img:"refrigerator" },
-                { en:"lamp", pt:"luminária", img:"lamp" }
-            ],
-            adjectives:[
-                { en:"big", pt:"grande", img:"big house" },
-                { en:"small", pt:"pequeno(a)", img:"small" },
-                { en:"new", pt:"novo(a)", img:"new" },
-                { en:"old", pt:"velho(a)", img:"old object" }
-            ],
-            adverbs:[
-                { en:"in", pt:"em / dentro" },
-                { en:"on", pt:"sobre / em cima" },
-                { en:"now", pt:"agora" },
-                { en:"for", pt:"para" }
-            ],
-            grammar:[
-                { title:"IT IS / IS IT?", rules:["It's a chair. = É uma cadeira.","It's in the bedroom. = Está no quarto.","It isn't in the kitchen. — Is it big? Yes, it is."] }
-            ]
-        }, phrases:[
-            { en:"It is a chair", pt:"É uma cadeira" },
-            { en:"The desk is in the kitchen", pt:"A escrivaninha está na cozinha" }
-        ]},
-        { title:"Lesson 3.2", name:"Coffee & Snacks", content:{
-            verbs:[
-                { en:"to drink", pt:"beber", c:["I drink","you drink","he / she / it drinks","we drink","you drink","they drink"] },
-                { en:"to eat", pt:"comer", c:["I eat","you eat","he / she / it eats","we eat","you eat","they eat"] },
-                { en:"to want", pt:"querer", c:["I want","you want","he / she / it wants","we want","you want","they want"] },
-                { en:"to understand", pt:"entender", c:["I understand","you understand","he / she / it understands","we understand","you understand","they understand"] }
-            ],
-            nouns:[
-                { en:"coffee", pt:"café", img:"coffee cup" },
-                { en:"tea", pt:"chá", img:"tea cup" },
-                { en:"milk", pt:"leite", img:"milk" },
-                { en:"sugar", pt:"açúcar", img:"sugar" },
-                { en:"cookie", pt:"biscoito", img:"cookie" },
-                { en:"cup", pt:"xícara", img:"cup" },
-                { en:"snack", pt:"lanche", img:"snack" }
-            ],
-            adjectives:[
-                { en:"big", pt:"grande", img:"big cup" },
-                { en:"small", pt:"pequeno(a)", img:"small cup" }
-            ],
-            adverbs:[
-                { en:"just", pt:"só / apenas" },
-                { en:"with", pt:"com" },
-                { en:"now", pt:"agora" },
-                { en:"here you are", pt:"aqui está" }
-            ],
-            grammar:[
-                { title:"Negative present (don't / doesn't)", rules:["I don't understand. = Eu não entendo.","He doesn't understand.","Sugar isn't a drink."] }
-            ]
-        }, phrases:[
-            { en:"I want a cup of coffee", pt:"Eu quero uma xícara de café" },
-            { en:"A cookie please", pt:"Um biscoito, por favor" },
-            { en:"I don't understand", pt:"Eu não entendo" }
-        ]},
-        { title:"Lesson 3.3", name:"A Home to Share", content:{
-            verbs:[
-                { en:"to have", pt:"ter", c:["I have","you have","he / she / it has","we have","you have","they have"] },
-                { en:"to live", pt:"morar", c:["I live","you live","he / she / it lives","we live","you live","they live"] }
-            ],
-            nouns:[
-                { en:"apartment", pt:"apartamento", img:"apartment" },
-                { en:"house", pt:"casa", img:"house" },
-                { en:"owner", pt:"proprietário(a)", img:"house owner" },
-                { en:"wall", pt:"parede", img:"wall" },
-                { en:"window", pt:"janela", img:"window" },
-                { en:"door", pt:"porta", img:"door" },
-                { en:"floor", pt:"chão", img:"floor" },
-                { en:"bookcase", pt:"estante", img:"bookcase" }
-            ],
-            adjectives:[
-                { en:"cool", pt:"legal", img:"cool" },
-                { en:"interesting", pt:"interessante", img:"interesting" },
-                { en:"nice", pt:"bom / agradável", img:"nice home" }
-            ],
-            adverbs:[
-                { en:"there is", pt:"há / tem (sing.)" },
-                { en:"there are", pt:"há / têm (pl.)" },
-                { en:"on the wall", pt:"na parede" }
-            ],
-            grammar:[
-                { title:"Questions: What / Where / How many / Who", rules:["Where is your apartment? = Onde fica seu apartamento?","How old is your son?","How many bedrooms are in your apartment?","Who is the owner? = Quem é o proprietário?"] }
-            ]
-        }, phrases:[
-            { en:"There is a couch in the living room", pt:"Há um sofá na sala de estar" },
-            { en:"Where is your apartment", pt:"Onde fica seu apartamento" }
-        ]},
-        { title:"Lesson 3.4", name:"Possessives & Numbers", content:{
-            verbs:[
-                { en:"to have", pt:"ter", c:["I have","you have","he / she / it has","we have","you have","they have"] }
-            ],
-            nouns:[
-                { en:"picture", pt:"quadro", img:"wall picture frame" },
-                { en:"kitchen", pt:"cozinha", img:"kitchen" },
-                { en:"living room", pt:"sala de estar", img:"living room" },
-                { en:"car", pt:"carro", img:"car" }
-            ],
-            adjectives:[
-                { en:"big", pt:"grande", img:"big" },
-                { en:"beautiful", pt:"bonito(a)", img:"beautiful house" }
-            ],
-            adverbs:[
-                { en:"there is", pt:"há / existe (sing.)" },
-                { en:"there are", pt:"há / existem (pl.)" },
-                { en:"with", pt:"com" }
-            ],
-            grammar:[
-                { title:"Possessive adjectives", rules:["my, your, his, her, our, their, its.","my brother, your house, his dog, her car."] },
-                { title:"Possessive 's and s'", rules:["Sergei's room = o quarto do Sergei (singular + 's).","my parents' bedroom = o quarto dos meus pais (plural + s').","The cat's name is Milka."] },
-                { title:"Hundreds", rules:["one hundred (100), two hundred (200).","Mr. = Senhor ; Mrs. = Senhora ; Ms. = Senhorita."] }
-            ]
-        }, phrases:[
-            { en:"This is my parents bedroom", pt:"Este é o quarto dos meus pais" },
-            { en:"The house has a big kitchen", pt:"A casa tem uma cozinha grande" }
-        ]}
+      { title:"Lesson 3.1", name:"Rooms & Furniture", content:{
+        verbs:[{en:"to live",pt:"morar"},{en:"to be",pt:"ser / estar"},{en:"to go",pt:"ir"},{en:"to celebrate",pt:"comemorar"},{en:"to turn",pt:"fazer (idade)"}],
+        nouns:[{en:"bed",pt:"cama"},{en:"bookcase",pt:"estante"},{en:"chair",pt:"cadeira"},{en:"table",pt:"mesa"},{en:"desk",pt:"escrivaninha"},{en:"couch",pt:"sofá"},{en:"shower",pt:"chuveiro"},{en:"refrigerator",pt:"geladeira"},{en:"television",pt:"televisão"},{en:"sink",pt:"pia"},{en:"rug",pt:"tapete"},{en:"lamp",pt:"luminária"},{en:"bedroom",pt:"quarto"},{en:"living room",pt:"sala de estar"},{en:"dining area",pt:"área de jantar"},{en:"kitchen",pt:"cozinha"},{en:"bathroom",pt:"banheiro"},{en:"restroom",pt:"banheiro (público)"},{en:"room",pt:"cômodo"},{en:"home",pt:"lar / casa"},{en:"house",pt:"casa"},{en:"apartment",pt:"apartamento"},{en:"space",pt:"espaço"},{en:"problem",pt:"problema"},{en:"furniture",pt:"móveis"},{en:"picture",pt:"imagem / quadro"},{en:"video",pt:"vídeo"},{en:"floor",pt:"chão"},{en:"wall",pt:"parede"},{en:"man",pt:"homem"},{en:"woman",pt:"mulher"},{en:"thing",pt:"coisa"}],
+        adjectives:[{en:"big",pt:"grande"},{en:"small",pt:"pequeno"},{en:"new",pt:"novo"},{en:"old",pt:"velho"},{en:"nice",pt:"bonito / agradável"},{en:"cool",pt:"legal"},{en:"funny",pt:"engraçado"},{en:"great",pt:"ótimo"},{en:"interesting",pt:"interessante"},{en:"boring",pt:"chato"},{en:"tall",pt:"alto"},{en:"short",pt:"baixo / curto"},{en:"beautiful",pt:"bonito(a)"},{en:"outgoing",pt:"extrovertido(a)"}],
+        adverbs:[{en:"very",pt:"muito"},{en:"really",pt:"realmente"},{en:"now",pt:"agora"},{en:"this",pt:"este / esta"},{en:"my",pt:"meu / minha"},{en:"your",pt:"seu / sua"},{en:"our",pt:"nosso / nossa"},{en:"her",pt:"dela"},{en:"for",pt:"para"},{en:"with",pt:"com"},{en:"on the floor",pt:"no chão"},{en:"on the wall",pt:"na parede"}],
+        grammar:[
+          {title:"IT IS / IS IT?",rules:["It's a chair. It's in the bedroom.","It isn't in the kitchen. Is it big? Yes, it is.","It's a desk. It's big / small / new / old / nice."]},
+          {title:"How are you doing?",rules:["How are you doing today? I'm doing great / fine.","How do you do? See you on Thursday!"]},
+          {title:"Possessive adjectives",rules:["my / your / our / her: my cat, your cat, our cat, her cat.","Her favorite picture is on the wall."]}
+        ]}, phrases:[{en:"It is a chair",pt:"É uma cadeira"},{en:"The desk is in the kitchen",pt:"A escrivaninha está na cozinha"},{en:"We live in an apartment",pt:"Nós moramos em um apartamento"},{en:"Is it big",pt:"É grande"}]},
+      { title:"Lesson 3.2", name:"Coffee & Snacks", content:{
+        verbs:[{en:"to drink",pt:"beber"},{en:"to eat",pt:"comer"},{en:"to want",pt:"querer"},{en:"to understand",pt:"entender"}],
+        nouns:[{en:"coffee",pt:"café"},{en:"tea",pt:"chá"},{en:"milk",pt:"leite"},{en:"sugar",pt:"açúcar"},{en:"cookie",pt:"biscoito"},{en:"biscuit",pt:"biscoito (UK)"},{en:"cup",pt:"xícara"},{en:"snack",pt:"lanche"},{en:"drink",pt:"bebida"},{en:"partner",pt:"parceiro"},{en:"word",pt:"palavra"},{en:"conversation",pt:"conversa"}],
+        adjectives:[{en:"small",pt:"pequeno"},{en:"big",pt:"grande"}],
+        adverbs:[{en:"just",pt:"só / apenas"},{en:"with",pt:"com"},{en:"now",pt:"agora"},{en:"here you are",pt:"aqui está"},{en:"next to",pt:"ao lado de"}],
+        grammar:[
+          {title:"At the café",rules:["This is a big cup. They're really small.","Just two, please. A cookie, please. Here you are.","What's a biscuit? A biscuit is a cookie."]},
+          {title:"Negative present",rules:["I don't understand. He doesn't understand.","Sorry, I don't understand."]}
+        ]}, phrases:[{en:"I want a cup of coffee",pt:"Eu quero uma xícara de café"},{en:"A cookie please",pt:"Um biscoito, por favor"},{en:"I don't understand",pt:"Eu não entendo"},{en:"This is a big cup",pt:"Esta é uma xícara grande"}]},
+      { title:"Lesson 3.3", name:"A Home to Share", content:{
+        verbs:[{en:"to want",pt:"querer"},{en:"to understand",pt:"entender"},{en:"to live",pt:"morar"},{en:"to have",pt:"ter"}],
+        nouns:[{en:"apartment",pt:"apartamento"},{en:"owner",pt:"proprietário(a)"},{en:"rooms",pt:"cômodos"},{en:"son",pt:"filho"},{en:"street",pt:"rua"},{en:"dog",pt:"cachorro"},{en:"living room",pt:"sala de estar"},{en:"home-share",pt:"casa compartilhada"},{en:"bedroom",pt:"quarto"},{en:"bed",pt:"cama"},{en:"couch",pt:"sofá"},{en:"bookcase",pt:"estante"},{en:"picture",pt:"quadro"},{en:"wall",pt:"parede"},{en:"kitchen",pt:"cozinha"},{en:"table",pt:"mesa"},{en:"chair",pt:"cadeira"},{en:"bathroom",pt:"banheiro"},{en:"dining area",pt:"área de jantar"},{en:"desk",pt:"escrivaninha"},{en:"shower",pt:"chuveiro"},{en:"television",pt:"televisão"},{en:"house",pt:"casa"},{en:"furniture",pt:"mobília"},{en:"five-bedroom house",pt:"casa com cinco quartos"},{en:"month",pt:"mês"},{en:"ad",pt:"anúncio"},{en:"people",pt:"pessoas"},{en:"place",pt:"lugar"},{en:"snack",pt:"lanchinho"},{en:"email address",pt:"endereço de e-mail"}],
+        adjectives:[{en:"small",pt:"pequeno"},{en:"big",pt:"grande"},{en:"cool",pt:"legal"},{en:"interesting",pt:"interessante"},{en:"great",pt:"ótimo"},{en:"nice",pt:"bom / agradável"},{en:"good",pt:"bom"},{en:"bad",pt:"ruim"}],
+        adverbs:[{en:"just",pt:"só"},{en:"with",pt:"com"},{en:"now",pt:"agora"},{en:"and",pt:"e"}],
+        grammar:[
+          {title:"Quantity: a cup of",rules:["a cup of coffee, a big cup of tea, two cups, three cups.","Sugar isn't a drink."]},
+          {title:"There is / There are",rules:["There is a couch in the living room.","There are pictures on the wall."]},
+          {title:"Email & questions",rules:["This email is about... Dear... Sincerely. Contact owner.","Where is your apartment? How old is your son?","How many bedrooms are in your apartment? Who is the owner?"]}
+        ]}, phrases:[{en:"There is a couch in the living room",pt:"Há um sofá na sala de estar"},{en:"Where is your apartment",pt:"Onde fica seu apartamento"},{en:"How many bedrooms are in your apartment",pt:"Quantos quartos há no seu apartamento"},{en:"Who is the owner",pt:"Quem é o proprietário"}]},
+      { title:"Lesson 3.4", name:"There is/are & Possessive 's", content:{
+        verbs:[{en:"to have",pt:"ter"},{en:"to say",pt:"dizer"}],
+        nouns:[{en:"picture",pt:"quadro"},{en:"wall",pt:"parede"},{en:"living room",pt:"sala de estar"},{en:"kitchen",pt:"cozinha"},{en:"table",pt:"mesa"},{en:"chair",pt:"cadeira"},{en:"car",pt:"carro"},{en:"house",pt:"casa"}],
+        adjectives:[{en:"big",pt:"grande"},{en:"beautiful",pt:"bonito(a)"}],
+        adverbs:[{en:"with",pt:"com"},{en:"on the wall",pt:"na parede"},{en:"there is",pt:"há (sing.)"},{en:"there are",pt:"há (pl.)"}],
+        grammar:[
+          {title:"Hundreds & titles",rules:["one hundred (100), two hundred (200)... six hundred (600). fifty (50).","Mr. = Senhor ; Mrs. = Senhora ; Ms. = Senhorita."]},
+          {title:"Possessive 's and s'",rules:["my friend's car ; the living room's wall ; the kitchen's table.","'s para singular ; apenas o apóstrofo (s') para plural terminado em s."]},
+          {title:"There is / There are",rules:["There are pictures on the wall of the living room.","There are chairs in the kitchen. The house has a big kitchen."]}
+        ]}, phrases:[{en:"There are pictures on the wall",pt:"Há quadros na parede"},{en:"The house has a big kitchen",pt:"A casa tem uma cozinha grande"},{en:"This is my friend's car",pt:"Este é o carro do meu amigo"}]}
     ]});
 
     // ===================== UNIT 4 =====================
     courseData.push({ id:4, title:"Unit 4", subtitle:"Technology & Devices", colors:["bg-rose-400/80","bg-pink-500/80","bg-fuchsia-500/80","bg-red-500/80"], lessons:[
-        { title:"Lesson 4.1", name:"Devices", content:{
-            verbs:[
-                { en:"to buy", pt:"comprar", c:["I buy","you buy","he / she / it buys","we buy","you buy","they buy"] },
-                { en:"to call", pt:"ligar / chamar", c:["I call","you call","he / she / it calls","we call","you call","they call"] },
-                { en:"to use", pt:"usar", c:["I use","you use","he / she / it uses","we use","you use","they use"] },
-                { en:"to have", pt:"ter", c:["I have","you have","he / she / it has","we have","you have","they have"] }
-            ],
-            nouns:[
-                { en:"cell phone", pt:"celular", img:"smartphone" },
-                { en:"computer", pt:"computador", img:"computer" },
-                { en:"laptop", pt:"notebook", img:"laptop" },
-                { en:"tablet", pt:"tablet", img:"tablet device" },
-                { en:"smartwatch", pt:"relógio inteligente", img:"smartwatch" },
-                { en:"camera", pt:"câmera", img:"camera" },
-                { en:"earphones", pt:"fones de ouvido", img:"earphones" },
-                { en:"game", pt:"jogo", img:"video game" }
-            ],
-            adjectives:[
-                { en:"expensive", pt:"caro(a)", img:"expensive money" },
-                { en:"cheap", pt:"barato(a)", img:"cheap sale" },
-                { en:"favorite", pt:"favorito(a)", img:"favorite star" },
-                { en:"new", pt:"novo(a)", img:"new gadget" }
-            ],
-            adverbs:[
-                { en:"really", pt:"realmente / muito" },
-                { en:"where", pt:"onde" },
-                { en:"why", pt:"por que" },
-                { en:"and you?", pt:"e você?" }
-            ],
-            grammar:[
-                { title:"Possessive 's with nouns", rules:["my friend's car = o carro do meu amigo.","my house's kitchen = a cozinha da minha casa.","my sister's bookcase."] }
-            ]
-        }, phrases:[
-            { en:"I have a new laptop", pt:"Eu tenho um notebook novo" },
-            { en:"I love my smartwatch", pt:"Eu amo meu relógio inteligente" }
-        ]},
-        { title:"Lesson 4.2", name:"Communication", content:{
-            verbs:[
-                { en:"to send", pt:"enviar", c:["I send","you send","he / she / it sends","we send","you send","they send"] },
-                { en:"to read", pt:"ler", c:["I read","you read","he / she / it reads","we read","you read","they read"] },
-                { en:"to watch", pt:"assistir", c:["I watch","you watch","he / she / it watches","we watch","you watch","they watch"] },
-                { en:"to listen (to)", pt:"ouvir / escutar", c:["I listen","you listen","he / she / it listens","we listen","you listen","they listen"] }
-            ],
-            nouns:[
-                { en:"message", pt:"mensagem", img:"text message" },
-                { en:"email", pt:"e-mail", img:"email inbox" },
-                { en:"photo", pt:"foto", img:"photo gallery" },
-                { en:"social media", pt:"redes sociais", img:"social media" },
-                { en:"movie", pt:"filme", img:"movie cinema" },
-                { en:"music", pt:"música", img:"music" },
-                { en:"letter", pt:"carta", img:"letter envelope" }
-            ],
-            adjectives:[
-                { en:"free", pt:"gratuito(a)", img:"free gift" },
-                { en:"cool", pt:"legal", img:"cool" },
-                { en:"interesting", pt:"interessante", img:"interesting" }
-            ],
-            adverbs:[
-                { en:"me too", pt:"eu também" },
-                { en:"of course", pt:"claro" },
-                { en:"what else", pt:"o que mais" },
-                { en:"how about you", pt:"e você" }
-            ],
-            grammar:[
-                { title:"Do you like ...?", rules:["Do you like movies? = Você gosta de filmes?","Yes, I do. / No, I don't.","I love to call my family on my cell phone."] }
-            ]
-        }, phrases:[
-            { en:"I send messages to my friends", pt:"Eu envio mensagens para meus amigos" },
-            { en:"Do you like movies", pt:"Você gosta de filmes" }
-        ]},
-        { title:"Lesson 4.3", name:"Reviews & Opinions", content:{
-            verbs:[
-                { en:"to like", pt:"gostar", c:["I like","you like","he / she / it likes","we like","you like","they like"] },
-                { en:"to write", pt:"escrever", c:["I write","you write","he / she / it writes","we write","you write","they write"] },
-                { en:"to look at", pt:"olhar para", c:["I look at","you look at","he / she / it looks at","we look at","you look at","they look at"] }
-            ],
-            nouns:[
-                { en:"book", pt:"livro", img:"book" },
-                { en:"price", pt:"preço", img:"price tag" },
-                { en:"star", pt:"estrela", img:"star rating" },
-                { en:"opinion", pt:"opinião", img:"opinion review" },
-                { en:"comment", pt:"comentário", img:"comment chat" }
-            ],
-            adjectives:[
-                { en:"comfortable", pt:"confortável", img:"comfortable sofa" },
-                { en:"expensive", pt:"caro(a)", img:"expensive" },
-                { en:"cheap", pt:"barato(a)", img:"cheap price" },
-                { en:"good", pt:"bom(boa)", img:"good thumbs up" },
-                { en:"bad", pt:"ruim", img:"bad thumbs down" }
-            ],
-            adverbs:[
-                { en:"because", pt:"porque" },
-                { en:"for example", pt:"por exemplo" },
-                { en:"again", pt:"novamente" },
-                { en:"with", pt:"com" }
-            ],
-            grammar:[
-                { title:"Short and complete answers", rules:["Do you like coffee? — Yes, I do. I like coffee.","No, I don't. I don't like coffee.","What about Facebook? Do you like it?"] }
-            ]
-        }, phrases:[
-            { en:"I write product reviews", pt:"Eu escrevo avaliações de produtos" },
-            { en:"It is really cool", pt:"É muito legal" }
-        ]},
-        { title:"Lesson 4.4", name:"Review: Technology", content:{
-            verbs:[
-                { en:"to talk", pt:"conversar", c:["I talk","you talk","he / she / it talks","we talk","you talk","they talk"] },
-                { en:"to understand", pt:"entender", c:["I understand","you understand","he / she / it understands","we understand","you understand","they understand"] }
-            ],
-            nouns:[
-                { en:"internet", pt:"internet", img:"internet" },
-                { en:"voice message", pt:"mensagem de voz", img:"voice message" },
-                { en:"band", pt:"banda", img:"band music" }
-            ],
-            adjectives:[
-                { en:"nice", pt:"bacana / legal", img:"nice" },
-                { en:"cheap", pt:"barato(a)", img:"cheap" },
-                { en:"expensive", pt:"caro(a)", img:"expensive" }
-            ],
-            adverbs:[
-                { en:"very", pt:"muito (qualidade)" },
-                { en:"many", pt:"muitos (coisas)" },
-                { en:"sometimes", pt:"às vezes" }
-            ],
-            grammar:[
-                { title:"Very vs Many", rules:["very + adjetivo: very expensive.","many + substantivo: many comments.","Do you watch movies on the TV?"] }
-            ]
-        }, phrases:[
-            { en:"I listen to music on my computer", pt:"Eu ouço música no meu computador" },
-            { en:"Do you understand English", pt:"Você entende inglês" }
-        ]}
+      { title:"Lesson 4.1", name:"Devices & Communication", content:{
+        verbs:[{en:"to buy",pt:"comprar"},{en:"to call",pt:"ligar / chamar"},{en:"to chat",pt:"conversar / bater papo"},{en:"to do",pt:"fazer"},{en:"to have",pt:"ter"},{en:"to know",pt:"saber / conhecer"},{en:"to leave",pt:"deixar"},{en:"to listen",pt:"ouvir"},{en:"to love",pt:"amar / adorar"},{en:"to play",pt:"jogar / brincar"},{en:"to post",pt:"postar"},{en:"to read",pt:"ler"},{en:"to send",pt:"enviar"},{en:"to use",pt:"usar"},{en:"to want",pt:"querer"},{en:"to watch",pt:"assistir"}],
+        nouns:[{en:"app",pt:"aplicativo"},{en:"cell phone",pt:"celular"},{en:"computer",pt:"computador"},{en:"laptop",pt:"notebook"},{en:"phone",pt:"telefone"},{en:"smartwatch",pt:"relógio inteligente"},{en:"tablet",pt:"tablet"},{en:"camera",pt:"câmera"},{en:"earphones",pt:"fones de ouvido"},{en:"game",pt:"jogo"},{en:"refrigerator",pt:"geladeira"},{en:"comments",pt:"comentários"},{en:"data",pt:"dados (internet)"},{en:"emails",pt:"e-mails"},{en:"internet",pt:"internet"},{en:"messages",pt:"mensagens"},{en:"phone plan",pt:"plano de celular"},{en:"photos",pt:"fotos"},{en:"social media",pt:"redes sociais"},{en:"text messages",pt:"mensagens de texto"},{en:"voice messages",pt:"mensagens de voz"},{en:"best friend",pt:"melhor amigo(a)"},{en:"clerk",pt:"atendente"},{en:"cousin",pt:"primo(a)"},{en:"family",pt:"família"},{en:"friends",pt:"amigos"},{en:"sister",pt:"irmã"},{en:"teacher",pt:"professor(a)"},{en:"home",pt:"casa"},{en:"month",pt:"mês"},{en:"room",pt:"quarto"},{en:"school",pt:"escola"},{en:"couch",pt:"sofá"},{en:"desk",pt:"escrivaninha"},{en:"games",pt:"jogos"},{en:"movies",pt:"filmes"},{en:"music",pt:"música"},{en:"idea",pt:"ideia"},{en:"world",pt:"mundo"},{en:"review",pt:"avaliação"},{en:"video games",pt:"videogames"}],
+        adjectives:[{en:"expensive",pt:"caro"},{en:"great",pt:"ótimo"},{en:"favorite",pt:"favorito"},{en:"true",pt:"verdadeiro"},{en:"cool",pt:"legal"},{en:"new",pt:"novo"},{en:"old",pt:"velho"},{en:"big",pt:"grande"},{en:"small",pt:"pequeno"},{en:"nice",pt:"legal / bom"},{en:"good",pt:"bom"},{en:"different",pt:"diferente"},{en:"same",pt:"mesmo / igual"}],
+        adverbs:[{en:"generally",pt:"geralmente"},{en:"really",pt:"realmente"},{en:"not",pt:"não"},{en:"but",pt:"mas"},{en:"and",pt:"e"},{en:"where",pt:"onde"},{en:"why",pt:"por que"},{en:"ok",pt:"tudo bem"}],
+        grammar:[
+          {title:"Possessive 's with nouns",rules:["my friend's car ; my friend's house ; my sister's bookcase.","my house's kitchen = a cozinha da minha casa."]},
+          {title:"Likes & opinions",rules:["I love my watch. We don't love things.","I really want an iPad. It's ok to love things.","my favorite things, cool apps, an old laptop."]}
+        ]}, phrases:[{en:"I have a new laptop",pt:"Eu tenho um notebook novo"},{en:"I love my smartwatch",pt:"Eu amo meu relógio inteligente"},{en:"I don't have a tablet",pt:"Eu não tenho um tablet"},{en:"These are my favorite things",pt:"Estas são minhas coisas favoritas"}]},
+      { title:"Lesson 4.2", name:"Likes & Social Media", content:{
+        verbs:[{en:"to ask",pt:"perguntar"},{en:"to buy",pt:"comprar"},{en:"to call",pt:"ligar"},{en:"to chat",pt:"bater papo"},{en:"to check",pt:"verificar"},{en:"to communicate",pt:"comunicar"},{en:"to have",pt:"ter"},{en:"to like",pt:"gostar"},{en:"to listen",pt:"ouvir"},{en:"to love",pt:"amar"},{en:"to post",pt:"postar"},{en:"to practice",pt:"praticar"},{en:"to read",pt:"ler"},{en:"to repeat",pt:"repetir"},{en:"to say",pt:"dizer"},{en:"to send",pt:"enviar"},{en:"to show",pt:"mostrar"},{en:"to start",pt:"começar"},{en:"to talk",pt:"conversar"},{en:"to text",pt:"enviar mensagem"},{en:"to think",pt:"pensar"},{en:"to understand",pt:"entender"},{en:"to use",pt:"usar"},{en:"to watch",pt:"assistir"},{en:"to write",pt:"escrever"},{en:"to leave",pt:"deixar"},{en:"to live",pt:"morar"}],
+        nouns:[{en:"app",pt:"aplicativo"},{en:"birthday card",pt:"cartão de aniversário"},{en:"brother",pt:"irmão"},{en:"card",pt:"cartão"},{en:"cell phone",pt:"celular"},{en:"college student",pt:"estudante universitário"},{en:"comment",pt:"comentário"},{en:"email",pt:"e-mail"},{en:"family",pt:"família"},{en:"friend",pt:"amigo"},{en:"grandparent",pt:"avô / avó"},{en:"home",pt:"casa"},{en:"internet",pt:"internet"},{en:"letter",pt:"carta"},{en:"message",pt:"mensagem"},{en:"movie",pt:"filme"},{en:"music",pt:"música"},{en:"parent",pt:"pai / mãe"},{en:"phone",pt:"telefone"},{en:"photo",pt:"foto"},{en:"picture",pt:"foto / imagem"},{en:"social media",pt:"redes sociais"},{en:"technology",pt:"tecnologia"},{en:"text",pt:"texto / mensagem"},{en:"video chat",pt:"chamada de vídeo"},{en:"word",pt:"palavra"}],
+        adjectives:[{en:"cool",pt:"legal"},{en:"expensive",pt:"caro"},{en:"free",pt:"gratuito"},{en:"great",pt:"ótimo"},{en:"interesting",pt:"interessante"},{en:"nice",pt:"bom / agradável"}],
+        adverbs:[{en:"and you?",pt:"e você?"},{en:"how about you?",pt:"e quanto a você?"},{en:"me too",pt:"eu também"},{en:"of course",pt:"claro"},{en:"really",pt:"realmente"},{en:"right",pt:"certo"},{en:"what about...?",pt:"e quanto a...?"},{en:"what else?",pt:"o que mais?"}],
+        grammar:[
+          {title:"Do you like ...?",rules:["Do you like movies? Yes, I do. / No, I don't.","I love to watch / I like to watch.","I love to call my family on my cell phone."]},
+          {title:"Where I post",rules:["I send text messages to my friends on Instagram / Facebook / Whatsapp.","I leave comments to my friends."]}
+        ]}, phrases:[{en:"I send text messages to my friends",pt:"Eu envio mensagens para meus amigos"},{en:"Do you like movies",pt:"Você gosta de filmes"},{en:"I love to listen to music",pt:"Eu adoro ouvir música"}]},
+      { title:"Lesson 4.3", name:"Reviews & Opinions", content:{
+        verbs:[{en:"to buy",pt:"comprar"},{en:"to look at",pt:"olhar / ver"},{en:"to write",pt:"escrever"},{en:"to listen",pt:"ouvir"},{en:"to answer",pt:"responder"},{en:"to use",pt:"usar"},{en:"to sit",pt:"sentar"},{en:"to watch",pt:"assistir"},{en:"to want",pt:"querer"},{en:"to give",pt:"dar"},{en:"to read",pt:"ler"},{en:"to video chat",pt:"fazer videochamada"},{en:"to love",pt:"amar"},{en:"to see",pt:"ver"},{en:"to say",pt:"dizer"}],
+        nouns:[{en:"app",pt:"aplicativo"},{en:"camera",pt:"câmera"},{en:"desk",pt:"escrivaninha"},{en:"game",pt:"jogo"},{en:"lamp",pt:"luminária"},{en:"tablet",pt:"tablet"},{en:"watch",pt:"relógio"},{en:"earphones",pt:"fones de ouvido"},{en:"chair",pt:"cadeira"},{en:"cell phone",pt:"celular"},{en:"music",pt:"música"},{en:"room",pt:"sala / quarto"},{en:"band",pt:"banda"},{en:"laptop",pt:"notebook"},{en:"smartwatch",pt:"relógio inteligente"},{en:"social media",pt:"redes sociais"},{en:"email address",pt:"endereço de e-mail"},{en:"apartment",pt:"apartamento"},{en:"house",pt:"casa"},{en:"movie",pt:"filme"},{en:"book",pt:"livro"},{en:"card",pt:"cartão"},{en:"price",pt:"preço"},{en:"star",pt:"estrela"},{en:"product review",pt:"avaliação de produto"},{en:"opinion",pt:"opinião"},{en:"comment",pt:"comentário"}],
+        adjectives:[{en:"expensive",pt:"caro"},{en:"cheap",pt:"barato"},{en:"nice",pt:"legal / bom"},{en:"small",pt:"pequeno"},{en:"big",pt:"grande"},{en:"comfortable",pt:"confortável"},{en:"boring",pt:"chato"},{en:"interesting",pt:"interessante"},{en:"old",pt:"velho"},{en:"cool",pt:"legal"},{en:"favorite",pt:"favorito"},{en:"good",pt:"bom"},{en:"bad",pt:"ruim"},{en:"great",pt:"ótimo"}],
+        adverbs:[{en:"but",pt:"mas"},{en:"because",pt:"porque"},{en:"same",pt:"mesmo / igual"},{en:"different",pt:"diferente"},{en:"for example",pt:"por exemplo"},{en:"really",pt:"realmente"},{en:"with",pt:"com"},{en:"again",pt:"novamente"},{en:"her",pt:"dela"},{en:"his",pt:"dele"}],
+        grammar:[
+          {title:"Do you like ...? answers",rules:["Do you like coffee? Yes, I do. I like coffee.","No, I don't. I don't like coffee. (short & complete answer)","Do you like coffee with sugar / with milk?"]},
+          {title:"Choices & reasons",rules:["Do you live in a house or in an apartment?","I post comments on people's photos.","What about Facebook? Because it is really cool."]}
+        ]}, phrases:[{en:"I write product reviews on the internet",pt:"Eu escrevo avaliações de produtos na internet"},{en:"It is really cool",pt:"É muito legal"},{en:"Do you like coffee with milk",pt:"Você gosta de café com leite"}]},
+      { title:"Lesson 4.4", name:"Review: Technology", content:{
+        verbs:[{en:"to send",pt:"enviar"},{en:"to look at",pt:"olhar / ver"},{en:"to write",pt:"escrever"},{en:"to buy",pt:"comprar"},{en:"to talk",pt:"conversar"},{en:"to understand",pt:"entender"},{en:"to use",pt:"usar"},{en:"to listen",pt:"ouvir"},{en:"to watch",pt:"assistir"}],
+        nouns:[{en:"internet",pt:"internet"},{en:"voice messages",pt:"mensagens de voz"},{en:"computer",pt:"computador"},{en:"band",pt:"banda"},{en:"product reviews",pt:"avaliações de produtos"},{en:"desk",pt:"escrivaninha"},{en:"table",pt:"mesa"}],
+        adjectives:[{en:"nice",pt:"legal / bacana"},{en:"cheap",pt:"barato"},{en:"expensive",pt:"caro"}],
+        adverbs:[{en:"very",pt:"muito (qualidades)"},{en:"many",pt:"muitos (coisas)"},{en:"sometimes",pt:"às vezes"},{en:"for",pt:"para"}],
+        grammar:[
+          {title:"Do you...? questions",rules:["Do you use the internet to call? Do you watch movies on the TV?","Do you understand English? Do you talk in English?","Do you leave comments on people's social media?"]},
+          {title:"very vs many",rules:["very + qualidade (very expensive).","many + coisas (many comments)."]}
+        ]}, phrases:[{en:"I listen to music on my computer",pt:"Eu ouço música no meu computador"},{en:"Do you understand English",pt:"Você entende inglês"},{en:"Sometimes I write product reviews",pt:"Às vezes eu escrevo avaliações de produtos"}]}
     ]});
-
     // ===================== UNIT 5 =====================
     courseData.push({ id:5, title:"Unit 5", subtitle:"Routine & Time", colors:["bg-violet-400/80","bg-purple-500/80","bg-indigo-500/80","bg-blue-400/80"], lessons:[
-        { title:"Lesson 5.1", name:"Days & Frequency", content:{
-            verbs:[
-                { en:"to work", pt:"trabalhar", c:["I work","you work","he / she / it works","we work","you work","they work"] },
-                { en:"to study", pt:"estudar", c:["I study","you study","he / she / it studies","we study","you study","they study"] },
-                { en:"to run", pt:"correr", c:["I run","you run","he / she / it runs","we run","you run","they run"] },
-                { en:"to play", pt:"jogar / brincar", c:["I play","you play","he / she / it plays","we play","you play","they play"] }
-            ],
-            nouns:[
-                { en:"weekend", pt:"fim de semana", img:"weekend relax" },
-                { en:"school", pt:"escola", img:"school building" },
-                { en:"soccer", pt:"futebol", img:"soccer" },
-                { en:"music", pt:"música", img:"music notes" },
-                { en:"party", pt:"festa", img:"party" },
-                { en:"class", pt:"aula", img:"classroom" }
-            ],
-            adjectives:[
-                { en:"tired", pt:"cansado(a)", img:"tired" },
-                { en:"busy", pt:"ocupado(a)", img:"busy work" },
-                { en:"free", pt:"livre", img:"free time" }
-            ],
-            adverbs:[
-                { en:"always", pt:"sempre" },
-                { en:"usually", pt:"geralmente" },
-                { en:"often", pt:"frequentemente" },
-                { en:"sometimes", pt:"às vezes" },
-                { en:"never", pt:"nunca" }
-            ],
-            grammar:[
-                { title:"Days of the week", rules:["Monday, Tuesday, Wednesday, Thursday.","Friday, Saturday, Sunday.","weekdays = dias de semana ; weekend = fim de semana."] },
-                { title:"Adverbs of frequency", rules:["always > usually > often > sometimes > hardly ever > never.","I always listen to music. = Eu sempre ouço música."] }
-            ]
-        }, phrases:[
-            { en:"I always run in the morning", pt:"Eu sempre corro de manhã" },
-            { en:"Do you work on the weekend", pt:"Você trabalha no fim de semana" }
-        ]},
-        { title:"Lesson 5.2", name:"Daily Activities", content:{
-            verbs:[
-                { en:"to get up", pt:"levantar-se", c:["I get up","you get up","he / she / it gets up","we get up","you get up","they get up"] },
-                { en:"to go to bed", pt:"ir dormir", c:["I go to bed","you go to bed","he / she / it goes to bed","we go to bed","you go to bed","they go to bed"] },
-                { en:"to have (a meal)", pt:"tomar / comer (refeição)", c:["I have","you have","he / she / it has","we have","you have","they have"] },
-                { en:"to make", pt:"fazer / preparar", c:["I make","you make","he / she / it makes","we make","you make","they make"] }
-            ],
-            nouns:[
-                { en:"breakfast", pt:"café da manhã", img:"breakfast" },
-                { en:"lunch", pt:"almoço", img:"lunch meal" },
-                { en:"dinner", pt:"jantar", img:"dinner" },
-                { en:"coffee", pt:"café", img:"coffee" },
-                { en:"bread", pt:"pão", img:"bread" },
-                { en:"office", pt:"escritório", img:"office" },
-                { en:"bed", pt:"cama", img:"bed sleeping" }
-            ],
-            adjectives:[
-                { en:"early", pt:"cedo", img:"early sunrise" },
-                { en:"late", pt:"tarde", img:"late clock" }
-            ],
-            adverbs:[
-                { en:"before", pt:"antes" },
-                { en:"after", pt:"depois" },
-                { en:"when", pt:"quando" },
-                { en:"where", pt:"onde" }
-            ],
-            grammar:[
-                { title:"Third person (Does ...?)", rules:["Does she make dinner? Yes, she does. / No, she doesn't.","Does he like games? — He likes games.","Wh- questions: When do you go out? Where do you eat lunch?"] }
-            ]
-        }, phrases:[
-            { en:"I have dinner at nine", pt:"Eu janto às nove" },
-            { en:"What time do you go to bed", pt:"Que horas você vai dormir" }
-        ]},
-        { title:"Lesson 5.3", name:"Telling the Time", content:{
-            verbs:[
-                { en:"to rest", pt:"descansar", c:["I rest","you rest","he / she / it rests","we rest","you rest","they rest"] },
-                { en:"to come", pt:"vir / chegar", c:["I come","you come","he / she / it comes","we come","you come","they come"] }
-            ],
-            nouns:[
-                { en:"hour", pt:"hora", img:"clock hour" },
-                { en:"guitar", pt:"violão", img:"guitar" },
-                { en:"homework", pt:"dever de casa", img:"homework" },
-                { en:"report", pt:"relatório", img:"report document" },
-                { en:"meal", pt:"refeição", img:"meal plate" }
-            ],
-            adjectives:[
-                { en:"happy", pt:"feliz", img:"happy" },
-                { en:"tired", pt:"cansado(a)", img:"tired person" },
-                { en:"good", pt:"bom(boa)", img:"good" }
-            ],
-            adverbs:[
-                { en:"o'clock", pt:"em ponto" },
-                { en:"a.m.", pt:"antes do meio-dia" },
-                { en:"p.m.", pt:"após o meio-dia" },
-                { en:"free time", pt:"tempo livre" }
-            ],
-            grammar:[
-                { title:"Telling the time", rules:["It's eight o'clock. = São oito em ponto.","quarter after = e quinze ; quarter to = quinze para.","half past / thirty = e meia."] }
-            ]
-        }, phrases:[
-            { en:"I have an English class in the evening", pt:"Eu tenho aula de inglês à noite" },
-            { en:"I study English for two hours", pt:"Eu estudo inglês por duas horas" }
-        ]},
-        { title:"Lesson 5.4", name:"Review: Routine", content:{
-            verbs:[
-                { en:"to wash", pt:"lavar", c:["I wash","you wash","he / she / it washes","we wash","you wash","they wash"] },
-                { en:"to work out", pt:"malhar / treinar", c:["I work out","you work out","he / she / it works out","we work out","you work out","they work out"] },
-                { en:"to apply (for)", pt:"inscrever-se", c:["I apply","you apply","he / she / it applies","we apply","you apply","they apply"] }
-            ],
-            nouns:[
-                { en:"gym", pt:"academia", img:"gym fitness" },
-                { en:"face", pt:"rosto", img:"face" },
-                { en:"workout", pt:"treino", img:"workout exercise" }
-            ],
-            adjectives:[
-                { en:"equal", pt:"igual", img:"equal balance" },
-                { en:"long", pt:"longo(a)", img:"long road" }
-            ],
-            adverbs:[
-                { en:"in the morning", pt:"de manhã" },
-                { en:"in the afternoon", pt:"à tarde" },
-                { en:"in the evening", pt:"à noite (início)" },
-                { en:"at night", pt:"à noite (madrugada)" }
-            ],
-            grammar:[
-                { title:"Spelling: he/she + verb", rules:["go → goes ; do → does ; watch → watches.","study → studies ; wash → washes.","She studies French. He goes out."] }
-            ]
-        }, phrases:[
-            { en:"She studies French for one hour", pt:"Ela estuda francês por uma hora" },
-            { en:"I work six hours a day", pt:"Eu trabalho seis horas por dia" }
-        ]}
+      { title:"Lesson 5.1", name:"Days, Frequency & Routine", content:{
+        verbs:[{en:"to work",pt:"trabalhar"},{en:"to study",pt:"estudar"},{en:"to run",pt:"correr"},{en:"to play soccer",pt:"jogar futebol"},{en:"to go out",pt:"sair"},{en:"to stay",pt:"ficar"},{en:"to watch",pt:"assistir"},{en:"to have fun",pt:"divertir-se"},{en:"to chat",pt:"bater papo"},{en:"to have",pt:"ter"},{en:"to want",pt:"querer"},{en:"to like",pt:"gostar"},{en:"to sleep",pt:"dormir"},{en:"to drink",pt:"beber"},{en:"to listen",pt:"ouvir"},{en:"to read",pt:"ler"},{en:"to write",pt:"escrever"},{en:"to get up",pt:"levantar-se"},{en:"to go to bed",pt:"ir dormir"},{en:"to make",pt:"fazer / preparar"}],
+        nouns:[{en:"teacher",pt:"professor(a)"},{en:"weekend",pt:"fim de semana"},{en:"school",pt:"escola"},{en:"lunch",pt:"almoço"},{en:"home",pt:"casa"},{en:"friends",pt:"amigos"},{en:"midnight",pt:"meia-noite"},{en:"noon",pt:"meio-dia"},{en:"parents",pt:"pais"},{en:"best friend",pt:"melhor amigo(a)"},{en:"coffee",pt:"café"},{en:"tea",pt:"chá"},{en:"breakfast",pt:"café da manhã"},{en:"dinner",pt:"jantar"},{en:"class",pt:"aula"},{en:"bed",pt:"cama"},{en:"routine",pt:"rotina"},{en:"body clock",pt:"relógio biológico"},{en:"basketball",pt:"basquete"},{en:"soccer",pt:"futebol"},{en:"games",pt:"jogos"},{en:"fun",pt:"diversão"},{en:"doctor",pt:"médico(a)"},{en:"office",pt:"escritório"},{en:"new job",pt:"emprego novo"},{en:"notebook",pt:"caderno"},{en:"party",pt:"festa"},{en:"birthday",pt:"aniversário"}],
+        adjectives:[{en:"tired",pt:"cansado(a)"},{en:"late",pt:"tarde / atrasado"},{en:"expensive",pt:"caro"}],
+        adverbs:[{en:"always",pt:"sempre"},{en:"usually",pt:"geralmente"},{en:"often",pt:"frequentemente"},{en:"sometimes",pt:"às vezes"},{en:"hardly ever",pt:"quase nunca"},{en:"never",pt:"nunca"},{en:"before",pt:"antes"},{en:"after",pt:"depois"},{en:"every",pt:"todo / cada"},{en:"on",pt:"em (dias)"},{en:"at",pt:"em (horários)"},{en:"in",pt:"em (períodos)"},{en:"morning",pt:"manhã"},{en:"afternoon",pt:"tarde"},{en:"evening",pt:"noite (início)"},{en:"night",pt:"noite"},{en:"Monday",pt:"segunda-feira"},{en:"Tuesday",pt:"terça-feira"},{en:"Wednesday",pt:"quarta-feira"},{en:"Thursday",pt:"quinta-feira"},{en:"Friday",pt:"sexta-feira"},{en:"Saturday",pt:"sábado"},{en:"Sunday",pt:"domingo"},{en:"weekdays",pt:"dias de semana"}],
+        grammar:[
+          {title:"Adverbs of frequency",rules:["always > usually > often > sometimes > hardly ever > never.","I always run in the morning. I always listen to music."]},
+          {title:"Does ...? (3rd person)",rules:["Does she...? Yes, she does. / No, she doesn't.","Does he...? Does it...?"]},
+          {title:"Prepositions of time",rules:["on Monday (dias). at night / at 8 (horários). in the morning (períodos)."]}
+        ]}, phrases:[{en:"I always run in the morning",pt:"Eu sempre corro de manhã"},{en:"Do you work on the weekend",pt:"Você trabalha no fim de semana"},{en:"Do you study in the morning",pt:"Você estuda de manhã"}]},
+      { title:"Lesson 5.2", name:"Daily Activities & Does", content:{
+        verbs:[{en:"to get up",pt:"levantar-se"},{en:"to go to bed",pt:"ir dormir"},{en:"to make",pt:"fazer / preparar"},{en:"to have",pt:"ter / consumir"},{en:"to eat lunch",pt:"almoçar"},{en:"to have lunch",pt:"almoçar"},{en:"to have breakfast",pt:"tomar café da manhã"},{en:"to know",pt:"saber / conhecer"},{en:"to do",pt:"fazer"},{en:"to study",pt:"estudar"},{en:"to work",pt:"trabalhar"},{en:"to go out",pt:"sair"},{en:"to play",pt:"jogar"},{en:"to live",pt:"morar"},{en:"to like",pt:"gostar"},{en:"to feel",pt:"sentir"},{en:"to find",pt:"encontrar"},{en:"to meet",pt:"conhecer / encontrar"},{en:"to choose",pt:"escolher"},{en:"to change",pt:"mudar"},{en:"to agree",pt:"concordar"}],
+        nouns:[{en:"activity",pt:"atividade"},{en:"ball",pt:"bola"},{en:"basketball",pt:"basquete"},{en:"beach",pt:"praia"},{en:"breakfast",pt:"café da manhã"},{en:"dinner",pt:"jantar"},{en:"lunch",pt:"almoço"},{en:"lunchtime",pt:"hora do almoço"},{en:"bread",pt:"pão"},{en:"egg",pt:"ovo"},{en:"chart",pt:"quadro / tabela"},{en:"conversation",pt:"conversa"},{en:"exercise",pt:"exercício"},{en:"free time",pt:"tempo livre"},{en:"game",pt:"jogo"},{en:"job",pt:"emprego"},{en:"list",pt:"lista"},{en:"man",pt:"homem"},{en:"woman",pt:"mulher"},{en:"minute",pt:"minuto"},{en:"person",pt:"pessoa"},{en:"place",pt:"lugar"},{en:"player",pt:"jogador"},{en:"pronunciation",pt:"pronúncia"},{en:"sport",pt:"esporte"},{en:"syllable",pt:"sílaba"},{en:"team",pt:"time"},{en:"cousin",pt:"primo(a)"},{en:"work",pt:"trabalho"}],
+        adjectives:[{en:"bad",pt:"ruim"},{en:"boring",pt:"chato"},{en:"common",pt:"comum"},{en:"cool",pt:"legal"},{en:"early",pt:"cedo"},{en:"fun",pt:"divertido"},{en:"funny",pt:"engraçado"},{en:"great",pt:"ótimo"},{en:"important",pt:"importante"},{en:"interesting",pt:"interessante"},{en:"late",pt:"tarde"},{en:"online",pt:"online"},{en:"right",pt:"certo / correto"},{en:"true",pt:"verdadeiro"}],
+        adverbs:[{en:"every day",pt:"todos os dias"},{en:"neither",pt:"nem / também não"},{en:"sometimes",pt:"às vezes"},{en:"too",pt:"também"},{en:"usually",pt:"geralmente"},{en:"hardly ever",pt:"quase nunca"},{en:"before",pt:"antes"},{en:"at work",pt:"no trabalho"},{en:"at school",pt:"na escola"},{en:"for lunch",pt:"no almoço"},{en:"for dinner",pt:"no jantar"}],
+        grammar:[
+          {title:"Does ... ? (questions)",rules:["Does your mother make dinner? she makes / doesn't make.","Does your teacher work on the weekend? Does he like games?","Yes, he does. / No, he doesn't."]},
+          {title:"Wh- questions (do/does)",rules:["When do you go out? Where do you eat lunch on weekdays?","What do you do on Saturday? What time do you go to bed?","I don't know what time my teacher gets up."]},
+          {title:"Meals",rules:["have breakfast / eat lunch / have lunch / have dinner.","My sister has coffee, egg and bread for breakfast."]}
+        ]}, phrases:[{en:"I have dinner at nine",pt:"Eu janto às nove"},{en:"What time do you go to bed",pt:"Que horas você vai dormir"},{en:"Where do you eat lunch",pt:"Onde você almoça"}]},
+      { title:"Lesson 5.3", name:"Time, Work & Hobbies", content:{
+        verbs:[{en:"to be",pt:"ser / estar"},{en:"to work",pt:"trabalhar"},{en:"to rest",pt:"descansar"},{en:"to play",pt:"jogar / tocar"},{en:"to have",pt:"ter"},{en:"to study",pt:"estudar"},{en:"to go out",pt:"sair"},{en:"to get up",pt:"levantar-se"},{en:"to come",pt:"vir / chegar"},{en:"to meet",pt:"encontrar"},{en:"to describe",pt:"descrever"},{en:"to skim",pt:"ler rapidamente"},{en:"to run",pt:"correr"}],
+        nouns:[{en:"work",pt:"trabalho"},{en:"salesperson",pt:"vendedor(a)"},{en:"store",pt:"loja"},{en:"homework",pt:"dever de casa"},{en:"report",pt:"relatório"},{en:"heading",pt:"cabeçalho"},{en:"desk",pt:"mesa de trabalho"},{en:"play",pt:"lazer / jogo"},{en:"music",pt:"música"},{en:"guitar",pt:"violão / guitarra"},{en:"book",pt:"livro"},{en:"magazine",pt:"revista"},{en:"article",pt:"artigo"},{en:"meal",pt:"refeição"},{en:"chocolate cookie",pt:"biscoito de chocolate"},{en:"child",pt:"criança"},{en:"life",pt:"vida"},{en:"test",pt:"teste"},{en:"result",pt:"resultado"},{en:"score",pt:"pontuação"},{en:"routine",pt:"rotina"},{en:"hour",pt:"hora"}],
+        adjectives:[{en:"happy",pt:"feliz"},{en:"busy",pt:"ocupado(a)"},{en:"tired",pt:"cansado(a)"},{en:"great",pt:"ótimo(a)"},{en:"good",pt:"bom(boa)"},{en:"bad",pt:"mau / ruim"},{en:"french",pt:"francês"},{en:"chinese",pt:"chinês"}],
+        adverbs:[{en:"a.m.",pt:"antes do meio-dia"},{en:"p.m.",pt:"após o meio-dia"},{en:"o'clock",pt:"em ponto"},{en:"weekday",pt:"dia de semana"},{en:"weekend",pt:"fim de semana"},{en:"free time",pt:"tempo livre"},{en:"What's up?",pt:"E aí?"}],
+        grammar:[
+          {title:"Telling the time",rules:["o'clock = em ponto. quarter after = e quinze. quarter to = quinze para.","half past / thirty = e meia. oh-five = e cinco (9:05)."]},
+          {title:"Question words",rules:["what, what time, when, where, how."]}
+        ]}, phrases:[{en:"I have an English class in the evening",pt:"Eu tenho aula de inglês à noite"},{en:"After work I go to guitar class",pt:"Depois do trabalho eu vou para a aula de violão"}]},
+      { title:"Lesson 5.4", name:"Routine in Practice", content:{
+        verbs:[{en:"to go",pt:"ir"},{en:"to do",pt:"fazer"},{en:"to go out",pt:"sair"},{en:"to watch",pt:"assistir"},{en:"to wash",pt:"lavar"},{en:"to study",pt:"estudar"},{en:"to apply for",pt:"inscrever-se"},{en:"to work out",pt:"malhar"},{en:"to rest",pt:"descansar"},{en:"to walk",pt:"caminhar"},{en:"to wake up",pt:"acordar"},{en:"to train",pt:"treinar"},{en:"to prefer",pt:"preferir"},{en:"to be",pt:"ser / estar"}],
+        nouns:[{en:"homework",pt:"dever de casa"},{en:"face",pt:"rosto"},{en:"hands",pt:"mãos"},{en:"workout",pt:"treino"},{en:"gym",pt:"academia"},{en:"athlete",pt:"atleta"},{en:"half",pt:"metade"},{en:"hour",pt:"hora"},{en:"day",pt:"dia"},{en:"week",pt:"semana"},{en:"year",pt:"ano"}],
+        adjectives:[{en:"equal",pt:"igual"}],
+        adverbs:[{en:"in the morning",pt:"de manhã"},{en:"in the afternoon",pt:"à tarde"},{en:"in the evening",pt:"à noite (início)"},{en:"at night",pt:"à noite (madrugada)"},{en:"in the dawn",pt:"na madrugada"},{en:"like",pt:"como / tipo"},{en:"plus",pt:"mais"},{en:"because",pt:"porque"}],
+        grammar:[
+          {title:"Spelling: he/she + verb",rules:["go -> goes ; do -> does ; watch -> watches.","study -> studies ; wash -> washes."]},
+          {title:"Action + duration + period",rules:["She studies French for one hour. I study English for two hours.","I work six hours a day. five days a week. twelve months a year."]},
+          {title:"Prefer / Can",rules:["I prefer to rest. I like to rest on the weekend.","I can rest. I can go out. I can be with my family and my friends."]}
+        ]}, phrases:[{en:"She studies French for one hour",pt:"Ela estuda francês por uma hora"},{en:"I work six hours a day",pt:"Eu trabalho seis horas por dia"},{en:"I can rest on the weekend",pt:"Eu posso descansar no fim de semana"}]}
     ]});
 
     // ===================== UNIT 6 =====================
     courseData.push({ id:6, title:"Unit 6", subtitle:"City & Nature", colors:["bg-cyan-400/80","bg-sky-500/80","bg-teal-500/80","bg-emerald-400/80"], lessons:[
-        { title:"Lesson 6.1", name:"Places in the City", content:{
-            verbs:[
-                { en:"to want", pt:"querer", c:["I want","you want","he / she / it wants","we want","you want","they want"] },
-                { en:"to go", pt:"ir", c:["I go","you go","he / she / it goes","we go","you go","they go"] },
-                { en:"to read", pt:"ler", c:["I read","you read","he / she / it reads","we read","you read","they read"] }
-            ],
-            nouns:[
-                { en:"bookstore", pt:"livraria", img:"bookstore" },
-                { en:"café", pt:"cafeteria", img:"cafe coffee shop" },
-                { en:"hospital", pt:"hospital", img:"hospital" },
-                { en:"mall", pt:"shopping center", img:"shopping mall" },
-                { en:"movie theater", pt:"cinema", img:"movie theater" },
-                { en:"museum", pt:"museu", img:"museum" },
-                { en:"park", pt:"parque", img:"park" },
-                { en:"restaurant", pt:"restaurante", img:"restaurant" },
-                { en:"supermarket", pt:"supermercado", img:"supermarket" },
-                { en:"zoo", pt:"zoológico", img:"zoo" }
-            ],
-            adjectives:[
-                { en:"friendly", pt:"simpático(a)", img:"friendly" },
-                { en:"funny", pt:"engraçado(a)", img:"funny" },
-                { en:"interesting", pt:"interessante", img:"interesting place" }
-            ],
-            adverbs:[
-                { en:"near", pt:"perto" },
-                { en:"nearby", pt:"por perto" },
-                { en:"after school", pt:"depois da escola" }
-            ],
-            grammar:[
-                { title:"There is / There are & quantifiers", rules:["there's = há / existe (sing.) ; there are = há (pl.).","no = nenhum ; a/an = um/uma.","some = alguns ; a lot of = muitos."] },
-                { title:"Plurals", rules:["city → cities ; party → parties (y → ies).","animal → animals ; book → books."] }
-            ]
-        }, phrases:[
-            { en:"There is a park near my house", pt:"Há um parque perto da minha casa" },
-            { en:"I want to read a book in the café", pt:"Eu quero ler um livro na cafeteria" }
-        ]},
-        { title:"Lesson 6.2", name:"Nature", content:{
-            verbs:[
-                { en:"to see", pt:"ver", c:["I see","you see","he / she / it sees","we see","you see","they see"] },
-                { en:"to live", pt:"viver / morar", c:["I live","you live","he / she / it lives","we live","you live","they live"] }
-            ],
-            nouns:[
-                { en:"beach", pt:"praia", img:"beach" },
-                { en:"mountain", pt:"montanha", img:"mountain" },
-                { en:"river", pt:"rio", img:"river" },
-                { en:"lake", pt:"lago", img:"lake" },
-                { en:"forest", pt:"floresta", img:"forest" },
-                { en:"ocean", pt:"oceano", img:"ocean" },
-                { en:"island", pt:"ilha", img:"island" },
-                { en:"tree", pt:"árvore", img:"tree" },
-                { en:"flower", pt:"flor", img:"flower" },
-                { en:"garden", pt:"jardim", img:"garden" }
-            ],
-            adjectives:[
-                { en:"large", pt:"grande / amplo", img:"large field" },
-                { en:"tall", pt:"alto(a)", img:"tall tree" },
-                { en:"beautiful", pt:"bonito(a)", img:"beautiful nature" }
-            ],
-            adverbs:[
-                { en:"close to", pt:"perto de" },
-                { en:"next to", pt:"ao lado de" },
-                { en:"usually", pt:"geralmente" },
-                { en:"on vacation", pt:"de férias" }
-            ],
-            grammar:[
-                { title:"Is there ...? / Are there ...?", rules:["Is there a river near your house?","Are there flowers on the table?","There is a lot of grass. There are some trees."] }
-            ]
-        }, phrases:[
-            { en:"There are tall trees in the forest", pt:"Há árvores altas na floresta" },
-            { en:"I usually go to the beach", pt:"Eu geralmente vou à praia" }
-        ]},
-        { title:"Lesson 6.3", name:"Directions", content:{
-            verbs:[
-                { en:"to turn", pt:"virar", c:["I turn","you turn","he / she / it turns","we turn","you turn","they turn"] },
-                { en:"to walk", pt:"caminhar", c:["I walk","you walk","he / she / it walks","we walk","you walk","they walk"] },
-                { en:"to go", pt:"ir", c:["I go","you go","he / she / it goes","we go","you go","they go"] }
-            ],
-            nouns:[
-                { en:"street", pt:"rua", img:"street" },
-                { en:"avenue", pt:"avenida", img:"avenue" },
-                { en:"block", pt:"quarteirão", img:"city block" },
-                { en:"corner", pt:"esquina", img:"street corner" },
-                { en:"map", pt:"mapa", img:"map" },
-                { en:"station", pt:"estação", img:"train station" },
-                { en:"subway", pt:"metrô", img:"subway" }
-            ],
-            adjectives:[
-                { en:"clear", pt:"claro / límpido", img:"clear sky" },
-                { en:"busy", pt:"movimentado(a)", img:"busy street" }
-            ],
-            adverbs:[
-                { en:"left", pt:"esquerda" },
-                { en:"right", pt:"direita" },
-                { en:"straight", pt:"reto / direto" },
-                { en:"over there", pt:"logo ali" }
-            ],
-            grammar:[
-                { title:"Giving directions", rules:["Excuse me, where is the museum?","Turn left / turn right. = Vire à esquerda / direita.","Go straight to the movie theater.","It's on the corner."] }
-            ]
-        }, phrases:[
-            { en:"Turn left on this street", pt:"Vire à esquerda nesta rua" },
-            { en:"The hotel is near the museum", pt:"O hotel fica perto do museu" }
-        ]},
-        { title:"Lesson 6.4", name:"Review: City & Nature", content:{
-            verbs:[
-                { en:"to visit", pt:"visitar", c:["I visit","you visit","he / she / it visits","we visit","you visit","they visit"] },
-                { en:"to love", pt:"amar", c:["I love","you love","he / she / it loves","we love","you love","they love"] }
-            ],
-            nouns:[
-                { en:"city", pt:"cidade", img:"city" },
-                { en:"waterfall", pt:"cachoeira", img:"waterfall" },
-                { en:"bird", pt:"pássaro", img:"bird" },
-                { en:"statue", pt:"estátua", img:"statue" },
-                { en:"building", pt:"prédio", img:"building" }
-            ],
-            adjectives:[
-                { en:"famous", pt:"famoso(a)", img:"famous landmark" },
-                { en:"tropical", pt:"tropical", img:"tropical beach" },
-                { en:"important", pt:"importante", img:"important" }
-            ],
-            adverbs:[
-                { en:"inside", pt:"dentro" },
-                { en:"outside", pt:"fora" },
-                { en:"near", pt:"perto" }
-            ],
-            grammar:[
-                { title:"Adjective + noun order", rules:["a beautiful beach = uma praia bonita (adj. antes do subst.).","a busy road ; a famous statue.","Christ the Redeemer is a famous statue."] }
-            ]
-        }, phrases:[
-            { en:"I love to visit the museum", pt:"Eu adoro visitar o museu" },
-            { en:"There are beautiful birds in the forest", pt:"Há pássaros bonitos na floresta" }
-        ]}
+      { title:"Lesson 6.1", name:"Places & There is/are", content:{
+        verbs:[{en:"to talk",pt:"falar / conversar"},{en:"to read",pt:"ler"},{en:"to listen",pt:"ouvir"},{en:"to want",pt:"querer"},{en:"to go",pt:"ir"},{en:"to see",pt:"ver"},{en:"to work",pt:"trabalhar"},{en:"to show",pt:"mostrar"},{en:"to eat",pt:"comer"},{en:"to know",pt:"saber / conhecer"},{en:"to play",pt:"jogar / brincar"},{en:"to write",pt:"escrever"},{en:"to like",pt:"gostar"},{en:"to live",pt:"morar"},{en:"to use",pt:"usar"}],
+        nouns:[{en:"bookstore",pt:"livraria"},{en:"café",pt:"cafeteria"},{en:"college",pt:"faculdade"},{en:"hospital",pt:"hospital"},{en:"hotel",pt:"hotel"},{en:"mall",pt:"shopping center"},{en:"movie theater",pt:"cinema"},{en:"museum",pt:"museu"},{en:"park",pt:"parque"},{en:"restaurant",pt:"restaurante"},{en:"school",pt:"escola"},{en:"store",pt:"loja"},{en:"supermarket",pt:"supermercado"},{en:"zoo",pt:"zoológico"},{en:"neighborhood",pt:"bairro"},{en:"week",pt:"semana"},{en:"weekend",pt:"fim de semana"},{en:"free time",pt:"tempo livre"},{en:"animals",pt:"animais"},{en:"book",pt:"livro"},{en:"doctor",pt:"médico"},{en:"movies",pt:"filmes"},{en:"student",pt:"estudante"},{en:"pictures",pt:"quadros / fotos"},{en:"artists",pt:"artistas"},{en:"dinner",pt:"jantar"},{en:"coffee",pt:"café"},{en:"cookie",pt:"biscoito"},{en:"milk",pt:"leite"},{en:"sugar",pt:"açúcar"},{en:"earphones",pt:"fones de ouvido"},{en:"camera",pt:"câmera"},{en:"furniture",pt:"móveis"},{en:"children",pt:"crianças / filhos"},{en:"city",pt:"cidade"},{en:"party",pt:"festa"}],
+        adjectives:[{en:"cool",pt:"legal"},{en:"great",pt:"ótimo / grande"},{en:"interesting",pt:"interessante"},{en:"expensive",pt:"caro"},{en:"big",pt:"grande"},{en:"nice",pt:"legal / agradável"},{en:"funny",pt:"engraçado"},{en:"friendly",pt:"amigável"}],
+        adverbs:[{en:"there's",pt:"há / existe (sing.)"},{en:"there are",pt:"há / existem (pl.)"},{en:"no",pt:"nenhum"},{en:"a / an",pt:"um / uma"},{en:"some",pt:"alguns"},{en:"a lot of",pt:"muitos"},{en:"near",pt:"perto"},{en:"after school",pt:"depois da escola"},{en:"no way",pt:"de jeito nenhum"}],
+        grammar:[
+          {title:"There is / There are & quantifiers",rules:["there's / there are. no = nenhum. a/an = um/uma.","some = alguns. a lot of = muitos. exact numbers."]},
+          {title:"Plurals",rules:["city -> cities ; party -> parties (y -> ies).","animal -> animals ; book -> books."]}
+        ]}, phrases:[{en:"There is a park near my house",pt:"Há um parque perto da minha casa"},{en:"I want to read a book in the café",pt:"Eu quero ler um livro na cafeteria"},{en:"There are no funny animals in the zoo",pt:"Não há animais engraçados no zoológico"}]},
+      { title:"Lesson 6.2", name:"Nature & Directions", content:{
+        verbs:[{en:"to be",pt:"ser / haver"},{en:"to change",pt:"mudar"},{en:"to choose",pt:"escolher"},{en:"to compare",pt:"comparar"},{en:"to give",pt:"dar"},{en:"to help",pt:"ajudar"},{en:"to look at",pt:"olhar para"},{en:"to see",pt:"ver"},{en:"to take",pt:"fazer (um teste)"},{en:"to tell",pt:"contar / dizer"},{en:"to think",pt:"pensar"},{en:"to ask",pt:"perguntar / pedir"},{en:"to speak",pt:"falar"},{en:"to turn",pt:"virar"},{en:"to come",pt:"vir"},{en:"to understand",pt:"entender"},{en:"to repeat",pt:"repetir"},{en:"to check",pt:"conferir"},{en:"to follow",pt:"seguir"},{en:"to walk down",pt:"descer (a rua)"}],
+        nouns:[{en:"beach",pt:"praia"},{en:"desert",pt:"deserto"},{en:"flower",pt:"flor"},{en:"forest",pt:"floresta"},{en:"grass",pt:"grama"},{en:"hill",pt:"colina"},{en:"island",pt:"ilha"},{en:"lake",pt:"lago"},{en:"mountain",pt:"montanha"},{en:"nature",pt:"natureza"},{en:"ocean",pt:"oceano"},{en:"plant",pt:"planta"},{en:"river",pt:"rio"},{en:"snow",pt:"neve"},{en:"tree",pt:"árvore"},{en:"water",pt:"água"},{en:"garden",pt:"jardim"},{en:"window",pt:"janela"},{en:"block",pt:"quarteirão"},{en:"street",pt:"rua"},{en:"map",pt:"mapa"},{en:"station",pt:"estação"},{en:"square",pt:"praça"},{en:"information",pt:"informação"},{en:"corner",pt:"esquina"},{en:"example",pt:"exemplo"},{en:"partner",pt:"parceiro(a)"},{en:"test",pt:"teste / prova"}],
+        adjectives:[{en:"big",pt:"grande"},{en:"correct",pt:"correto"},{en:"favorite",pt:"favorito"},{en:"large",pt:"grande / amplo"},{en:"tall",pt:"alto"},{en:"true",pt:"verdadeiro"},{en:"clear",pt:"claro / límpido"}],
+        adverbs:[{en:"close to",pt:"perto de"},{en:"near",pt:"perto"},{en:"between",pt:"entre"},{en:"next to",pt:"ao lado de"},{en:"left",pt:"esquerda"},{en:"right",pt:"direita"},{en:"straight",pt:"reto / direto"},{en:"over there",pt:"logo ali"},{en:"usually",pt:"geralmente"},{en:"on vacation",pt:"de férias"},{en:"excuse me",pt:"com licença"},{en:"go straight",pt:"vá direto"},{en:"you're welcome",pt:"de nada"}],
+        grammar:[
+          {title:"Is there...? Are there...?",rules:["Is there a river near your house? Are there flowers on the table?","There is a lot of grass. There are some trees."]},
+          {title:"Giving directions",rules:["Excuse me, where is the museum? Go straight. Turn left / turn right.","on the left / on the right / that way / one block / over there."]},
+          {title:"Vacation",rules:["I usually go to the beach on vacation."]}
+        ]}, phrases:[{en:"Is there a river near your house",pt:"Há um rio perto da sua casa"},{en:"I usually go to the beach",pt:"Eu geralmente vou à praia"},{en:"Go straight and turn left",pt:"Vá direto e vire à esquerda"}]},
+      { title:"Lesson 6.3", name:"Getting Around & Famous Places", content:{
+        verbs:[{en:"to look",pt:"olhar"},{en:"to see",pt:"ver"},{en:"to listen",pt:"ouvir"},{en:"to say",pt:"dizer"},{en:"to read",pt:"ler"},{en:"to hear",pt:"ouvir"},{en:"to write",pt:"escrever"},{en:"to love",pt:"amar"},{en:"to visit",pt:"visitar"},{en:"to make",pt:"fazer / formar"},{en:"to have",pt:"ter"},{en:"to think",pt:"achar / pensar"},{en:"to turn",pt:"virar"},{en:"to go",pt:"ir"}],
+        nouns:[{en:"subway",pt:"metrô"},{en:"train",pt:"trem"},{en:"town",pt:"cidade pequena"},{en:"square",pt:"praça"},{en:"station",pt:"estação"},{en:"subway station",pt:"estação de metrô"},{en:"train station",pt:"estação de trem"},{en:"bus station",pt:"rodoviária"},{en:"corner",pt:"esquina"},{en:"avenue",pt:"avenida"},{en:"woman",pt:"mulher"},{en:"flowers",pt:"flores"},{en:"plants",pt:"plantas"},{en:"trees",pt:"árvores"},{en:"beaches",pt:"praias"},{en:"waterfalls",pt:"cachoeiras"},{en:"birds",pt:"pássaros"},{en:"statue",pt:"estátua"},{en:"countries",pt:"países"},{en:"monkey",pt:"macaco"},{en:"opinion",pt:"opinião"},{en:"size",pt:"tamanho"},{en:"car",pt:"carro"},{en:"building",pt:"prédio"},{en:"road",pt:"estrada / rua"},{en:"world",pt:"mundo"},{en:"fact sheet",pt:"ficha informativa"}],
+        adjectives:[{en:"tall",pt:"alto"},{en:"big",pt:"grande"},{en:"small",pt:"pequeno"},{en:"near",pt:"perto"},{en:"beautiful",pt:"bonito"},{en:"famous",pt:"famoso"},{en:"important",pt:"importante"},{en:"tropical",pt:"tropical"},{en:"different",pt:"diferente"},{en:"busy",pt:"movimentado"},{en:"nice",pt:"agradável"},{en:"interesting",pt:"interessante"},{en:"great",pt:"ótimo"}],
+        adverbs:[{en:"over there",pt:"logo ali"},{en:"over here",pt:"bem aqui"},{en:"on the corner",pt:"na esquina"},{en:"next to",pt:"ao lado de"},{en:"inside",pt:"dentro"},{en:"outside",pt:"fora"},{en:"on this street",pt:"nesta rua"}],
+        grammar:[
+          {title:"There is / Are there...?",rules:["Is there a hotel on this street? Are there stores on this block?","The hotel is near the museum. It is on my way to school."]},
+          {title:"Famous places & adjectives",rules:["Christ the Redeemer is a famous statue.","a beautiful beach ; a busy road (adjetivo antes do substantivo)."]}
+        ]}, phrases:[{en:"The hotel is near the museum",pt:"O hotel fica perto do museu"},{en:"There are beautiful birds in the forest",pt:"Há pássaros bonitos na floresta"},{en:"Turn to the left",pt:"Vire à esquerda"}]},
+      { title:"Lesson 6.4", name:"Daily Life Review", content:{
+        verbs:[{en:"to brush",pt:"escovar"},{en:"to call",pt:"ligar / chamar"},{en:"to chat",pt:"bater papo"},{en:"to clean",pt:"limpar"},{en:"to cook",pt:"cozinhar"},{en:"to do",pt:"fazer"},{en:"to drink",pt:"beber"},{en:"to eat",pt:"comer"},{en:"to get up",pt:"levantar-se"},{en:"to have fun",pt:"divertir-se"},{en:"to help",pt:"ajudar"},{en:"to learn",pt:"aprender"},{en:"to leave",pt:"sair / partir"},{en:"to love",pt:"amar"},{en:"to play",pt:"jogar / brincar"},{en:"to run",pt:"correr"},{en:"to shop",pt:"fazer compras"},{en:"to study",pt:"estudar"},{en:"to take",pt:"tomar / pegar"},{en:"to wash",pt:"lavar"},{en:"to watch",pt:"assistir"},{en:"to work",pt:"trabalhar"}],
+        nouns:[{en:"sister",pt:"irmã"},{en:"brother",pt:"irmão"},{en:"daughter",pt:"filha"},{en:"son",pt:"filho"},{en:"husband",pt:"marido"},{en:"children",pt:"crianças"},{en:"kids",pt:"crianças (inf.)"},{en:"friends",pt:"amigos"},{en:"partner",pt:"parceiro(a)"},{en:"student",pt:"estudante"},{en:"kitchen",pt:"cozinha"},{en:"bathroom",pt:"banheiro"},{en:"room",pt:"cômodo"},{en:"furniture",pt:"móveis"},{en:"bed",pt:"cama"},{en:"dishes",pt:"louça"},{en:"computer",pt:"computador"},{en:"car",pt:"carro"},{en:"store",pt:"loja"},{en:"park",pt:"parque"},{en:"game",pt:"jogo"},{en:"food",pt:"comida"},{en:"breakfast",pt:"café da manhã"},{en:"lunch",pt:"almoço"},{en:"dinner",pt:"jantar"},{en:"homework",pt:"dever de casa"},{en:"hair",pt:"cabelo"},{en:"teeth",pt:"dentes"},{en:"bath",pt:"banho (banheira)"},{en:"shower",pt:"banho (chuveiro)"},{en:"dog",pt:"cachorro"},{en:"cat",pt:"gato"},{en:"time",pt:"tempo / hora"},{en:"day",pt:"dia"},{en:"moment",pt:"momento"}],
+        adjectives:[{en:"busy",pt:"ocupado(a)"},{en:"boring",pt:"chato(a)"},{en:"fun",pt:"divertido(a)"},{en:"difficult",pt:"difícil"},{en:"nice",pt:"legal / gentil"}],
+        adverbs:[{en:"right now",pt:"agora mesmo"},{en:"at the moment",pt:"no momento"},{en:"in the morning",pt:"de manhã"},{en:"at night",pt:"à noite"},{en:"on the weekend",pt:"no fim de semana"},{en:"late",pt:"tarde / atrasado"},{en:"a good time to",pt:"um bom momento para"}],
+        grammar:[
+          {title:"Verb TO BE (present)",rules:["Affirmative: I am, you are, he is, we are, they are.","Negative: I'm not, you aren't, he isn't.","Questions: Am I? Are you? Is he? Are they?"]}
+        ]}, phrases:[{en:"It is a good time to study",pt:"É um bom momento para estudar"},{en:"I clean the kitchen in the morning",pt:"Eu limpo a cozinha de manhã"},{en:"We have fun on the weekend",pt:"Nós nos divertimos no fim de semana"}]}
     ]});
-
     // ===================== UNIT 7 =====================
     courseData.push({ id:7, title:"Unit 7", subtitle:"Present Continuous", colors:["bg-purple-500/80","bg-violet-500/80","bg-fuchsia-400/80","bg-indigo-400/80"], lessons:[
-        { title:"Lesson 7.1", name:"Things Happening Now", content:{
-            verbs:[
-                { en:"to clean", pt:"limpar", c:["I clean","you clean","he / she / it cleans","we clean","you clean","they clean"] },
-                { en:"to cook", pt:"cozinhar", c:["I cook","you cook","he / she / it cooks","we cook","you cook","they cook"] },
-                { en:"to brush", pt:"escovar", c:["I brush","you brush","he / she / it brushes","we brush","you brush","they brush"] },
-                { en:"to wash", pt:"lavar", c:["I wash","you wash","he / she / it washes","we wash","you wash","they wash"] }
-            ],
-            nouns:[
-                { en:"bus", pt:"ônibus", img:"bus" },
-                { en:"train", pt:"trem", img:"train" },
-                { en:"bike", pt:"bicicleta", img:"bicycle" },
-                { en:"bus stop", pt:"ponto de ônibus", img:"bus stop" },
-                { en:"kitchen", pt:"cozinha", img:"kitchen clean" },
-                { en:"dishes", pt:"louça", img:"dishes washing" },
-                { en:"plant", pt:"planta", img:"potted plant" }
-            ],
-            adjectives:[
-                { en:"happy", pt:"feliz", img:"happy" },
-                { en:"busy", pt:"ocupado(a)", img:"busy" }
-            ],
-            adverbs:[
-                { en:"now", pt:"agora" },
-                { en:"right now", pt:"agora mesmo" },
-                { en:"today", pt:"hoje" },
-                { en:"by", pt:"de (transporte)" }
-            ],
-            grammar:[
-                { title:"Present Continuous", rules:["am/is/are + verbo-ing.","I am cleaning the kitchen. = Estou limpando a cozinha.","She is running. They are playing in the park."] },
-                { title:"-ing spelling", rules:["clean → cleaning ; play → playing.","run → running ; cook → cooking.","watch → watching ; study → studying."] }
-            ]
-        }, phrases:[
-            { en:"I am cleaning the kitchen", pt:"Eu estou limpando a cozinha" },
-            { en:"The children are playing in the park", pt:"As crianças estão brincando no parque" }
-        ]},
-        { title:"Lesson 7.2", name:"Sharing News", content:{
-            verbs:[
-                { en:"to share", pt:"compartilhar", c:["I share","you share","he / she / it shares","we share","you share","they share"] },
-                { en:"to call", pt:"ligar", c:["I call","you call","he / she / it calls","we call","you call","they call"] },
-                { en:"to live", pt:"morar", c:["I live","you live","he / she / it lives","we live","you live","they live"] }
-            ],
-            nouns:[
-                { en:"news", pt:"notícias", img:"news" },
-                { en:"job", pt:"emprego", img:"job work" },
-                { en:"building", pt:"prédio", img:"tall building" },
-                { en:"boyfriend", pt:"namorado", img:"couple boyfriend" },
-                { en:"life", pt:"vida", img:"life lifestyle" }
-            ],
-            adjectives:[
-                { en:"long", pt:"longo(a)", img:"long" },
-                { en:"short", pt:"curto(a)", img:"short" },
-                { en:"expensive", pt:"caro(a)", img:"expensive building" },
-                { en:"busy", pt:"ocupado(a)", img:"busy person" }
-            ],
-            adverbs:[
-                { en:"these days", pt:"hoje em dia" },
-                { en:"right now", pt:"agora mesmo" }
-            ],
-            grammar:[
-                { title:"Present Continuous: questions", rules:["What are you doing? = O que você está fazendo?","Are you resting? Yes, I am. / No, I'm not.","She is calling her friend."] }
-            ]
-        }, phrases:[
-            { en:"I have some good news", pt:"Eu tenho boas notícias" },
-            { en:"What are you doing right now", pt:"O que você está fazendo agora" }
-        ]},
-        { title:"Lesson 7.3", name:"Transportation", content:{
-            verbs:[
-                { en:"to take", pt:"pegar (transporte)", c:["I take","you take","he / she / it takes","we take","you take","they take"] },
-                { en:"to drive", pt:"dirigir", c:["I drive","you drive","he / she / it drives","we drive","you drive","they drive"] },
-                { en:"to ride", pt:"andar de", c:["I ride","you ride","he / she / it rides","we ride","you ride","they ride"] },
-                { en:"to wait (for)", pt:"esperar", c:["I wait","you wait","he / she / it waits","we wait","you wait","they wait"] }
-            ],
-            nouns:[
-                { en:"car", pt:"carro", img:"car driving" },
-                { en:"train station", pt:"estação de trem", img:"train station" },
-                { en:"subway station", pt:"estação de metrô", img:"subway station" },
-                { en:"office", pt:"escritório", img:"office work" }
-            ],
-            adjectives:[
-                { en:"big", pt:"grande", img:"big" },
-                { en:"near", pt:"perto", img:"near" }
-            ],
-            adverbs:[
-                { en:"by car", pt:"de carro" },
-                { en:"by train", pt:"de trem" },
-                { en:"by bike", pt:"de bicicleta" },
-                { en:"to", pt:"para" }
-            ],
-            grammar:[
-                { title:"Continuous + transport", rules:["I am driving to the city.","She is riding the bike to the office.","You are taking the train to the bookstore."] }
-            ]
-        }, phrases:[
-            { en:"I am driving to the city", pt:"Eu estou dirigindo para a cidade" },
-            { en:"She is riding the bike to the office", pt:"Ela está indo de bicicleta para o escritório" }
-        ]},
-        { title:"Lesson 7.4", name:"Review: Right Now", content:{
-            verbs:[
-                { en:"to carry", pt:"carregar", c:["I carry","you carry","he / she / it carries","we carry","you carry","they carry"] },
-                { en:"to help", pt:"ajudar", c:["I help","you help","he / she / it helps","we help","you help","they help"] },
-                { en:"to sing", pt:"cantar", c:["I sing","you sing","he / she / it sings","we sing","you sing","they sing"] }
-            ],
-            nouns:[
-                { en:"chaos", pt:"caos", img:"chaos" },
-                { en:"noise", pt:"barulho", img:"loud noise" },
-                { en:"conversation", pt:"conversa", img:"conversation talk" }
-            ],
-            adjectives:[
-                { en:"difficult", pt:"difícil", img:"difficult" },
-                { en:"tall", pt:"alto(a)", img:"tall building" },
-                { en:"ordinary", pt:"comum", img:"ordinary" }
-            ],
-            adverbs:[
-                { en:"too", pt:"também" },
-                { en:"this week", pt:"esta semana" },
-                { en:"this year", pt:"este ano" }
-            ],
-            grammar:[
-                { title:"Negative & questions (continuous)", rules:["He isn't helping his friend this week.","Are you answering the questions?","Is it difficult to work in this place?"] }
-            ]
-        }, phrases:[
-            { en:"They are singing music too", pt:"Eles também estão cantando música" },
-            { en:"We are going to the beach by bus", pt:"Nós estamos indo à praia de ônibus" }
-        ]}
+      { title:"Lesson 7.1", name:"Things Happening Now", content:{
+        verbs:[{en:"to work",pt:"trabalhar"},{en:"to call",pt:"ligar"},{en:"to run",pt:"correr"},{en:"to read",pt:"ler"},{en:"to listen",pt:"ouvir"},{en:"to post",pt:"postar"},{en:"to use",pt:"usar"},{en:"to know",pt:"saber / conhecer"},{en:"to brush",pt:"escovar"},{en:"to clean",pt:"limpar"},{en:"to cook",pt:"cozinhar"},{en:"to wash",pt:"lavar"},{en:"to do",pt:"fazer"},{en:"to play",pt:"jogar / brincar"},{en:"to study",pt:"estudar"},{en:"to watch",pt:"assistir"},{en:"to learn",pt:"aprender"},{en:"to help",pt:"ajudar"},{en:"to take",pt:"pegar (transporte)"},{en:"to walk",pt:"caminhar"},{en:"to carry",pt:"carregar"},{en:"to wait",pt:"esperar"},{en:"to ride",pt:"andar de"},{en:"to drive",pt:"dirigir"}],
+        nouns:[{en:"bus",pt:"ônibus"},{en:"train",pt:"trem"},{en:"subway",pt:"metrô"},{en:"bike",pt:"bicicleta"},{en:"store",pt:"loja"},{en:"house",pt:"casa"},{en:"bus stop",pt:"ponto de ônibus"},{en:"train station",pt:"estação de trem"},{en:"subway station",pt:"estação de metrô"},{en:"mall",pt:"shopping"},{en:"supermarket",pt:"supermercado"},{en:"work",pt:"trabalho"},{en:"college",pt:"faculdade"},{en:"english class",pt:"aula de inglês"},{en:"movie theater",pt:"cinema"},{en:"office",pt:"escritório"},{en:"park",pt:"parque"},{en:"lake",pt:"lago"},{en:"beach",pt:"praia"},{en:"kitchen",pt:"cozinha"},{en:"parents",pt:"pais"},{en:"aunt",pt:"tia"},{en:"bag",pt:"bolsa / sacola"},{en:"plant",pt:"planta"},{en:"picture",pt:"quadro / pintura"},{en:"cookies",pt:"biscoitos"},{en:"text message",pt:"mensagem de texto"},{en:"exam",pt:"prova / exame"},{en:"dishes",pt:"louça"},{en:"dog",pt:"cachorro"},{en:"car",pt:"carro"},{en:"movie",pt:"filme"}],
+        adjectives:[{en:"big",pt:"grande"},{en:"interesting",pt:"interessante"},{en:"funny",pt:"engraçado"},{en:"expensive",pt:"caro"},{en:"small",pt:"pequeno"},{en:"happy",pt:"feliz"},{en:"near",pt:"perto"}],
+        adverbs:[{en:"now",pt:"agora"},{en:"right now",pt:"agora mesmo"},{en:"today",pt:"hoje"},{en:"this year",pt:"este ano"},{en:"every day",pt:"todos os dias"},{en:"on Fridays",pt:"às sextas"},{en:"by",pt:"de (transporte)"},{en:"nearby",pt:"por perto"},{en:"a lot",pt:"muito"}],
+        grammar:[
+          {title:"Present Continuous",rules:["am / is / are + verbo-ing.","I am cleaning the kitchen. She is running. They are playing in the park.","He is washing the dog. We are watching TV right now."]},
+          {title:"-ing spelling",rules:["run -> running ; clean -> cleaning ; study -> studying.","-sh / -ch / -tch / -o / -y -> -ies (he brushes, he cleans)."]},
+          {title:"Do / Does (simple)",rules:["I do / you do / she does. She doesn't do. Do you do? Does she do?"]}
+        ]}, phrases:[{en:"I am cleaning the kitchen",pt:"Eu estou limpando a cozinha"},{en:"The children are playing in the park",pt:"As crianças estão brincando no parque"},{en:"She is washing the dog",pt:"Ela está lavando o cachorro"}]},
+      { title:"Lesson 7.2", name:"Sharing News", content:{
+        verbs:[{en:"to share",pt:"compartilhar"},{en:"to look",pt:"olhar"},{en:"to have",pt:"ter"},{en:"to call",pt:"ligar"},{en:"to read",pt:"ler"},{en:"to listen",pt:"ouvir"},{en:"to go",pt:"ir"},{en:"to do",pt:"fazer"},{en:"to live",pt:"morar"},{en:"to want",pt:"querer"},{en:"to hear",pt:"ouvir"},{en:"to think",pt:"pensar / achar"},{en:"to give",pt:"dar"},{en:"to learn",pt:"aprender"},{en:"to study",pt:"estudar"},{en:"to carry",pt:"carregar"},{en:"to shop",pt:"fazer compras"},{en:"to imagine",pt:"imaginar"},{en:"to start",pt:"começar"},{en:"to talk",pt:"conversar"},{en:"to change",pt:"mudar"},{en:"to love",pt:"amar"},{en:"to help",pt:"ajudar"},{en:"to drive",pt:"dirigir"},{en:"to like",pt:"gostar"},{en:"to write",pt:"escrever"}],
+        nouns:[{en:"news",pt:"notícias"},{en:"phone",pt:"telefone"},{en:"conversation",pt:"conversa"},{en:"friend",pt:"amigo(a)"},{en:"job",pt:"emprego"},{en:"building",pt:"prédio"},{en:"boyfriend",pt:"namorado"},{en:"life",pt:"vida"},{en:"partner",pt:"parceiro(a)"},{en:"good news",pt:"boas notícias"},{en:"bad news",pt:"más notícias"},{en:"ordinary news",pt:"notícias comuns"},{en:"apartment",pt:"apartamento"},{en:"car",pt:"carro"},{en:"nature",pt:"natureza"},{en:"bag",pt:"bolsa"},{en:"mall",pt:"shopping"},{en:"homework",pt:"lição de casa"},{en:"son",pt:"filho"},{en:"grandmother",pt:"avó"},{en:"hotel",pt:"hotel"},{en:"room",pt:"quarto"},{en:"brother",pt:"irmão"},{en:"sister",pt:"irmã"},{en:"class",pt:"aula"},{en:"cousins",pt:"primos"},{en:"wife",pt:"esposa"},{en:"weekend",pt:"fim de semana"},{en:"home",pt:"casa"},{en:"work",pt:"trabalho"}],
+        adjectives:[{en:"long",pt:"longo(a)"},{en:"short",pt:"curto(a)"},{en:"busy",pt:"ocupado(a)"},{en:"expensive",pt:"caro"},{en:"nice",pt:"legal / bom"},{en:"good",pt:"bom"},{en:"great",pt:"ótimo"},{en:"tall",pt:"alto"},{en:"ordinary",pt:"comum"}],
+        adverbs:[{en:"these days",pt:"hoje em dia"},{en:"right now",pt:"agora mesmo"},{en:"all about it",pt:"tudo sobre isso"}],
+        grammar:[
+          {title:"Continuous: questions",rules:["What are you doing? Are you resting?","She is calling her friend. I am living in a building.","They are having a long conversation."]}
+        ]}, phrases:[{en:"I have some good news",pt:"Eu tenho boas notícias"},{en:"What are you doing right now",pt:"O que você está fazendo agora"},{en:"I want to hear all about your life",pt:"Eu quero ouvir tudo sobre sua vida"}]},
+      { title:"Lesson 7.3", name:"Transportation", content:{
+        verbs:[{en:"to go",pt:"ir"},{en:"to take",pt:"pegar (transporte)"},{en:"to drive",pt:"dirigir"},{en:"to ride",pt:"andar de"},{en:"to carry",pt:"carregar"},{en:"to walk",pt:"caminhar"},{en:"to wait",pt:"esperar"},{en:"to call",pt:"ligar"},{en:"to live",pt:"morar"},{en:"to rest",pt:"descansar"},{en:"to do",pt:"fazer"}],
+        nouns:[{en:"museum",pt:"museu"},{en:"college",pt:"faculdade"},{en:"bookstore",pt:"livraria"},{en:"hospital",pt:"hospital"},{en:"zoo",pt:"zoológico"},{en:"city",pt:"cidade"},{en:"mall",pt:"shopping"},{en:"office",pt:"escritório"},{en:"company",pt:"empresa"},{en:"school",pt:"escola"},{en:"plant",pt:"planta"},{en:"couch",pt:"sofá"},{en:"park",pt:"parque"},{en:"bus stop",pt:"ponto de ônibus"},{en:"bus station",pt:"rodoviária"},{en:"train station",pt:"estação de trem"},{en:"subway station",pt:"estação de metrô"},{en:"neighborhood",pt:"bairro"}],
+        adjectives:[{en:"big",pt:"grande"},{en:"great",pt:"ótimo"},{en:"nice",pt:"legal"}],
+        adverbs:[{en:"by car",pt:"de carro"},{en:"by train",pt:"de trem"},{en:"by subway",pt:"de metrô"},{en:"by bike",pt:"de bicicleta"},{en:"to",pt:"para"},{en:"right now",pt:"agora mesmo"}],
+        grammar:[
+          {title:"Continuous + transport",rules:["I am driving to the city. She is riding the bike to the office.","He is carrying a big plant. You are walking to the park.","Why is she riding...? Are you taking the train...?"]}
+        ]}, phrases:[{en:"I am driving to the city",pt:"Eu estou dirigindo para a cidade"},{en:"She is riding the bike to the office",pt:"Ela está indo de bicicleta para o escritório"},{en:"You are walking to the park",pt:"Você está caminhando para o parque"}]},
+      { title:"Lesson 7.4", name:"Now vs Always (Review)", content:{
+        verbs:[{en:"to answer",pt:"responder"},{en:"to ask",pt:"perguntar"},{en:"to chat",pt:"bater papo"},{en:"to clean",pt:"limpar"},{en:"to close",pt:"fechar"},{en:"to come",pt:"vir"},{en:"to cook",pt:"cozinhar"},{en:"to get old",pt:"ficar velho"},{en:"to happen",pt:"acontecer"},{en:"to make",pt:"fazer / criar"},{en:"to sing",pt:"cantar"},{en:"to sleep",pt:"dormir"},{en:"to talk",pt:"conversar"},{en:"to tell",pt:"contar"},{en:"to call",pt:"ligar"},{en:"to have",pt:"ter"},{en:"to hear",pt:"ouvir"},{en:"to help",pt:"ajudar"},{en:"to go",pt:"ir"},{en:"to run",pt:"correr"},{en:"to walk",pt:"caminhar"},{en:"to wait",pt:"esperar"},{en:"to wash",pt:"lavar"},{en:"to skim",pt:"folhear"}],
+        nouns:[{en:"ball",pt:"bola"},{en:"beach",pt:"praia"},{en:"bloggers",pt:"blogueiros"},{en:"chaos",pt:"caos"},{en:"chef",pt:"chef"},{en:"college student",pt:"estudante universitário"},{en:"cookies",pt:"biscoitos"},{en:"deserts",pt:"desertos"},{en:"dining area",pt:"sala de jantar"},{en:"door",pt:"porta"},{en:"faces",pt:"rostos"},{en:"games",pt:"jogos"},{en:"hands",pt:"mãos"},{en:"hours",pt:"horas"},{en:"laptop",pt:"computador portátil"},{en:"living room",pt:"sala de estar"},{en:"millions",pt:"milhões"},{en:"mountains",pt:"montanhas"},{en:"noise",pt:"barulho"},{en:"rainforests",pt:"florestas tropicais"},{en:"server",pt:"garçom"},{en:"soccer",pt:"futebol"},{en:"table",pt:"mesa"},{en:"wall",pt:"parede"},{en:"week",pt:"semana"},{en:"work",pt:"trabalho"},{en:"conversation",pt:"conversa"},{en:"building",pt:"prédio"}],
+        adjectives:[{en:"busy",pt:"ocupado / corrido"},{en:"difficult",pt:"difícil"},{en:"favorite",pt:"favorito"},{en:"happy",pt:"feliz"},{en:"old",pt:"velho"},{en:"tall",pt:"alto"},{en:"expensive",pt:"caro"},{en:"good",pt:"bom"},{en:"long",pt:"longo"},{en:"short",pt:"curto"},{en:"nice",pt:"legal"},{en:"great",pt:"ótimo"},{en:"ordinary",pt:"comum"}],
+        adverbs:[{en:"also",pt:"também"},{en:"but",pt:"mas"},{en:"every",pt:"a cada / todo"},{en:"today",pt:"hoje"},{en:"too",pt:"também"},{en:"right now",pt:"agora mesmo"},{en:"this week",pt:"esta semana"}],
+        grammar:[
+          {title:"Continuous vs Simple",rules:["She is calling her friend. / She calls her friend.","I get old / I am getting old. He gets old / He is getting old."]},
+          {title:"Negatives & questions",rules:["He isn't helping his friend this week.","Are you answering the questions on the laptop?","We are going to the beach by bus. Is it difficult to work in this place?"]}
+        ]}, phrases:[{en:"She is calling her friend",pt:"Ela está ligando para a amiga"},{en:"We are going to the beach by bus",pt:"Nós estamos indo à praia de ônibus"},{en:"Is it difficult to work in this place",pt:"É difícil trabalhar neste lugar"}]}
     ]});
 
     // ===================== UNIT 8 =====================
     courseData.push({ id:8, title:"Unit 8", subtitle:"Abilities (Can)", colors:["bg-amber-400/80","bg-yellow-500/80","bg-orange-500/80","bg-lime-500/80"], lessons:[
-        { title:"Lesson 8.1", name:"Skills & Abilities", content:{
-            verbs:[
-                { en:"to dance", pt:"dançar", c:["I dance","you dance","he / she / it dances","we dance","you dance","they dance"] },
-                { en:"to draw", pt:"desenhar", c:["I draw","you draw","he / she / it draws","we draw","you draw","they draw"] },
-                { en:"to paint", pt:"pintar", c:["I paint","you paint","he / she / it paints","we paint","you paint","they paint"] },
-                { en:"to sing", pt:"cantar", c:["I sing","you sing","he / she / it sings","we sing","you sing","they sing"] },
-                { en:"to swim", pt:"nadar", c:["I swim","you swim","he / she / it swims","we swim","you swim","they swim"] },
-                { en:"to surf", pt:"surfar", c:["I surf","you surf","he / she / it surfs","we surf","you surf","they surf"] },
-                { en:"to skateboard", pt:"andar de skate", c:["I skateboard","you skateboard","he / she / it skateboards","we skateboard","you skateboard","they skateboard"] },
-                { en:"to snowboard", pt:"praticar snowboard", c:["I snowboard","you snowboard","he / she / it snowboards","we snowboard","you snowboard","they snowboard"] },
-                { en:"to play the guitar", pt:"tocar violão", c:["I play the guitar","you play the guitar","he / she / it plays the guitar","we play the guitar","you play the guitar","they play the guitar"] },
-                { en:"to read music", pt:"ler partitura", c:["I read music","you read music","he / she / it reads music","we read music","you read music","they read music"] },
-                { en:"to fix things", pt:"consertar coisas", c:["I fix things","you fix things","he / she / it fixes things","we fix things","you fix things","they fix things"] },
-                { en:"to speak two languages", pt:"falar dois idiomas", c:["I speak two languages","you speak two languages","he / she / it speaks two languages","we speak two languages","you speak two languages","they speak two languages"] },
-                { en:"to cook", pt:"cozinhar", c:["I cook","you cook","he / she / it cooks","we cook","you cook","they cook"] },
-                { en:"to drive", pt:"dirigir", c:["I drive","you drive","he / she / it drives","we drive","you drive","they drive"] },
-                { en:"to teach", pt:"ensinar", c:["I teach","you teach","he / she / it teaches","we teach","you teach","they teach"] },
-                { en:"to play soccer", pt:"jogar futebol", c:["I play soccer","you play soccer","he / she / it plays soccer","we play soccer","you play soccer","they play soccer"] },
-                { en:"to know", pt:"saber / conhecer", c:["I know","you know","he / she / it knows","we know","you know","they know"] }
-            ],
-            nouns:[
-                { en:"guitar", pt:"violão / guitarra", img:"guitar" },
-                { en:"piano", pt:"piano", img:"piano" },
-                { en:"music", pt:"música", img:"music" },
-                { en:"band", pt:"banda", img:"music band" },
-                { en:"mechanic", pt:"mecânico", img:"mechanic" },
-                { en:"artist", pt:"artista", img:"artist painting" },
-                { en:"car", pt:"carro", img:"car" },
-                { en:"skill", pt:"habilidade", img:"skill" },
-                { en:"ability", pt:"habilidade", img:"ability" }
-            ],
-            adjectives:[
-                { en:"good", pt:"bom(boa)", img:"good" },
-                { en:"terrible", pt:"péssimo(a)", img:"terrible" },
-                { en:"great", pt:"ótimo(a)", img:"great" },
-                { en:"cool", pt:"legal", img:"cool" }
-            ],
-            adverbs:[
-                { en:"can", pt:"poder / saber (habilidade)" },
-                { en:"can't", pt:"não poder / não saber" },
-                { en:"well", pt:"bem" },
-                { en:"really", pt:"realmente / muito" },
-                { en:"so", pt:"então" }
-            ],
-            grammar:[
-                { title:"CAN / CAN'T (ability)", rules:["can + verbo: I can swim. = Eu sei nadar.","can't + verbo: She can't drive. = Ela não sabe dirigir.","I can speak two languages. = Eu sei falar dois idiomas."] },
-                { title:"can vs like/want/have to", rules:["He likes to sing → He can sing.","I want to dance → I can dance.","They have to work → They can work."] }
-            ]
-        }, phrases:[
-            { en:"I can play the guitar", pt:"Eu sei tocar violão" },
-            { en:"She can't drive", pt:"Ela não sabe dirigir" },
-            { en:"They can speak two languages", pt:"Eles sabem falar dois idiomas" },
-            { en:"I can swim very well", pt:"Eu sei nadar muito bem" }
-        ]},
-        { title:"Lesson 8.2", name:"Questions with Can", content:{
-            verbs:[
-                { en:"to fix", pt:"consertar", c:["I fix","you fix","he / she / it fixes","we fix","you fix","they fix"] },
-                { en:"to speak", pt:"falar", c:["I speak","you speak","he / she / it speaks","we speak","you speak","they speak"] },
-                { en:"to use", pt:"usar", c:["I use","you use","he / she / it uses","we use","you use","they use"] },
-                { en:"to find", pt:"encontrar", c:["I find","you find","he / she / it finds","we find","you find","they find"] },
-                { en:"to buy", pt:"comprar", c:["I buy","you buy","he / she / it buys","we buy","you buy","they buy"] },
-                { en:"to send", pt:"enviar", c:["I send","you send","he / she / it sends","we send","you send","they send"] },
-                { en:"to help", pt:"ajudar", c:["I help","you help","he / she / it helps","we help","you help","they help"] },
-                { en:"to take a break", pt:"fazer uma pausa", c:["I take a break","you take a break","he / she / it takes a break","we take a break","you take a break","they take a break"] },
-                { en:"to have a meeting", pt:"fazer uma reunião", c:["I have a meeting","you have a meeting","he / she / it has a meeting","we have a meeting","you have a meeting","they have a meeting"] }
-            ],
-            nouns:[
-                { en:"meeting", pt:"reunião", img:"business meeting" },
-                { en:"office", pt:"escritório", img:"office" },
-                { en:"coworker", pt:"colega de trabalho", img:"coworkers" },
-                { en:"break", pt:"pausa / intervalo", img:"coffee break" },
-                { en:"lake", pt:"lago", img:"lake" },
-                { en:"mall", pt:"shopping", img:"shopping mall" },
-                { en:"computer", pt:"computador", img:"computer" },
-                { en:"dishes", pt:"louça", img:"dishes" }
-            ],
-            adjectives:[
-                { en:"right", pt:"certo(a)", img:"correct right" },
-                { en:"busy", pt:"ocupado(a)", img:"busy office" },
-                { en:"happy", pt:"feliz", img:"happy" }
-            ],
-            adverbs:[
-                { en:"now", pt:"agora" },
-                { en:"actually", pt:"na verdade" },
-                { en:"let's", pt:"vamos" },
-                { en:"work from home", pt:"trabalhar de casa" }
-            ],
-            grammar:[
-                { title:"Can in questions", rules:["Can you speak English? Yes, I can. / No, I can't.","Can we have a meeting in the office?","Can she fix the car? = Ela consegue consertar o carro?"] },
-                { title:"Let's (suggestions)", rules:["Let's take a break. = Vamos fazer uma pausa.","Let's have lunch. = Vamos almoçar.","Let's walk. = Vamos caminhar."] }
-            ]
-        }, phrases:[
-            { en:"Can you speak English", pt:"Você sabe falar inglês" },
-            { en:"Let's take a break", pt:"Vamos fazer uma pausa" },
-            { en:"Can we have a meeting in the office", pt:"Podemos fazer uma reunião no escritório" },
-            { en:"Can I use your cell phone", pt:"Posso usar seu celular" }
-        ]},
-        { title:"Lesson 8.3", name:"Teamwork", content:{
-            verbs:[
-                { en:"to think", pt:"pensar / achar", c:["I think","you think","he / she / it thinks","we think","you think","they think"] },
-                { en:"to work", pt:"trabalhar", c:["I work","you work","he / she / it works","we work","you work","they work"] },
-                { en:"to answer", pt:"responder", c:["I answer","you answer","he / she / it answers","we answer","you answer","they answer"] },
-                { en:"to explain", pt:"explicar", c:["I explain","you explain","he / she / it explains","we explain","you explain","they explain"] },
-                { en:"to communicate", pt:"comunicar-se", c:["I communicate","you communicate","he / she / it communicates","we communicate","you communicate","they communicate"] },
-                { en:"to practice", pt:"praticar", c:["I practice","you practice","he / she / it practices","we practice","you practice","they practice"] },
-                { en:"to mean", pt:"querer dizer", c:["I mean","you mean","he / she / it means","we mean","you mean","they mean"] },
-                { en:"to interview", pt:"entrevistar", c:["I interview","you interview","he / she / it interviews","we interview","you interview","they interview"] }
-            ],
-            nouns:[
-                { en:"team", pt:"equipe / time", img:"team" },
-                { en:"teamwork", pt:"trabalho em equipe", img:"teamwork" },
-                { en:"company", pt:"empresa", img:"company" },
-                { en:"money", pt:"dinheiro", img:"money" },
-                { en:"singer", pt:"cantor(a)", img:"singer" },
-                { en:"job", pt:"emprego", img:"job" },
-                { en:"group", pt:"grupo", img:"group people" },
-                { en:"technology", pt:"tecnologia", img:"technology" },
-                { en:"video game", pt:"videogame", img:"video game" },
-                { en:"sport", pt:"esporte", img:"sport" },
-                { en:"interview", pt:"entrevista", img:"job interview" }
-            ],
-            adjectives:[
-                { en:"important", pt:"importante", img:"important" },
-                { en:"boring", pt:"chato(a)", img:"boring" },
-                { en:"useful", pt:"útil", img:"useful tool" },
-                { en:"interesting", pt:"interessante", img:"interesting" },
-                { en:"free", pt:"livre", img:"free time" }
-            ],
-            adverbs:[
-                { en:"why", pt:"por que" },
-                { en:"I think so", pt:"eu acho que sim" },
-                { en:"I don't think so", pt:"eu acho que não" },
-                { en:"on a team", pt:"em uma equipe" }
-            ],
-            grammar:[
-                { title:"Wh- questions", rules:["What do you think? = O que você acha?","Why do people want a job?","Where can we have lunch?"] },
-                { title:"Giving opinions", rules:["I think so. / I don't think so.","I mean, it's a group of people.","What do you think? = O que você acha?"] }
-            ]
-        }, phrases:[
-            { en:"A team is a group of people", pt:"Uma equipe é um grupo de pessoas" },
-            { en:"Why do you think that", pt:"Por que você acha isso" },
-            { en:"I am a really good worker", pt:"Eu sou um trabalhador muito bom" }
-        ]},
-        { title:"Lesson 8.4", name:"Good At Something", content:{
-            verbs:[
-                { en:"to make", pt:"fazer / criar", c:["I make","you make","he / she / it makes","we make","you make","they make"] },
-                { en:"to pay", pt:"pagar", c:["I pay","you pay","he / she / it pays","we pay","you pay","they pay"] },
-                { en:"to do", pt:"fazer", c:["I do","you do","he / she / it does","we do","you do","they do"] },
-                { en:"to drive", pt:"dirigir", c:["I drive","you drive","he / she / it drives","we drive","you drive","they drive"] },
-                { en:"to draw", pt:"desenhar", c:["I draw","you draw","he / she / it draws","we draw","you draw","they draw"] },
-                { en:"to take", pt:"pegar / levar", c:["I take","you take","he / she / it takes","we take","you take","they take"] },
-                { en:"to sit", pt:"sentar", c:["I sit","you sit","he / she / it sits","we sit","you sit","they sit"] }
-            ],
-            nouns:[
-                { en:"business", pt:"negócio", img:"business" },
-                { en:"movie", pt:"filme", img:"movie film" },
-                { en:"skin care", pt:"cuidados com a pele", img:"skincare" },
-                { en:"farm", pt:"fazenda", img:"farm" },
-                { en:"ranch", pt:"rancho", img:"ranch" },
-                { en:"boat", pt:"barco", img:"boat" },
-                { en:"plane", pt:"avião", img:"airplane" },
-                { en:"train", pt:"trem", img:"train" },
-                { en:"postcard", pt:"cartão-postal", img:"postcard" },
-                { en:"ticket", pt:"passagem", img:"ticket" },
-                { en:"tour guide", pt:"guia turístico", img:"tour guide" },
-                { en:"country", pt:"campo / interior", img:"countryside" }
-            ],
-            adjectives:[
-                { en:"good at", pt:"bom em", img:"skilled expert" },
-                { en:"bad at", pt:"ruim em", img:"fail" },
-                { en:"comfortable", pt:"confortável", img:"comfortable" },
-                { en:"expensive", pt:"caro(a)", img:"expensive" },
-                { en:"simple", pt:"simples", img:"simple" },
-                { en:"local", pt:"local", img:"local" }
-            ],
-            adverbs:[
-                { en:"at the office", pt:"no escritório" },
-                { en:"at the mall", pt:"no shopping" },
-                { en:"in front of", pt:"na frente de" },
-                { en:"next to", pt:"ao lado de" },
-                { en:"on the right", pt:"à direita" }
-            ],
-            grammar:[
-                { title:"good at + -ing", rules:["I'm good at cooking. = Eu sou bom de cozinhar.","People from Brazil are good at playing soccer.","She is bad at driving."] },
-                { title:"Preposition AT (place / time)", rules:["at the office, at the mall, at school (lugares).","I have class at 8 p.m. (horário).","People from USA are good at making movies."] }
-            ]
-        }, phrases:[
-            { en:"I am good at cooking", pt:"Eu sou bom de cozinhar" },
-            { en:"People from Brazil are good at playing soccer", pt:"Os brasileiros são bons de jogar futebol" },
-            { en:"She is good at computers", pt:"Ela é boa com computadores" }
-        ]}
+      { title:"Lesson 8.1", name:"Skills & Abilities", content:{
+        verbs:[{en:"to dance",pt:"dançar"},{en:"to draw",pt:"desenhar"},{en:"to fix things",pt:"consertar coisas"},{en:"to read music",pt:"ler partitura"},{en:"to paint",pt:"pintar"},{en:"to play the guitar",pt:"tocar violão"},{en:"to sing",pt:"cantar"},{en:"to skateboard",pt:"andar de skate"},{en:"to snowboard",pt:"praticar snowboard"},{en:"to speak two languages",pt:"falar dois idiomas"},{en:"to surf",pt:"surfar"},{en:"to swim",pt:"nadar"},{en:"to play soccer",pt:"jogar futebol"},{en:"to play music",pt:"tocar música"},{en:"to cook",pt:"cozinhar"},{en:"to drive",pt:"dirigir"},{en:"to teach",pt:"ensinar"},{en:"to know",pt:"saber / conhecer"},{en:"to wait",pt:"esperar"},{en:"to use",pt:"usar"},{en:"to love",pt:"amar"}],
+        nouns:[{en:"music",pt:"música"},{en:"guitar",pt:"violão / guitarra"},{en:"piano",pt:"piano"},{en:"band",pt:"banda"},{en:"mechanic",pt:"mecânico"},{en:"artist",pt:"artista"},{en:"pictures",pt:"desenhos / quadros"},{en:"ability",pt:"habilidade"},{en:"skill",pt:"habilidade / competência"},{en:"art classes",pt:"aulas de arte"},{en:"singing lessons",pt:"aulas de canto"},{en:"dance lessons",pt:"aulas de dança"},{en:"music class",pt:"aula de música"},{en:"beach",pt:"praia"},{en:"mountains",pt:"montanhas"},{en:"winter",pt:"inverno"},{en:"park",pt:"parque"},{en:"cousin",pt:"primo(a)"},{en:"family parties",pt:"festas de família"},{en:"car",pt:"carro"},{en:"bikes",pt:"bicicletas"},{en:"soccer players",pt:"jogadores de futebol"},{en:"bus drivers",pt:"motoristas de ônibus"},{en:"chef",pt:"chef de cozinha"},{en:"english teachers",pt:"professores de inglês"},{en:"idea",pt:"ideia"},{en:"month",pt:"mês"},{en:"birthday",pt:"aniversário"}],
+        adjectives:[{en:"fun",pt:"divertido"},{en:"difficult",pt:"difícil"},{en:"cool",pt:"legal"},{en:"shy",pt:"tímido"},{en:"funny",pt:"engraçado"},{en:"terrible",pt:"péssimo"},{en:"good",pt:"bom"},{en:"great",pt:"ótimo"},{en:"mexican-american",pt:"mexicano-americano"},{en:"french",pt:"francês"},{en:"spanish",pt:"espanhol"}],
+        adverbs:[{en:"can",pt:"poder / saber (habilidade)"},{en:"can't",pt:"não poder / não saber"},{en:"well",pt:"bem"},{en:"really",pt:"realmente / muito"},{en:"so",pt:"então"}],
+        grammar:[
+          {title:"CAN / CAN'T (ability)",rules:["can + verbo: I can swim. I can speak two languages.","can't + verbo: She can't drive."]},
+          {title:"can vs like/want/have to",rules:["He likes to sing -> He can sing.","I want to dance -> I can dance.","They have to work -> They can work."]},
+          {title:"to know",rules:["I know you. You know English. She knows."]}
+        ]}, phrases:[{en:"I can play the guitar",pt:"Eu sei tocar violão"},{en:"She can't drive",pt:"Ela não sabe dirigir"},{en:"They can speak two languages",pt:"Eles sabem falar dois idiomas"},{en:"I can swim very well",pt:"Eu sei nadar muito bem"}]},
+      { title:"Lesson 8.2", name:"Questions with Can / Let's", content:{
+        verbs:[{en:"to ask",pt:"perguntar"},{en:"to circle",pt:"circular"},{en:"to come",pt:"vir"},{en:"to eat",pt:"comer"},{en:"to find",pt:"encontrar"},{en:"to give",pt:"dar"},{en:"to help",pt:"ajudar"},{en:"to listen",pt:"ouvir"},{en:"to make",pt:"fazer"},{en:"to pay",pt:"pagar"},{en:"to play",pt:"jogar / tocar"},{en:"to ride",pt:"andar de"},{en:"to run",pt:"correr"},{en:"to send",pt:"enviar"},{en:"to speak",pt:"falar"},{en:"to surf",pt:"surfar"},{en:"to swim",pt:"nadar"},{en:"to use",pt:"usar"},{en:"to walk",pt:"caminhar"},{en:"to fix",pt:"consertar"},{en:"to drive",pt:"dirigir"},{en:"to take a break",pt:"fazer uma pausa"},{en:"to have a meeting",pt:"fazer uma reunião"},{en:"to have lunch",pt:"almoçar"},{en:"to work from home",pt:"trabalhar de casa"}],
+        nouns:[{en:"answer",pt:"resposta"},{en:"basketball",pt:"basquete"},{en:"bike",pt:"bicicleta"},{en:"break",pt:"pausa / intervalo"},{en:"bus",pt:"ônibus"},{en:"business",pt:"negócio / empresa"},{en:"chair",pt:"cadeira"},{en:"company",pt:"empresa"},{en:"computer",pt:"computador"},{en:"coworker",pt:"colega de trabalho"},{en:"desk",pt:"mesa de escritório"},{en:"dog",pt:"cachorro"},{en:"forest",pt:"floresta"},{en:"idea",pt:"ideia"},{en:"lake",pt:"lago"},{en:"lunch",pt:"almoço"},{en:"meeting",pt:"reunião"},{en:"message",pt:"mensagem"},{en:"money",pt:"dinheiro"},{en:"mountain",pt:"montanha"},{en:"office",pt:"escritório"},{en:"park",pt:"parque"},{en:"plant",pt:"planta"},{en:"problem",pt:"problema"},{en:"restaurant",pt:"restaurante"},{en:"workplace",pt:"local de trabalho"},{en:"worker",pt:"trabalhador(a)"},{en:"guitar",pt:"violão"},{en:"piano",pt:"piano"},{en:"mall",pt:"shopping"},{en:"cell phone",pt:"celular"},{en:"family",pt:"família"}],
+        adjectives:[{en:"big",pt:"grande"},{en:"cool",pt:"legal"},{en:"friendly",pt:"amigável"},{en:"great",pt:"ótimo"},{en:"happy",pt:"feliz"},{en:"late",pt:"atrasado"},{en:"nice",pt:"agradável"},{en:"ordinary",pt:"comum"},{en:"right",pt:"certo"},{en:"busy",pt:"ocupado"}],
+        adverbs:[{en:"after",pt:"depois"},{en:"always",pt:"sempre"},{en:"before",pt:"antes"},{en:"sometimes",pt:"às vezes"},{en:"usually",pt:"geralmente"},{en:"at the same time",pt:"ao mesmo tempo"},{en:"go straight",pt:"ir direto"},{en:"turn left",pt:"virar à esquerda"},{en:"work hard",pt:"trabalhar duro"},{en:"let's",pt:"vamos"},{en:"actually",pt:"na verdade"},{en:"now",pt:"agora"}],
+        grammar:[
+          {title:"Can in questions",rules:["Can you speak English? Yes, I can. / No, I can't.","Can she fix the car? Can we have a meeting in the office?","Can I use your cell phone now?"]},
+          {title:"Wh- + can",rules:["Where can we have lunch? How can I get to the restaurant?"]},
+          {title:"Let's (suggestions)",rules:["Let's take a break. Let's have lunch. Let's walk.","You can work hard and have fun. Money can't make people happy."]}
+        ]}, phrases:[{en:"Can you speak English",pt:"Você sabe falar inglês"},{en:"Let's take a break",pt:"Vamos fazer uma pausa"},{en:"Can we have a meeting in the office",pt:"Podemos fazer uma reunião no escritório"},{en:"Can I use your cell phone now",pt:"Posso usar seu celular agora"}]},
+      { title:"Lesson 8.3", name:"Teamwork & Opinions", content:{
+        verbs:[{en:"to answer",pt:"responder"},{en:"to change",pt:"mudar"},{en:"to check",pt:"verificar"},{en:"to choose",pt:"escolher"},{en:"to communicate",pt:"comunicar-se"},{en:"to complete",pt:"completar"},{en:"to explain",pt:"explicar"},{en:"to follow",pt:"seguir"},{en:"to interview",pt:"entrevistar"},{en:"to make",pt:"fazer / criar"},{en:"to match",pt:"relacionar"},{en:"to mean",pt:"querer dizer"},{en:"to play",pt:"jogar / tocar"},{en:"to practice",pt:"praticar"},{en:"to put",pt:"colocar"},{en:"to sing",pt:"cantar"},{en:"to speak",pt:"falar"},{en:"to take turns",pt:"revezar"},{en:"to think",pt:"achar / pensar"},{en:"to work",pt:"trabalhar"},{en:"to drive",pt:"dirigir"},{en:"to call",pt:"ligar"},{en:"to talk",pt:"falar"},{en:"to start",pt:"começar"},{en:"to hear",pt:"ouvir"},{en:"to write",pt:"escrever"}],
+        nouns:[{en:"answer",pt:"resposta"},{en:"art teacher",pt:"professor(a) de artes"},{en:"band",pt:"banda"},{en:"basketball",pt:"basquete"},{en:"cell phone",pt:"celular"},{en:"chart",pt:"tabela / quadro"},{en:"chef",pt:"chef de cozinha"},{en:"company",pt:"empresa"},{en:"coworker",pt:"colega de trabalho"},{en:"dog",pt:"cachorro"},{en:"explanation",pt:"explicação"},{en:"friend",pt:"amigo"},{en:"group",pt:"grupo"},{en:"guitar",pt:"violão"},{en:"hotel clerk",pt:"recepcionista de hotel"},{en:"idea",pt:"ideia"},{en:"information",pt:"informação"},{en:"interview",pt:"entrevista"},{en:"job",pt:"emprego"},{en:"language",pt:"idioma"},{en:"lesson",pt:"lição"},{en:"money",pt:"dinheiro"},{en:"music",pt:"música"},{en:"office",pt:"escritório"},{en:"person",pt:"pessoa"},{en:"picture",pt:"foto / imagem"},{en:"restaurant",pt:"restaurante"},{en:"server",pt:"garçom / garçonete"},{en:"singer",pt:"cantor(a)"},{en:"soccer player",pt:"jogador de futebol"},{en:"sport",pt:"esporte"},{en:"team",pt:"equipe / time"},{en:"teamwork",pt:"trabalho em equipe"},{en:"technology",pt:"tecnologia"},{en:"video game",pt:"videogame"},{en:"world",pt:"mundo"},{en:"comment",pt:"comentário"},{en:"opinion",pt:"opinião"},{en:"host",pt:"apresentador"},{en:"podcast",pt:"podcast"},{en:"voice",pt:"voz"}],
+        adjectives:[{en:"big",pt:"grande"},{en:"boring",pt:"chato"},{en:"busy",pt:"ocupado"},{en:"cool",pt:"legal"},{en:"different",pt:"diferente"},{en:"free",pt:"livre"},{en:"fun",pt:"divertido"},{en:"good",pt:"bom"},{en:"great",pt:"ótimo"},{en:"happy",pt:"feliz"},{en:"important",pt:"importante"},{en:"interesting",pt:"interessante"},{en:"right",pt:"certo / adequado"},{en:"short",pt:"curto"},{en:"useful",pt:"útil"},{en:"correct",pt:"correto"}],
+        adverbs:[{en:"I think so",pt:"eu acho que sim"},{en:"I don't think so",pt:"eu acho que não"},{en:"I mean",pt:"quero dizer"},{en:"on a team",pt:"em uma equipe"},{en:"very well",pt:"muito bem"},{en:"what do you think?",pt:"o que você acha?"},{en:"pair work",pt:"trabalho em dupla"},{en:"on the phone",pt:"ao telefone"}],
+        grammar:[
+          {title:"Wh- questions",rules:["What do you think? Why do people want a job?","Where / When / How can we...?"]},
+          {title:"Giving opinions",rules:["I think so. / I don't think so. I mean, it's a group of people.","I am a really good worker."]}
+        ]}, phrases:[{en:"A team is a group of people",pt:"Uma equipe é um grupo de pessoas"},{en:"Why do you think that",pt:"Por que você acha isso"},{en:"I am a really good worker",pt:"Eu sou um trabalhador muito bom"}]},
+      { title:"Lesson 8.4", name:"Good At Something", content:{
+        verbs:[{en:"to make",pt:"fazer / criar"},{en:"to pay",pt:"pagar"},{en:"to do",pt:"fazer"},{en:"to drive",pt:"dirigir"},{en:"to draw",pt:"desenhar"},{en:"to take",pt:"pegar / levar"},{en:"to sit",pt:"sentar"},{en:"to buy",pt:"comprar"},{en:"to come",pt:"vir"},{en:"to find",pt:"encontrar"},{en:"to help",pt:"ajudar"},{en:"to imagine",pt:"imaginar"},{en:"to show",pt:"mostrar"},{en:"to tell",pt:"contar"},{en:"to walk",pt:"caminhar"},{en:"to correct",pt:"corrigir"}],
+        nouns:[{en:"art",pt:"arte"},{en:"artists",pt:"artistas"},{en:"aunt",pt:"tia"},{en:"birds",pt:"pássaros"},{en:"boat",pt:"barco"},{en:"buildings",pt:"prédios"},{en:"city",pt:"cidade (grande)"},{en:"country",pt:"campo / interior"},{en:"dollars",pt:"dólares"},{en:"farm",pt:"fazenda"},{en:"hill",pt:"colina"},{en:"history",pt:"história"},{en:"hotel",pt:"hotel"},{en:"museum",pt:"museu"},{en:"noun",pt:"substantivo"},{en:"ocean",pt:"oceano"},{en:"park",pt:"parque"},{en:"plane",pt:"avião"},{en:"postcard",pt:"cartão-postal"},{en:"posts",pt:"postagens"},{en:"ranch",pt:"rancho"},{en:"seat",pt:"assento"},{en:"sentence",pt:"frase"},{en:"ticket",pt:"passagem / ingresso"},{en:"tour",pt:"passeio"},{en:"tour guide",pt:"guia turístico"},{en:"town",pt:"cidade (pequena)"},{en:"train",pt:"trem"},{en:"transportation",pt:"transporte"},{en:"travel",pt:"viagem"},{en:"trip",pt:"viagem"},{en:"vacation",pt:"férias"},{en:"window",pt:"janela"},{en:"zoo",pt:"zoológico"},{en:"business",pt:"negócio"},{en:"movie",pt:"filme"},{en:"skin care",pt:"cuidados com a pele"}],
+        adjectives:[{en:"good at",pt:"bom em"},{en:"bad at",pt:"ruim em"},{en:"comfortable",pt:"confortável"},{en:"expensive",pt:"caro(a)"},{en:"simple",pt:"simples"},{en:"local",pt:"local"},{en:"false",pt:"falso(a)"},{en:"true",pt:"verdadeiro(a)"},{en:"big",pt:"grande"},{en:"small",pt:"pequeno(a)"},{en:"boring",pt:"chato(a)"},{en:"funny",pt:"engraçado(a)"},{en:"favorite",pt:"favorito(a)"},{en:"cool",pt:"legal"}],
+        adverbs:[{en:"at the office",pt:"no escritório"},{en:"at the mall",pt:"no shopping"},{en:"in front of",pt:"na frente de"},{en:"next to",pt:"ao lado de"},{en:"on the right",pt:"à direita"},{en:"in the city",pt:"na cidade"},{en:"in the country",pt:"no campo"},{en:"on a boat",pt:"em um barco"},{en:"on a tour",pt:"em um passeio"},{en:"on vacation",pt:"de férias"}],
+        grammar:[
+          {title:"good at + -ing",rules:["I'm good at cooking. She is bad at driving.","People from Brazil are good at playing soccer.","People from USA are good at making movies."]},
+          {title:"Preposition AT",rules:["at the school / at the mall / at the office (lugares).","I have class at 8 p.m. (horário)."]}
+        ]}, phrases:[{en:"I am good at cooking",pt:"Eu sou bom de cozinhar"},{en:"People from Brazil are good at playing soccer",pt:"Os brasileiros são bons de jogar futebol"},{en:"She is good at computers",pt:"Ela é boa com computadores"}]}
     ]});
-
     // ===================== UNIT 9 =====================
     courseData.push({ id:9, title:"Unit 9", subtitle:"Travel & Tourism", colors:["bg-sky-500/80","bg-blue-500/80","bg-cyan-500/80","bg-indigo-400/80"], lessons:[
-        { title:"Lesson 9.1", name:"At the Airport", content:{
-            verbs:[
-                { en:"to travel", pt:"viajar", c:["I travel","you travel","he / she / it travels","we travel","you travel","they travel"] },
-                { en:"to fly", pt:"voar", c:["I fly","you fly","he / she / it flies","we fly","you fly","they fly"] },
-                { en:"to arrive", pt:"chegar", c:["I arrive","you arrive","he / she / it arrives","we arrive","you arrive","they arrive"] },
-                { en:"to leave", pt:"partir / sair", c:["I leave","you leave","he / she / it leaves","we leave","you leave","they leave"] }
-            ],
-            nouns:[
-                { en:"airport", pt:"aeroporto", img:"airport" },
-                { en:"flight", pt:"voo", img:"airplane flight" },
-                { en:"plane", pt:"avião", img:"airplane" },
-                { en:"ticket", pt:"passagem", img:"plane ticket" },
-                { en:"trip", pt:"viagem", img:"travel trip" },
-                { en:"destination", pt:"destino", img:"travel destination" }
-            ],
-            adjectives:[
-                { en:"early", pt:"cedo", img:"early morning" },
-                { en:"late", pt:"atrasado(a)", img:"late" },
-                { en:"ready", pt:"pronto(a)", img:"ready luggage" }
-            ],
-            adverbs:[
-                { en:"by plane", pt:"de avião" },
-                { en:"on a trip", pt:"em uma viagem" },
-                { en:"before", pt:"antes" }
-            ],
-            grammar:[
-                { title:"Prepositions of transport/place", rules:["on a bus / on a train / on a plane / on the subway.","at the airport / at our destination.","I arrive 15 minutes early before my flight."] }
-            ]
-        }, phrases:[
-            { en:"Have a great trip", pt:"Tenha uma ótima viagem" },
-            { en:"I travel by plane", pt:"Eu viajo de avião" }
-        ]},
-        { title:"Lesson 9.2", name:"Shopping & Asking", content:{
-            verbs:[
-                { en:"to buy", pt:"comprar", c:["I buy","you buy","he / she / it buys","we buy","you buy","they buy"] },
-                { en:"to need", pt:"precisar", c:["I need","you need","he / she / it needs","we need","you need","they need"] },
-                { en:"to ask", pt:"perguntar / pedir", c:["I ask","you ask","he / she / it asks","we ask","you ask","they ask"] }
-            ],
-            nouns:[
-                { en:"travel guide", pt:"guia de viagem", img:"travel guide book" },
-                { en:"magazine", pt:"revista", img:"magazine" },
-                { en:"restroom", pt:"banheiro público", img:"restroom sign" },
-                { en:"bag", pt:"bolsa / mochila", img:"travel bag" },
-                { en:"mug", pt:"caneca", img:"mug" },
-                { en:"seat", pt:"assento", img:"seat" }
-            ],
-            adjectives:[
-                { en:"open", pt:"aberto(a)", img:"open sign" },
-                { en:"cheap", pt:"barato(a)", img:"cheap" },
-                { en:"polite", pt:"educado(a)", img:"polite" }
-            ],
-            adverbs:[
-                { en:"over there", pt:"logo ali" },
-                { en:"next to", pt:"ao lado de" },
-                { en:"on the right", pt:"à direita" }
-            ],
-            grammar:[
-                { title:"Polite questions", rules:["Excuse me, can you repeat that, please?","How much is that? = Quanto custa isso?","What time does it open? — In about 10 minutes."] }
-            ]
-        }, phrases:[
-            { en:"How much is that", pt:"Quanto custa isso" },
-            { en:"Can you repeat that please", pt:"Você pode repetir isso, por favor" }
-        ]},
-        { title:"Lesson 9.3", name:"Tours & Prices", content:{
-            verbs:[
-                { en:"to stay", pt:"ficar / hospedar-se", c:["I stay","you stay","he / she / it stays","we stay","you stay","they stay"] },
-                { en:"to reserve", pt:"reservar", c:["I reserve","you reserve","he / she / it reserves","we reserve","you reserve","they reserve"] },
-                { en:"to ride", pt:"montar / andar", c:["I ride","you ride","he / she / it rides","we ride","you ride","they ride"] }
-            ],
-            nouns:[
-                { en:"hotel", pt:"hotel", img:"hotel" },
-                { en:"tour", pt:"passeio / excursão", img:"city tour" },
-                { en:"island", pt:"ilha", img:"tropical island" },
-                { en:"ranch", pt:"rancho / fazenda", img:"ranch farm" },
-                { en:"horse", pt:"cavalo", img:"horse" },
-                { en:"market", pt:"mercado", img:"market" }
-            ],
-            adjectives:[
-                { en:"expensive", pt:"caro(a)", img:"expensive hotel" },
-                { en:"hot", pt:"quente", img:"hot weather" },
-                { en:"friendly", pt:"amigável", img:"friendly local" }
-            ],
-            adverbs:[
-                { en:"on the way", pt:"no caminho" },
-                { en:"per night", pt:"por noite" },
-                { en:"on a horse", pt:"a cavalo" }
-            ],
-            grammar:[
-                { title:"Travel questions", rules:["What time does the plane leave?","How much is the ticket for the tour?","Can we take a boat to the island?"] }
-            ]
-        }, phrases:[
-            { en:"What time does the plane leave", pt:"Que horas o avião parte" },
-            { en:"Can you ride a horse", pt:"Você sabe andar a cavalo" }
-        ]},
-        { title:"Lesson 9.4", name:"Review: Travel", content:{
-            verbs:[
-                { en:"to recommend", pt:"recomendar", c:["I recommend","you recommend","he / she / it recommends","we recommend","you recommend","they recommend"] },
-                { en:"to suggest", pt:"sugerir", c:["I suggest","you suggest","he / she / it suggests","we suggest","you suggest","they suggest"] }
-            ],
-            nouns:[
-                { en:"sunscreen", pt:"protetor solar", img:"sunscreen" },
-                { en:"sunglasses", pt:"óculos de sol", img:"sunglasses" },
-                { en:"backpack", pt:"mochila", img:"backpack" },
-                { en:"water bottle", pt:"garrafa de água", img:"water bottle" },
-                { en:"waterfall", pt:"cachoeira", img:"waterfall" }
-            ],
-            adjectives:[
-                { en:"local", pt:"local", img:"local market" },
-                { en:"wonderful", pt:"maravilhoso(a)", img:"wonderful view" }
-            ],
-            adverbs:[
-                { en:"unfortunately", pt:"infelizmente" },
-                { en:"first", pt:"primeiro" }
-            ],
-            grammar:[
-                { title:"Recommendations", rules:["I recommend going to the waterfalls.","First, Jim needs a travel guide and a ticket.","Don't forget the sunscreen and water bottle."] }
-            ]
-        }, phrases:[
-            { en:"I recommend the city tour", pt:"Eu recomendo o passeio pela cidade" },
-            { en:"Don't forget your sunscreen", pt:"Não esqueça seu protetor solar" }
-        ]}
+      { title:"Lesson 9.1", name:"At the Airport & Order", content:{
+        verbs:[{en:"to travel",pt:"viajar"},{en:"to fly",pt:"voar"},{en:"to arrive",pt:"chegar"},{en:"to leave",pt:"sair / partir"},{en:"to take",pt:"pegar / tomar"},{en:"to need",pt:"precisar"},{en:"to check in",pt:"fazer check-in"},{en:"to stay",pt:"ficar / hospedar-se"},{en:"to buy",pt:"comprar"},{en:"to sleep",pt:"dormir"},{en:"to come",pt:"vir"},{en:"to make",pt:"fazer"},{en:"to plan",pt:"planejar"},{en:"to visit",pt:"visitar"},{en:"to compare",pt:"comparar"},{en:"to learn",pt:"aprender"},{en:"to get up",pt:"levantar-se"}],
+        nouns:[{en:"vacation",pt:"férias"},{en:"destination",pt:"destino"},{en:"flight",pt:"voo"},{en:"airport",pt:"aeroporto"},{en:"plane",pt:"avião"},{en:"trip",pt:"viagem"},{en:"ticket",pt:"passagem / bilhete"},{en:"bus",pt:"ônibus"},{en:"train",pt:"trem"},{en:"subway",pt:"metrô"},{en:"night",pt:"noite"},{en:"morning",pt:"manhã"},{en:"way",pt:"maneira / caminho"},{en:"answer",pt:"resposta"},{en:"window",pt:"janela"},{en:"cell phone",pt:"celular"},{en:"wife",pt:"esposa"},{en:"weekend",pt:"fim de semana"},{en:"dinner",pt:"jantar"},{en:"reason",pt:"razão / motivo"},{en:"family",pt:"família"},{en:"museum",pt:"museu"},{en:"mall",pt:"shopping"},{en:"business",pt:"negócios"},{en:"doctor",pt:"médico"},{en:"camera",pt:"câmera"},{en:"interview",pt:"entrevista"},{en:"company",pt:"empresa"}],
+        adjectives:[{en:"expensive",pt:"caro"},{en:"cheap",pt:"barato"},{en:"true",pt:"verdadeiro"},{en:"false",pt:"falso"},{en:"bad",pt:"ruim"},{en:"interesting",pt:"interessante"},{en:"old",pt:"velho / antigo"},{en:"new",pt:"novo"},{en:"early",pt:"cedo"},{en:"late",pt:"atrasado / tarde"},{en:"ready",pt:"pronto"},{en:"next",pt:"próximo"},{en:"great",pt:"ótimo"}],
+        adverbs:[{en:"after",pt:"depois"},{en:"before",pt:"antes"},{en:"by plane",pt:"de avião"},{en:"on the bus",pt:"no ônibus"},{en:"after dinner",pt:"depois do jantar"},{en:"really early",pt:"bem cedo"},{en:"for work",pt:"a trabalho"},{en:"for vacation",pt:"de férias"},{en:"at the airport",pt:"no aeroporto"},{en:"at our destination",pt:"no nosso destino"},{en:"on a trip",pt:"em uma viagem"},{en:"at the bus stop",pt:"no ponto de ônibus"},{en:"before my flight",pt:"antes do meu voo"},{en:"next morning",pt:"manhã seguinte"},{en:"next week",pt:"na próxima semana"},{en:"have a great trip",pt:"tenha uma ótima viagem"}],
+        grammar:[
+          {title:"Order & sequence",rules:["after / before ; the opposite / the contrary.","a long time before ; in total."]},
+          {title:"Prepositions of travel",rules:["on a bus / on a train / on a plane / on the subway.","at the airport / at our destination. I get up really early before my flight."]}
+        ]}, phrases:[{en:"Have a great trip",pt:"Tenha uma ótima viagem"},{en:"I travel by plane",pt:"Eu viajo de avião"},{en:"I get up really early before my flight",pt:"Eu levanto bem cedo antes do meu voo"}]},
+      { title:"Lesson 9.2", name:"Shopping & Polite Questions", content:{
+        verbs:[{en:"to arrive",pt:"chegar"},{en:"to buy",pt:"comprar"},{en:"to drink",pt:"beber"},{en:"to ask",pt:"perguntar / pedir"},{en:"to need",pt:"precisar"},{en:"to open",pt:"abrir"},{en:"to check",pt:"verificar"},{en:"to repeat",pt:"repetir"},{en:"to understand",pt:"entender"},{en:"to put",pt:"colocar"},{en:"to thank",pt:"agradecer"},{en:"to finish",pt:"terminar"},{en:"to give",pt:"dar"},{en:"to find",pt:"encontrar"},{en:"to leave",pt:"sair / partir"},{en:"to read",pt:"ler"},{en:"to listen",pt:"ouvir"},{en:"to want",pt:"querer"},{en:"to say",pt:"dizer"}],
+        nouns:[{en:"airport",pt:"aeroporto"},{en:"travel guide",pt:"guia de viagem"},{en:"book",pt:"livro"},{en:"magazine",pt:"revista"},{en:"price",pt:"preço"},{en:"news",pt:"notícias"},{en:"café",pt:"café (lugar)"},{en:"coffee",pt:"café (bebida)"},{en:"minute",pt:"minuto"},{en:"restroom",pt:"banheiro (público)"},{en:"bathroom",pt:"banheiro"},{en:"cell phone",pt:"celular"},{en:"bag",pt:"bolsa / mochila"},{en:"item",pt:"item"},{en:"customer",pt:"cliente"},{en:"clerk",pt:"atendente"},{en:"mug",pt:"caneca"},{en:"ticket",pt:"passagem / ingresso"},{en:"bus",pt:"ônibus"},{en:"child",pt:"criança"},{en:"son",pt:"filho"},{en:"seat",pt:"assento / lugar"},{en:"flower",pt:"flor"},{en:"plant",pt:"planta"},{en:"information",pt:"informação"},{en:"flight",pt:"voo"}],
+        adjectives:[{en:"same",pt:"mesmo"},{en:"good",pt:"bom"},{en:"open",pt:"aberto"},{en:"cheap",pt:"barato"},{en:"big",pt:"grande"},{en:"missing",pt:"faltando"},{en:"correct",pt:"correto"},{en:"polite",pt:"educado"},{en:"next",pt:"próximo / ao lado"}],
+        adverbs:[{en:"how much is that?",pt:"quanto custa isso?"},{en:"is it the same price?",pt:"é o mesmo preço?"},{en:"both, please",pt:"ambos, por favor"},{en:"what time does...?",pt:"a que horas...?"},{en:"in about 10 minutes",pt:"em cerca de 10 minutos"},{en:"over there",pt:"logo ali"},{en:"next to",pt:"ao lado de"},{en:"excuse me",pt:"com licença"},{en:"on the right",pt:"à direita"}],
+        grammar:[
+          {title:"Polite questions",rules:["Excuse me. Can you say that again? Can you repeat that, please?","How much is that? Two for $15. Is it the same price?","What time does it open? In about 10 minutes."]}
+        ]}, phrases:[{en:"How much is that",pt:"Quanto custa isso"},{en:"Can you repeat that please",pt:"Você pode repetir isso, por favor"},{en:"The restroom is over there",pt:"O banheiro fica logo ali"}]},
+      { title:"Lesson 9.3", name:"Tours, Prices & Numbers", content:{
+        verbs:[{en:"to recognize",pt:"reconhecer"},{en:"to live",pt:"morar"},{en:"to take",pt:"levar / pegar"},{en:"to get",pt:"pegar / conseguir"},{en:"to arrive",pt:"chegar"},{en:"to walk",pt:"caminhar"},{en:"to stay",pt:"ficar / hospedar-se"},{en:"to need",pt:"precisar"},{en:"to reserve",pt:"reservar"},{en:"to book",pt:"reservar"},{en:"to pay",pt:"pagar"},{en:"to travel",pt:"viajar"},{en:"to find",pt:"encontrar"},{en:"to mean",pt:"significar"},{en:"to meet",pt:"conhecer / encontrar"},{en:"to explain",pt:"explicar"},{en:"to underline",pt:"sublinhar"},{en:"to visit",pt:"visitar"},{en:"to ride",pt:"andar (a cavalo)"},{en:"to mention",pt:"mencionar"},{en:"to cook",pt:"cozinhar"},{en:"to plan",pt:"planejar"},{en:"to forget",pt:"esquecer"}],
+        nouns:[{en:"destination",pt:"destino"},{en:"place",pt:"lugar"},{en:"reading",pt:"leitura"},{en:"text",pt:"texto"},{en:"guide",pt:"guia"},{en:"homework",pt:"lição de casa"},{en:"island",pt:"ilha"},{en:"lake",pt:"lago"},{en:"mountain",pt:"montanha"},{en:"transportation",pt:"transporte"},{en:"boat",pt:"barco"},{en:"company",pt:"empresa"},{en:"hour",pt:"hora"},{en:"car",pt:"carro"},{en:"town",pt:"cidade"},{en:"nature",pt:"natureza"},{en:"way",pt:"caminho"},{en:"hotel",pt:"hotel"},{en:"trip",pt:"viagem"},{en:"price",pt:"preço"},{en:"family",pt:"família"},{en:"dance",pt:"dança"},{en:"restaurant",pt:"restaurante"},{en:"lunch",pt:"almoço"},{en:"market",pt:"mercado"},{en:"neighborhood",pt:"bairro"},{en:"hill",pt:"colina"},{en:"ocean",pt:"oceano"},{en:"snow",pt:"neve"},{en:"food",pt:"comida"},{en:"camera",pt:"câmera"},{en:"skill",pt:"habilidade"},{en:"advice",pt:"conselho"},{en:"horse",pt:"cavalo"},{en:"farm",pt:"fazenda"},{en:"worker",pt:"trabalhador"},{en:"tour",pt:"passeio / excursão"},{en:"animal",pt:"animal"},{en:"museum",pt:"museu"},{en:"vacation",pt:"férias"},{en:"ranch",pt:"rancho / fazenda"}],
+        adjectives:[{en:"interesting",pt:"interessante"},{en:"wonderful",pt:"maravilhoso"},{en:"free",pt:"grátis"},{en:"expensive",pt:"caro"},{en:"hot",pt:"quente"},{en:"small",pt:"pequeno"},{en:"correct",pt:"correto"},{en:"friendly",pt:"amigável"},{en:"big",pt:"grande"}],
+        adverbs:[{en:"on the way",pt:"no caminho"},{en:"near",pt:"perto de"},{en:"per night",pt:"por noite"},{en:"on a horse",pt:"a cavalo"},{en:"one-day tour",pt:"passeio de um dia"},{en:"go for a walk",pt:"dar uma caminhada"},{en:"stay longer",pt:"ficar mais tempo"}],
+        grammar:[
+          {title:"Large numbers & time",rules:["125.49 = one twenty-five forty-nine. 248 = two forty-eight.","What time does the movie start? It's 8:30 p.m."]},
+          {title:"Travel questions",rules:["What time does the plane leave? How much is the ticket for the tour?","Can we take a boat to the island?"]}
+        ]}, phrases:[{en:"What time does the plane leave",pt:"Que horas o avião parte"},{en:"Can you ride a horse",pt:"Você sabe andar a cavalo"},{en:"How much is the ticket for the tour",pt:"Quanto custa a passagem para o passeio"}]},
+      { title:"Lesson 9.4", name:"Trip Planning (Review)", content:{
+        verbs:[{en:"to want",pt:"querer"},{en:"to visit",pt:"visitar"},{en:"to leave",pt:"sair / partir"},{en:"to take",pt:"pegar / levar"},{en:"to need",pt:"precisar"},{en:"to buy",pt:"comprar"},{en:"to find",pt:"encontrar"},{en:"to ride",pt:"andar (a cavalo)"},{en:"to arrive",pt:"chegar"},{en:"to recommend",pt:"recomendar"},{en:"to suggest",pt:"sugerir"},{en:"to go",pt:"ir"},{en:"to dive",pt:"mergulhar"},{en:"to open",pt:"abrir"},{en:"to cost",pt:"custar"}],
+        nouns:[{en:"ranch",pt:"rancho"},{en:"plane",pt:"avião"},{en:"hotel",pt:"hotel"},{en:"ticket",pt:"passagem"},{en:"tour",pt:"passeio"},{en:"boat",pt:"barco"},{en:"island",pt:"ilha"},{en:"restroom",pt:"banheiro (público)"},{en:"airport",pt:"aeroporto"},{en:"museum",pt:"museu"},{en:"food",pt:"comida"},{en:"flight",pt:"voo"},{en:"horse",pt:"cavalo"},{en:"city",pt:"cidade"},{en:"water",pt:"água"},{en:"lake",pt:"lago"},{en:"restaurant",pt:"restaurante"},{en:"market",pt:"mercado"},{en:"tour guide",pt:"guia turístico"},{en:"mug",pt:"caneca"},{en:"mountains",pt:"montanhas"},{en:"waterfalls",pt:"cachoeiras"},{en:"travel guide",pt:"guia de viagem"},{en:"guidebook",pt:"guia (livro)"},{en:"money",pt:"dinheiro"},{en:"baggage",pt:"mala / bagagem"},{en:"camera",pt:"câmera"},{en:"sunscreen",pt:"protetor solar"},{en:"sunglasses",pt:"óculos de sol"},{en:"backpack",pt:"mochila"},{en:"snack",pt:"lanchinho"},{en:"water bottle",pt:"garrafa de água"},{en:"travel insurance",pt:"seguro viagem"}],
+        adjectives:[{en:"expensive",pt:"caro"},{en:"friendly",pt:"amigável"},{en:"late",pt:"atrasado"},{en:"cold",pt:"frio"},{en:"local",pt:"local"},{en:"free",pt:"grátis"},{en:"interesting",pt:"interessante"}],
+        adverbs:[{en:"unfortunately",pt:"infelizmente"},{en:"near",pt:"perto"},{en:"first",pt:"primeiro"},{en:"already",pt:"já"}],
+        grammar:[
+          {title:"Travel questions",rules:["Where is the restroom in the airport? When do we arrive at our destination?","Which bus goes to the city? Can I sit next to the window on the plane?"]},
+          {title:"Recommendations",rules:["I recommend / I suggest going to Iguaçu Waterfalls.","First, Jim needs a travel guide, a ticket and money.","Don't forget the sunscreen and the water bottle. Download the Uber app."]}
+        ]}, phrases:[{en:"I recommend the city tour",pt:"Eu recomendo o passeio pela cidade"},{en:"Don't forget your sunscreen",pt:"Não esqueça seu protetor solar"},{en:"Where is the restroom in the airport",pt:"Onde fica o banheiro no aeroporto"}]}
     ]});
 
     // ===================== UNIT 10 =====================
     courseData.push({ id:10, title:"Unit 10", subtitle:"Future Plans (Going to)", colors:["bg-teal-500/80","bg-emerald-500/80","bg-green-500/80","bg-cyan-400/80"], lessons:[
-        { title:"Lesson 10.1", name:"Plans & Seasons", content:{
-            verbs:[
-                { en:"to plan", pt:"planejar", c:["I plan","you plan","he / she / it plans","we plan","you plan","they plan"] },
-                { en:"to meet", pt:"encontrar", c:["I meet","you meet","he / she / it meets","we meet","you meet","they meet"] },
-                { en:"to rain", pt:"chover", c:["it rains"] }
-            ],
-            nouns:[
-                { en:"spring", pt:"primavera", img:"spring flowers" },
-                { en:"summer", pt:"verão", img:"summer beach" },
-                { en:"fall", pt:"outono", img:"autumn fall leaves" },
-                { en:"winter", pt:"inverno", img:"winter snow" },
-                { en:"picnic", pt:"piquenique", img:"picnic" },
-                { en:"vacation", pt:"férias", img:"vacation holiday" },
-                { en:"rain", pt:"chuva", img:"rain" }
-            ],
-            adjectives:[
-                { en:"hot", pt:"quente", img:"hot sun" },
-                { en:"cold", pt:"frio(a)", img:"cold winter" },
-                { en:"ready", pt:"pronto(a)", img:"ready" }
-            ],
-            adverbs:[
-                { en:"tomorrow", pt:"amanhã" },
-                { en:"next week", pt:"semana que vem" },
-                { en:"tonight", pt:"hoje à noite" },
-                { en:"maybe", pt:"talvez" }
-            ],
-            grammar:[
-                { title:"BE GOING TO (future)", rules:["am/is/are + going to + verbo.","I am going to travel next week.","It is going to rain. = Vai chover."] }
-            ]
-        }, phrases:[
-            { en:"I am going to travel next week", pt:"Eu vou viajar semana que vem" },
-            { en:"It is going to rain tomorrow", pt:"Vai chover amanhã" }
-        ]},
-        { title:"Lesson 10.2", name:"Clothes", content:{
-            verbs:[
-                { en:"to wear", pt:"vestir / usar", c:["I wear","you wear","he / she / it wears","we wear","you wear","they wear"] },
-                { en:"to take", pt:"levar", c:["I take","you take","he / she / it takes","we take","you take","they take"] },
-                { en:"to buy", pt:"comprar", c:["I buy","you buy","he / she / it buys","we buy","you buy","they buy"] }
-            ],
-            nouns:[
-                { en:"shirt", pt:"camisa", img:"shirt" },
-                { en:"pants", pt:"calças", img:"pants trousers" },
-                { en:"dress", pt:"vestido", img:"dress" },
-                { en:"shoes", pt:"sapatos", img:"shoes" },
-                { en:"coat", pt:"casaco", img:"coat" },
-                { en:"hat", pt:"chapéu", img:"hat" },
-                { en:"skirt", pt:"saia", img:"skirt" },
-                { en:"sweater", pt:"suéter", img:"sweater" },
-                { en:"boots", pt:"botas", img:"boots" },
-                { en:"jeans", pt:"jeans", img:"jeans" }
-            ],
-            adjectives:[
-                { en:"new", pt:"novo(a)", img:"new clothes" },
-                { en:"big", pt:"grande", img:"big" },
-                { en:"beautiful", pt:"lindo(a)", img:"beautiful dress" }
-            ],
-            adverbs:[
-                { en:"in the winter", pt:"no inverno" },
-                { en:"in the summer", pt:"no verão" },
-                { en:"at the mall", pt:"no shopping" }
-            ],
-            grammar:[
-                { title:"Going to + clothes", rules:["She is going to take the dress on the trip.","What are they going to wear?","I am going to buy boots tomorrow."] }
-            ]
-        }, phrases:[
-            { en:"I am going to buy new shoes", pt:"Eu vou comprar sapatos novos" },
-            { en:"What are you going to wear", pt:"O que você vai vestir" }
-        ]},
-        { title:"Lesson 10.3", name:"Suggestions & Invites", content:{
-            verbs:[
-                { en:"to suggest", pt:"sugerir", c:["I suggest","you suggest","he / she / it suggests","we suggest","you suggest","they suggest"] },
-                { en:"to go out", pt:"sair", c:["I go out","you go out","he / she / it goes out","we go out","you go out","they go out"] }
-            ],
-            nouns:[
-                { en:"invitation", pt:"convite", img:"invitation card" },
-                { en:"sunrise", pt:"nascer do sol", img:"sunrise" },
-                { en:"event", pt:"evento", img:"event" },
-                { en:"holiday", pt:"feriado", img:"holiday celebration" }
-            ],
-            adjectives:[
-                { en:"exciting", pt:"emocionante", img:"exciting" },
-                { en:"famous", pt:"famoso(a)", img:"famous" },
-                { en:"surprised", pt:"surpreso(a)", img:"surprised" }
-            ],
-            adverbs:[
-                { en:"early in the morning", pt:"de manhã cedo" },
-                { en:"because of", pt:"por causa de" },
-                { en:"but", pt:"mas" }
-            ],
-            grammar:[
-                { title:"Making suggestions", rules:["Why don't we...? = Por que não...?","Let's have dinner. = Vamos jantar.","How about Saturday? — Sounds good!"] }
-            ]
-        }, phrases:[
-            { en:"Let's have dinner tonight", pt:"Vamos jantar hoje à noite" },
-            { en:"Why don't we go to the beach", pt:"Por que não vamos à praia" }
-        ]},
-        { title:"Lesson 10.4", name:"Review: Future", content:{
-            verbs:[
-                { en:"to get together", pt:"reunir-se", c:["I get together","you get together","he / she / it gets together","we get together","you get together","they get together"] },
-                { en:"to dance", pt:"dançar", c:["I dance","you dance","he / she / it dances","we dance","you dance","they dance"] }
-            ],
-            nouns:[
-                { en:"gas station", pt:"posto de gasolina", img:"gas station" },
-                { en:"bank", pt:"banco", img:"bank" },
-                { en:"bakery", pt:"padaria", img:"bakery" },
-                { en:"lunch break", pt:"horário de almoço", img:"lunch break" }
-            ],
-            adjectives:[
-                { en:"fun", pt:"divertido(a)", img:"fun" },
-                { en:"sick", pt:"doente", img:"sick person" }
-            ],
-            adverbs:[
-                { en:"during", pt:"durante" },
-                { en:"on Sundays", pt:"aos domingos" },
-                { en:"always", pt:"sempre" }
-            ],
-            grammar:[
-                { title:"Going to + frequency", rules:["My boyfriend and I are going to take a walk.","We are going to go dancing on the weekend.","After running, we are going to have breakfast."] }
-            ]
-        }, phrases:[
-            { en:"We are going to take a walk", pt:"Nós vamos dar uma caminhada" },
-            { en:"They are going to dance on the weekend", pt:"Eles vão dançar no fim de semana" }
-        ]}
+      { title:"Lesson 10.1", name:"Plans, Clothes & Seasons", content:{
+        verbs:[{en:"to plan",pt:"planejar"},{en:"to meet",pt:"encontrar"},{en:"to pet",pt:"fazer carinho"},{en:"to work out",pt:"malhar"},{en:"to wear",pt:"usar / vestir"},{en:"to need",pt:"precisar"},{en:"to discuss",pt:"discutir"},{en:"to begin",pt:"começar"},{en:"to belong",pt:"pertencer"},{en:"to get together",pt:"reunir-se"},{en:"to take out",pt:"levar para sair"},{en:"to go shopping",pt:"fazer compras"},{en:"to travel",pt:"viajar"},{en:"to buy",pt:"comprar"},{en:"to take",pt:"levar / pegar"},{en:"to look at",pt:"olhar / observar"},{en:"to have",pt:"ter"}],
+        nouns:[{en:"clothes",pt:"roupas"},{en:"season",pt:"estação"},{en:"hat",pt:"chapéu / gorro"},{en:"pants",pt:"calças"},{en:"shirt",pt:"camisa"},{en:"coat",pt:"casaco"},{en:"shorts",pt:"shorts"},{en:"skirt",pt:"saia"},{en:"dress",pt:"vestido"},{en:"shoes",pt:"sapatos"},{en:"sweater",pt:"suéter"},{en:"t-shirt",pt:"camiseta"},{en:"jeans",pt:"jeans"},{en:"boots",pt:"botas"},{en:"spring",pt:"primavera"},{en:"summer",pt:"verão"},{en:"fall",pt:"outono"},{en:"winter",pt:"inverno"},{en:"dry season",pt:"estação seca"},{en:"rainy season",pt:"estação chuvosa"},{en:"feet",pt:"pés"},{en:"body",pt:"corpo"},{en:"rain",pt:"chuva"},{en:"beach",pt:"praia"},{en:"flower",pt:"flor"},{en:"vacation",pt:"férias"},{en:"picnic",pt:"piquenique"},{en:"park",pt:"parque"},{en:"museum",pt:"museu"},{en:"coworkers",pt:"colegas de trabalho"},{en:"billboard",pt:"outdoor"},{en:"cat",pt:"gato"},{en:"trip",pt:"viagem"},{en:"idea",pt:"ideia"}],
+        adjectives:[{en:"big",pt:"grande"},{en:"hot",pt:"quente / calor"},{en:"cold",pt:"frio"},{en:"new",pt:"novo(a)"},{en:"ready",pt:"pronto(a)"},{en:"some",pt:"alguns"},{en:"same",pt:"mesmo"},{en:"correct",pt:"correto"},{en:"short",pt:"curto"},{en:"great",pt:"ótimo"},{en:"true",pt:"verdadeiro"}],
+        adverbs:[{en:"tomorrow",pt:"amanhã"},{en:"next week",pt:"semana que vem"},{en:"tonight",pt:"hoje à noite"},{en:"maybe",pt:"talvez"},{en:"this weekend",pt:"neste fim de semana"},{en:"in the summer",pt:"no verão"},{en:"in the winter",pt:"no inverno"},{en:"in the spring",pt:"na primavera"},{en:"in the rainy season",pt:"na estação chuvosa"},{en:"on the beach",pt:"na praia"},{en:"at the mall",pt:"no shopping"},{en:"outside",pt:"ao ar livre"},{en:"a lot",pt:"muito"},{en:"good idea",pt:"boa ideia"}],
+        grammar:[
+          {title:"Be going to (future)",rules:["am/is/are + going to + verbo.","I am going to travel next week. She is going to meet coworkers.","It is going to rain. It's going to be early."]},
+          {title:"take a break / take a walk",rules:["have a picnic in the park / at the beach.","take a break / take a walk at 11 a.m."]}
+        ]}, phrases:[{en:"I am going to travel next week",pt:"Eu vou viajar semana que vem"},{en:"It is going to rain tomorrow",pt:"Vai chover amanhã"},{en:"We are going to have a picnic in the park",pt:"Nós vamos fazer um piquenique no parque"}]},
+      { title:"Lesson 10.2", name:"Suggestions", content:{
+        verbs:[{en:"to meet",pt:"encontrar"},{en:"to suggest",pt:"sugerir"},{en:"to go out",pt:"sair"},{en:"to think",pt:"pensar / achar"},{en:"to have",pt:"ter / consumir"},{en:"to like",pt:"gostar"},{en:"to love",pt:"amar"},{en:"to practice",pt:"praticar"},{en:"to take",pt:"pegar / levar"},{en:"to order",pt:"pedir (compra)"},{en:"to call",pt:"ligar"},{en:"to focus",pt:"focar"},{en:"to get",pt:"conseguir / pegar"},{en:"to stay",pt:"ficar"},{en:"to cook",pt:"cozinhar"},{en:"to free",pt:"desocupar"},{en:"to find",pt:"encontrar"}],
+        nouns:[{en:"hotel",pt:"hotel"},{en:"plan",pt:"plano"},{en:"activity",pt:"atividade"},{en:"evening",pt:"noite / noitinha"},{en:"meeting",pt:"reunião"},{en:"coworker",pt:"colega de trabalho"},{en:"town",pt:"cidade"},{en:"dinner",pt:"jantar"},{en:"time",pt:"hora / horário"},{en:"script",pt:"roteiro"},{en:"food",pt:"comida"},{en:"place",pt:"lugar"},{en:"restaurant",pt:"restaurante"},{en:"idea",pt:"ideia"},{en:"expression",pt:"expressão"},{en:"strategy",pt:"estratégia"},{en:"reason",pt:"razão / motivo"},{en:"sound",pt:"som"},{en:"ticket",pt:"ingresso / bilhete"},{en:"station",pt:"estação"},{en:"movie",pt:"filme"},{en:"business",pt:"negócio"},{en:"kilometer",pt:"quilômetro"},{en:"picnic",pt:"piquenique"},{en:"party",pt:"festa"},{en:"birthday",pt:"aniversário"},{en:"line",pt:"fila"}],
+        adjectives:[{en:"functional",pt:"funcional"},{en:"real",pt:"real"},{en:"good",pt:"bom"},{en:"Mexican",pt:"mexicano"},{en:"busy",pt:"ocupado"},{en:"sure",pt:"certo / claro"},{en:"different",pt:"diferente"},{en:"Italian",pt:"italiano"},{en:"Chinese",pt:"chinês"},{en:"beautiful",pt:"lindo"},{en:"free",pt:"livre / desocupado"},{en:"Korean",pt:"coreano"},{en:"new",pt:"novo"}],
+        adverbs:[{en:"sounds good",pt:"parece bom"},{en:"good idea",pt:"boa ideia"},{en:"eight o'clock",pt:"oito horas"},{en:"eight-thirty",pt:"oito e meia"},{en:"next Friday",pt:"próxima sexta"},{en:"next weekend",pt:"próximo fim de semana"}],
+        grammar:[
+          {title:"Making suggestions",rules:["Why don't we...? Let's... How about...?","Sounds good. Good idea."]},
+          {title:"Refusing politely",rules:["I'm sorry, but I can't. I have to...","there is / there are. going to (future)."]}
+        ]}, phrases:[{en:"Let's have dinner",pt:"Vamos jantar"},{en:"Why don't we go to the beach",pt:"Por que não vamos à praia"},{en:"How about Saturday",pt:"Que tal sábado"}]},
+      { title:"Lesson 10.3", name:"Invitations & Events", content:{
+        verbs:[{en:"to sound",pt:"soar"},{en:"to take",pt:"levar"},{en:"to visit",pt:"visitar"},{en:"to wear",pt:"vestir / usar"},{en:"to walk",pt:"caminhar"},{en:"to run",pt:"correr"},{en:"to play",pt:"jogar / brincar"},{en:"to meet",pt:"encontrar"},{en:"to dance",pt:"dançar"},{en:"to reply",pt:"responder"},{en:"to forward",pt:"encaminhar"},{en:"to sleep",pt:"dormir"},{en:"to tour",pt:"fazer turismo"},{en:"to go out",pt:"sair"},{en:"to send",pt:"enviar"},{en:"to describe",pt:"descrever"},{en:"to tell",pt:"contar"}],
+        nouns:[{en:"invitation",pt:"convite"},{en:"show",pt:"programa / espetáculo"},{en:"travel",pt:"viagem"},{en:"neighborhood",pt:"bairro"},{en:"event",pt:"evento"},{en:"host",pt:"anfitrião"},{en:"door",pt:"porta"},{en:"sunrise",pt:"nascer do sol"},{en:"walk",pt:"caminhada"},{en:"picnic",pt:"piquenique"},{en:"breakfast",pt:"café da manhã"},{en:"soccer",pt:"futebol"},{en:"shorts",pt:"shorts"},{en:"sweater",pt:"suéter"},{en:"surprise",pt:"surpresa"},{en:"star",pt:"estrela"},{en:"moon",pt:"lua"},{en:"smile",pt:"sorriso"},{en:"sun",pt:"sol"},{en:"sky",pt:"céu"},{en:"group",pt:"grupo"},{en:"building",pt:"prédio"},{en:"island",pt:"ilha"},{en:"holiday",pt:"feriado"},{en:"clothes",pt:"roupas"},{en:"flower",pt:"flor"},{en:"child",pt:"criança"},{en:"adult",pt:"adulto"},{en:"game",pt:"jogo"},{en:"strawberry",pt:"morango"},{en:"umbrella",pt:"guarda-sol"},{en:"tree",pt:"árvore"},{en:"ball",pt:"bola"},{en:"birthday",pt:"aniversário"}],
+        adjectives:[{en:"online",pt:"on-line"},{en:"informal",pt:"informal"},{en:"formal",pt:"formal"},{en:"late",pt:"atrasado"},{en:"early",pt:"cedo"},{en:"nice",pt:"bom / agradável"},{en:"great",pt:"ótimo"},{en:"surprised",pt:"surpreso"},{en:"exciting",pt:"emocionante"},{en:"famous",pt:"famoso"},{en:"old",pt:"velho"},{en:"hot",pt:"quente"},{en:"important",pt:"importante"},{en:"young",pt:"jovem"},{en:"black",pt:"preto"},{en:"white",pt:"branco"},{en:"fun",pt:"divertido"},{en:"big",pt:"grande"}],
+        adverbs:[{en:"because",pt:"porque"},{en:"because of",pt:"por causa de"},{en:"outside",pt:"ao ar livre"},{en:"don't be late",pt:"não se atrase"},{en:"early in the morning",pt:"de manhã cedo"},{en:"watch the sunrise",pt:"assistir ao nascer do sol"},{en:"beach party",pt:"festa na praia"}],
+        grammar:[
+          {title:"Going to (gonna)",rules:["going to = futuro (gonna, informal).","you're / don't / there's / we're (contrações)."]},
+          {title:"Invitations & events",rules:["Let's have dinner. We are going to watch the sunrise.","day-and-night city: the city never sleeps."]}
+        ]}, phrases:[{en:"Let's have dinner tonight",pt:"Vamos jantar hoje à noite"},{en:"Don't be late",pt:"Não se atrase"},{en:"We are going to watch the sunrise",pt:"Nós vamos assistir ao nascer do sol"}]},
+      { title:"Lesson 10.4", name:"Future Review & Past intro", content:{
+        verbs:[{en:"to be",pt:"ser / estar"},{en:"to begin",pt:"começar"},{en:"to invent",pt:"inventar"},{en:"to organize",pt:"organizar"},{en:"to remember",pt:"lembrar"},{en:"to transcribe",pt:"transcrever"},{en:"to swim",pt:"nadar"},{en:"to drive",pt:"dirigir"},{en:"to wear",pt:"vestir / usar"},{en:"to run",pt:"correr"},{en:"to walk",pt:"caminhar"},{en:"to dance",pt:"dançar"},{en:"to make",pt:"fazer"},{en:"to find",pt:"encontrar"}],
+        nouns:[{en:"gas station",pt:"posto de gasolina"},{en:"bank",pt:"banco"},{en:"lunch break",pt:"horário de almoço"},{en:"bakery",pt:"padaria"},{en:"age",pt:"idade"},{en:"baby",pt:"bebê"},{en:"farm",pt:"fazenda"},{en:"flashback",pt:"retrospectiva"},{en:"go-kart",pt:"kart"},{en:"grandpa",pt:"vovô"},{en:"grandparents",pt:"avós"},{en:"high school",pt:"ensino médio"},{en:"hometown",pt:"cidade natal"},{en:"image",pt:"imagem"},{en:"job",pt:"emprego"},{en:"memory",pt:"lembrança"},{en:"note",pt:"anotação"},{en:"office",pt:"escritório"},{en:"post",pt:"postagem"},{en:"postcard",pt:"cartão-postal"},{en:"sport",pt:"esporte"},{en:"toy",pt:"brinquedo"},{en:"uncle",pt:"tio"},{en:"yard",pt:"quintal"},{en:"year",pt:"ano"},{en:"bar",pt:"bar"}],
+        adjectives:[{en:"affirmative",pt:"afirmativo"},{en:"asleep",pt:"dormindo"},{en:"awful",pt:"horrível"},{en:"bold",pt:"em negrito"},{en:"cute",pt:"fofo"},{en:"exciting",pt:"empolgante"},{en:"fast",pt:"rápido"},{en:"negative",pt:"negativo"},{en:"noisy",pt:"barulhento"},{en:"quiet",pt:"silencioso"},{en:"real",pt:"real / de verdade"},{en:"slow",pt:"lento"},{en:"smart",pt:"inteligente"},{en:"wonderful",pt:"maravilhoso"},{en:"beautiful",pt:"lindo"},{en:"big",pt:"grande"},{en:"good",pt:"bom"}],
+        adverbs:[{en:"during",pt:"durante"},{en:"on Sundays",pt:"aos domingos"},{en:"never",pt:"nunca"},{en:"hardly ever",pt:"quase nunca"},{en:"usually",pt:"geralmente"},{en:"sometimes",pt:"às vezes"},{en:"often",pt:"frequentemente"},{en:"always",pt:"sempre"},{en:"summer vacation",pt:"férias de verão"},{en:"good at",pt:"bom em"}],
+        grammar:[
+          {title:"Going to + frequency",rules:["My boyfriend and I are going to take a walk and run during the summer.","After running, we are going to the bakery to have breakfast."]},
+          {title:"Simple past (intro)",rules:["I was / you were / he was / we were / they were.","I wasn't / you weren't / they weren't."]}
+        ]}, phrases:[{en:"We are going to take a walk",pt:"Nós vamos dar uma caminhada"},{en:"They are going to go dancing on the weekend",pt:"Eles vão dançar no fim de semana"},{en:"After running we are going to the bakery",pt:"Depois de correr, nós vamos à padaria"}]}
     ]});
 
     // ===================== UNIT 11 =====================
     courseData.push({ id:11, title:"Unit 11", subtitle:"Simple Past (Was/Were)", colors:["bg-indigo-500/80","bg-purple-500/80","bg-violet-400/80","bg-blue-500/80"], lessons:[
-        { title:"Lesson 11.1", name:"Past with Was/Were", content:{
-            verbs:[
-                { en:"to be (past)", pt:"ser / estar (passado)", c:["I was","you were","he / she / it was","we were","you were","they were"] },
-                { en:"to be (past negative)", pt:"não era / não estava", c:["I wasn't","you weren't","he / she / it wasn't","we weren't","you weren't","they weren't"] },
-                { en:"to remember", pt:"lembrar", c:["I remember","you remember","he / she / it remembers","we remember","you remember","they remember"] }
-            ],
-            nouns:[
-                { en:"memory", pt:"lembrança", img:"old memory photo" },
-                { en:"yard", pt:"quintal", img:"backyard" },
-                { en:"garden", pt:"jardim", img:"garden" },
-                { en:"neighborhood", pt:"bairro", img:"neighborhood" },
-                { en:"toy", pt:"brinquedo", img:"toy" },
-                { en:"baby", pt:"bebê", img:"baby" }
-            ],
-            adjectives:[
-                { en:"quiet", pt:"silencioso(a)", img:"quiet calm" },
-                { en:"noisy", pt:"barulhento(a)", img:"noisy" },
-                { en:"awful", pt:"horrível", img:"awful storm" },
-                { en:"cute", pt:"fofo(a)", img:"cute puppy" },
-                { en:"beautiful", pt:"lindo(a)", img:"beautiful" }
-            ],
-            adverbs:[
-                { en:"last week", pt:"semana passada" },
-                { en:"in July", pt:"em julho" },
-                { en:"in the summer", pt:"no verão" }
-            ],
-            grammar:[
-                { title:"WAS / WERE", rules:["I/he/she/it was ; you/we/they were.","Negative: wasn't / weren't.","The house was beautiful. We weren't on vacation."] },
-                { title:"Colors", rules:["white, gray, red, yellow, purple, brown.","black, blue, green, orange, pink.","What color is it? It's blue."] }
-            ]
-        }, phrases:[
-            { en:"The house was beautiful", pt:"A casa era linda" },
-            { en:"My friends were at home", pt:"Meus amigos estavam em casa" }
-        ]},
-        { title:"Lesson 11.2", name:"Favorite Things & Colors", content:{
-            verbs:[
-                { en:"to be (past)", pt:"ser / estar (passado)", c:["I was","you were","he / she / it was","we were","you were","they were"] },
-                { en:"to wear", pt:"usar / vestir", c:["I wear","you wear","he / she / it wears","we wear","you wear","they wear"] }
-            ],
-            nouns:[
-                { en:"color", pt:"cor", img:"colors palette" },
-                { en:"couch", pt:"sofá", img:"couch" },
-                { en:"shirt", pt:"camisa", img:"shirt clothing" },
-                { en:"shoes", pt:"sapatos", img:"shoes pair" }
-            ],
-            adjectives:[
-                { en:"red", pt:"vermelho(a)", img:"red color" },
-                { en:"blue", pt:"azul", img:"blue color" },
-                { en:"green", pt:"verde", img:"green color" },
-                { en:"yellow", pt:"amarelo(a)", img:"yellow color" },
-                { en:"black", pt:"preto(a)", img:"black color" },
-                { en:"white", pt:"branco(a)", img:"white color" },
-                { en:"favorite", pt:"favorito(a)", img:"favorite heart" }
-            ],
-            adverbs:[
-                { en:"there was", pt:"havia (sing.)" },
-                { en:"there were", pt:"havia (pl.)" },
-                { en:"next to", pt:"ao lado de" }
-            ],
-            grammar:[
-                { title:"There was / There were", rules:["There was a couch in the living room.","There were two chairs next to the table.","What was your favorite color?"] }
-            ]
-        }, phrases:[
-            { en:"My favorite color was blue", pt:"Minha cor favorita era azul" },
-            { en:"There were toys in the yard", pt:"Havia brinquedos no quintal" }
-        ]}
+      { title:"Lesson 11.1", name:"Past with Was/Were & Colors", content:{
+        verbs:[{en:"to be (past)",pt:"ser / estar (passado)",c:["I was","you were","he / she / it was","we were","you were","they were"]},{en:"to be (past negative)",pt:"não era / não estava",c:["I wasn't","you weren't","he / she / it wasn't","we weren't","you weren't","they weren't"]},{en:"to remember",pt:"lembrar"},{en:"to describe",pt:"descrever"},{en:"to tell",pt:"contar / dizer"},{en:"to last",pt:"durar / faltar"},{en:"to include",pt:"incluir"},{en:"to unscramble",pt:"desembaralhar"},{en:"to wear",pt:"usar / vestir"},{en:"to talk",pt:"conversar"},{en:"to read",pt:"ler"},{en:"to listen",pt:"ouvir"},{en:"to hear",pt:"ouvir"},{en:"to look",pt:"olhar"},{en:"to draw",pt:"desenhar"}],
+        nouns:[{en:"phone",pt:"telefone"},{en:"cell phone",pt:"celular"},{en:"wife",pt:"esposa"},{en:"picture",pt:"foto / imagem"},{en:"child",pt:"criança"},{en:"home",pt:"casa / lar"},{en:"house",pt:"casa"},{en:"color",pt:"cor"},{en:"memory",pt:"lembrança"},{en:"grandparents",pt:"avós"},{en:"grandmother",pt:"avó"},{en:"kitchen",pt:"cozinha"},{en:"living room",pt:"sala de estar"},{en:"bedroom",pt:"quarto"},{en:"couch",pt:"sofá"},{en:"wall",pt:"parede"},{en:"room",pt:"cômodo"},{en:"furniture",pt:"móveis"},{en:"bed",pt:"cama"},{en:"desk",pt:"escrivaninha"},{en:"window",pt:"janela"},{en:"refrigerator",pt:"geladeira"},{en:"table",pt:"mesa"},{en:"chair",pt:"cadeira"},{en:"shirt",pt:"camisa"},{en:"bag",pt:"bolsa / mochila"},{en:"clothes",pt:"roupas"},{en:"shoes",pt:"sapatos"},{en:"toy",pt:"brinquedo"},{en:"story",pt:"história"},{en:"post",pt:"postagem"},{en:"garden",pt:"jardim"},{en:"yard",pt:"quintal"},{en:"office",pt:"escritório"},{en:"neighborhood",pt:"bairro"},{en:"job",pt:"emprego"},{en:"year",pt:"ano"},{en:"week",pt:"semana"},{en:"babies",pt:"bebês"},{en:"coworkers",pt:"colegas de trabalho"},{en:"vacation",pt:"férias"},{en:"school",pt:"escola"},{en:"farm",pt:"fazenda"},{en:"company",pt:"empresa"}],
+        adjectives:[{en:"white",pt:"branco"},{en:"gray",pt:"cinza"},{en:"red",pt:"vermelho"},{en:"yellow",pt:"amarelo"},{en:"purple",pt:"roxo"},{en:"brown",pt:"marrom"},{en:"black",pt:"preto"},{en:"blue",pt:"azul"},{en:"green",pt:"verde"},{en:"orange",pt:"laranja"},{en:"pink",pt:"rosa"},{en:"old",pt:"velho"},{en:"new",pt:"novo"},{en:"cute",pt:"fofo"},{en:"big",pt:"grande"},{en:"ugly",pt:"feio"},{en:"nice",pt:"agradável"},{en:"easy",pt:"fácil"},{en:"favorite",pt:"favorito"},{en:"busy",pt:"ocupado"},{en:"quiet",pt:"silencioso(a)"},{en:"noisy",pt:"barulhento"},{en:"boring",pt:"chato"},{en:"rude",pt:"grosseiro"},{en:"beautiful",pt:"lindo / bonito"},{en:"exciting",pt:"animado / empolgante"},{en:"asleep",pt:"sonolento(a)"},{en:"awful",pt:"horrível"},{en:"fast",pt:"rápido"},{en:"first",pt:"primeiro"},{en:"correct",pt:"correto"}],
+        adverbs:[{en:"at home",pt:"em casa"},{en:"at work",pt:"no trabalho"},{en:"in class",pt:"na aula"},{en:"on vacation",pt:"de férias"},{en:"last week",pt:"semana passada"},{en:"in July",pt:"em julho"},{en:"in the summer",pt:"no verão"},{en:"what color",pt:"de que cor"},{en:"how old",pt:"quantos anos"},{en:"next to",pt:"ao lado de"}],
+        grammar:[
+          {title:"WAS / WERE",rules:["I/he/she/it was ; you/we/they were.","Negative: wasn't / weren't.","The house was beautiful. We weren't on vacation. It wasn't an awful day."]},
+          {title:"There was / There were",rules:["there was = havia (singular). there were = havia (plural)."]},
+          {title:"Colors & days",rules:["white, gray, red, yellow, purple, brown, black, blue, green, orange, pink.","Sunday, Monday, Tuesday, Wednesday, Friday, Saturday."]}
+        ]}, phrases:[{en:"The house was beautiful",pt:"A casa era linda"},{en:"My friends were at home",pt:"Meus amigos estavam em casa"},{en:"My first job was exciting",pt:"Meu primeiro emprego era empolgante"},{en:"It wasn't an awful day",pt:"Não foi um dia horrível"}]},
+      { title:"Lesson 11.2", name:"Favorite Things & Past Review", content:{
+        verbs:[{en:"to be (past)",pt:"ser / estar (passado)",c:["I was","you were","he / she / it was","we were","you were","they were"]},{en:"to wear",pt:"usar / vestir"},{en:"to remember",pt:"lembrar"},{en:"to describe",pt:"descrever"},{en:"to ask",pt:"perguntar"},{en:"to answer",pt:"responder"},{en:"to talk",pt:"conversar"},{en:"to like",pt:"gostar"},{en:"to draw",pt:"desenhar"},{en:"to complete",pt:"completar"},{en:"to correct",pt:"corrigir"},{en:"to write",pt:"escrever"}],
+        nouns:[{en:"color",pt:"cor"},{en:"couch",pt:"sofá"},{en:"shirt",pt:"camisa"},{en:"shoes",pt:"sapatos"},{en:"picture",pt:"foto / imagem"},{en:"memory",pt:"lembrança"},{en:"grandparents",pt:"avós"},{en:"kitchen",pt:"cozinha"},{en:"living room",pt:"sala de estar"},{en:"bedroom",pt:"quarto"},{en:"wall",pt:"parede"},{en:"room",pt:"cômodo"},{en:"furniture",pt:"móveis"},{en:"bed",pt:"cama"},{en:"desk",pt:"escrivaninha"},{en:"window",pt:"janela"},{en:"table",pt:"mesa"},{en:"chair",pt:"cadeira"},{en:"bag",pt:"bolsa"},{en:"clothes",pt:"roupas"},{en:"toy",pt:"brinquedo"},{en:"family",pt:"família"},{en:"friends",pt:"amigos"},{en:"vacation",pt:"férias"},{en:"weekend",pt:"fim de semana"}],
+        adjectives:[{en:"red",pt:"vermelho"},{en:"blue",pt:"azul"},{en:"green",pt:"verde"},{en:"yellow",pt:"amarelo"},{en:"black",pt:"preto"},{en:"white",pt:"branco"},{en:"gray",pt:"cinza"},{en:"purple",pt:"roxo"},{en:"brown",pt:"marrom"},{en:"orange",pt:"laranja"},{en:"pink",pt:"rosa"},{en:"favorite",pt:"favorito"},{en:"old",pt:"velho"},{en:"new",pt:"novo"},{en:"cute",pt:"fofo"},{en:"big",pt:"grande"},{en:"ugly",pt:"feio"},{en:"nice",pt:"agradável"},{en:"beautiful",pt:"lindo"},{en:"quiet",pt:"silencioso"},{en:"noisy",pt:"barulhento"}],
+        adverbs:[{en:"there was",pt:"havia (sing.)"},{en:"there were",pt:"havia (pl.)"},{en:"next to",pt:"ao lado de"},{en:"what color",pt:"de que cor"},{en:"how old",pt:"quantos anos"},{en:"favorite color",pt:"cor favorita"},{en:"on the weekend",pt:"no fim de semana"},{en:"at home",pt:"em casa"}],
+        grammar:[
+          {title:"There was / There were",rules:["There was a couch in the living room.","There were two chairs next to the table.","What was your favorite color?"]},
+          {title:"Question types",rules:["yes/no questions ; information questions ; short answers.","what color / how old / favorite things."]}
+        ]}, phrases:[{en:"My favorite color was blue",pt:"Minha cor favorita era azul"},{en:"There were toys in the yard",pt:"Havia brinquedos no quintal"},{en:"There was a couch in the living room",pt:"Havia um sofá na sala de estar"}]}
     ]});
+
+    // aplica conjugação automática a todos os verbos sem "c"
+    courseData.forEach(function(u){ u.lessons.forEach(function(l){ if(l.content && l.content.verbs){ l.content.verbs.forEach(function(v){ if(!v.c) v.c=autoConj(v.en); }); } }); });
 
     // ==========================================
     // MOTOR DE ÁUDIO (TEXT-TO-SPEECH)
@@ -1774,7 +742,7 @@
             </div>`;
         }).join('');
         return `<div class="flex flex-col items-center justify-center min-h-[100dvh] w-full p-4 relative z-10 animate-fade-in">
-            <div class="mb-10 text-center"><h1 class="text-4xl md:text-5xl font-extrabold text-[#1d1d1f] tracking-tight mb-3 drop-shadow-sm">English A1</h1>
+            <div class="mb-10 text-center"><h1 class="text-4xl md:text-5xl font-extrabold text-[#1d1d1f] tracking-tight mb-3 drop-shadow-sm">Learn English</h1>
             <p class="text-[#86868b] font-medium text-lg uppercase tracking-widest">Select a Unit</p></div>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-12 w-full max-w-5xl px-4">${gridHTML}</div>
         </div>`;
