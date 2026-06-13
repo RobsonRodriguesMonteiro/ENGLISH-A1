@@ -618,12 +618,28 @@
             .replace(/\s+/g, ' ')
             .trim();
     }
-    // Vozes neurais (Amazon Polly via StreamElements). O <audio> reproduz mídia
-    // de outra origem sem exigir CORS, então funciona em qualquer navegador.
-    const TTS_VOICES = ["Joanna", "Matthew"]; // en-US natural
-    let _ttsAudio = null;
+    // Quebra o texto em pedaços curtos (respeitando palavras) para os serviços de voz.
+    function chunkText(t, max){
+        max = max || 190;
+        const words = t.split(' '); const out = []; let cur = '';
+        for (const w of words){
+            if ((cur + ' ' + w).trim().length > max){ if (cur) out.push(cur.trim()); cur = w; }
+            else { cur = (cur ? cur + ' ' : '') + w; }
+        }
+        if (cur.trim()) out.push(cur.trim());
+        return out.length ? out : [t];
+    }
+    // Provedores de voz neural na nuvem (reproduzidos por <audio>, sem exigir CORS
+    // -> mesma voz natural em qualquer dispositivo/navegador).
+    function ttsUrl(provider, txt){
+        const q = encodeURIComponent(txt);
+        if (provider === 0) return 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=' + q;
+        return 'https://api.streamelements.com/kb/v2/speech?voice=Brian&text=' + q;
+    }
+    let _audio = null; let _token = 0;
     function stopAudio(){
-        try { if (_ttsAudio) { _ttsAudio.onerror = null; _ttsAudio.pause(); _ttsAudio.src = ''; _ttsAudio = null; } } catch(e){}
+        _token++;
+        try { if (_audio){ _audio.onerror = null; _audio.onended = null; _audio.oncanplay = null; _audio.pause(); _audio.src = ''; _audio = null; } } catch(e){}
         try { if (synth) synth.cancel(); } catch(e){}
     }
     window.playAudio = (text, event) => {
@@ -631,22 +647,40 @@
         const clean = cleanForSpeech(text);
         if (!clean) return;
         stopAudio();
-        // StreamElements tem limite de tamanho; para textos longos use a voz local.
-        if (clean.length > 280) { speakFallback(clean); return; }
-        let used = false;
-        try {
-            const url = 'https://api.streamelements.com/kb/v2/speech?voice=' + TTS_VOICES[0] +
-                        '&text=' + encodeURIComponent(clean);
-            const a = new Audio();
-            a.crossOrigin = 'anonymous';
-            _ttsAudio = a;
-            a.src = url;
-            a.onerror = () => { if (used) return; used = true; speakFallback(clean); };
-            const p = a.play();
-            if (p && p.catch) { p.catch(() => { if (used) return; used = true; speakFallback(clean); }); }
-        } catch(e) {
-            speakFallback(clean);
+        const myToken = _token;
+        const chunks = chunkText(clean, 190);
+        let idx = 0; let fellBack = false;
+        function fallbackAll(){
+            if (myToken !== _token || fellBack) return;
+            fellBack = true;
+            speakFallback(clean); // voz do aparelho (reserva)
         }
+        function playChunk(){
+            if (myToken !== _token || idx >= chunks.length) return;
+            const txt = chunks[idx];
+            let provider = 0;
+            function tryProvider(){
+                if (myToken !== _token) return;
+                let started = false, done = false;
+                const a = new Audio(); _audio = a; a.preload = 'auto';
+                const guard = setTimeout(() => { if (!started && !done){ done = true; nextOrFallback(); } }, 3500);
+                a.oncanplay = () => { started = true; clearTimeout(guard); };
+                a.onended = () => { if (myToken !== _token) return; clearTimeout(guard); idx++; playChunk(); };
+                a.onerror = () => { if (done) return; done = true; clearTimeout(guard); nextOrFallback(); };
+                function nextOrFallback(){
+                    if (myToken !== _token) return;
+                    provider++;
+                    if (provider <= 1) tryProvider(); else fallbackAll();
+                }
+                try {
+                    a.src = ttsUrl(provider, txt);
+                    const p = a.play();
+                    if (p && p.catch) p.catch(() => {});
+                } catch(e){ if (!done){ done = true; clearTimeout(guard); nextOrFallback(); } }
+            }
+            tryProvider();
+        }
+        playChunk();
     };
 
     // ---------- ÍCONES QUE REPRESENTAM CADA PALAVRA (Lucide) ----------
