@@ -618,19 +618,39 @@
             .replace(/\s+/g, ' ')
             .trim();
     }
-    // Quebra o texto em pedaços curtos (respeitando palavras) para os serviços de voz.
+    // Detecta celular/tablet: nesses aparelhos só o áudio disparado DIRETAMENTE no
+    // toque funciona, então usamos a voz nativa do dispositivo (que é natural nos
+    // celulares modernos: Google TTS no Android, vozes da Apple no iPhone).
+    const isMobileDevice = /Android|iPhone|iPad|iPod|Mobile|IEMobile|BlackBerry|Opera Mini/i.test(navigator.userAgent || '')
+        || (typeof navigator.maxTouchPoints === 'number' && navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform || ''));
+    // Quebra o texto em pedaços curtos (respeitando palavras).
     function chunkText(t, max){
-        max = max || 190;
-        const words = t.split(' '); const out = []; let cur = '';
+        max = max || 180;
+        const words = String(t).split(' '); const out = []; let cur = '';
         for (const w of words){
             if ((cur + ' ' + w).trim().length > max){ if (cur) out.push(cur.trim()); cur = w; }
             else { cur = (cur ? cur + ' ' : '') + w; }
         }
         if (cur.trim()) out.push(cur.trim());
-        return out.length ? out : [t];
+        return out.length ? out : [String(t)];
     }
-    // Provedores de voz neural na nuvem (reproduzidos por <audio>, sem exigir CORS
-    // -> mesma voz natural em qualquer dispositivo/navegador).
+    // Voz nativa do dispositivo (Web Speech API). Chamada SÍNCRONA dentro do toque,
+    // então toca em qualquer navegador e em qualquer celular.
+    function speakDevice(clean){
+        if (!synth) return false;
+        try {
+            synth.cancel();
+            if (!bestVoice) bestVoice = pickBestVoice();
+            chunkText(clean, 160).forEach(function(part){
+                const u = new SpeechSynthesisUtterance(part);
+                u.lang = 'en-US'; u.rate = 0.95; u.pitch = 1.0; u.volume = 1;
+                if (bestVoice) u.voice = bestVoice;
+                synth.speak(u);
+            });
+            return true;
+        } catch(e){ return false; }
+    }
+    // Provedores de voz neural na nuvem (reproduzidos por <audio>, sem exigir CORS).
     function ttsUrl(provider, txt){
         const q = encodeURIComponent(txt);
         if (provider === 0) return 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=' + q;
@@ -642,45 +662,39 @@
         try { if (_audio){ _audio.onerror = null; _audio.onended = null; _audio.oncanplay = null; _audio.pause(); _audio.src = ''; _audio = null; } } catch(e){}
         try { if (synth) synth.cancel(); } catch(e){}
     }
+    // Computador: tenta a voz natural na nuvem; se falhar, usa a voz do sistema.
+    function cloudThenDevice(clean){
+        const myToken = _token;
+        const chunks = chunkText(clean, 190);
+        let idx = 0, fellBack = false;
+        function fallbackAll(){ if (myToken !== _token || fellBack) return; fellBack = true; speakDevice(clean); }
+        function playChunk(){
+            if (myToken !== _token || idx >= chunks.length) return;
+            const txt = chunks[idx]; let provider = 0;
+            (function tryProvider(){
+                if (myToken !== _token) return;
+                let started = false, done = false;
+                const a = new Audio(); _audio = a; a.preload = 'auto';
+                const guard = setTimeout(function(){ if (!started && !done){ done = true; nextOrFallback(); } }, 3000);
+                a.oncanplay = function(){ started = true; clearTimeout(guard); };
+                a.onended = function(){ if (myToken !== _token) return; clearTimeout(guard); idx++; playChunk(); };
+                a.onerror = function(){ if (done) return; done = true; clearTimeout(guard); nextOrFallback(); };
+                function nextOrFallback(){ if (myToken !== _token) return; provider++; if (provider <= 1) tryProvider(); else fallbackAll(); }
+                try { a.src = ttsUrl(provider, txt); const p = a.play(); if (p && p.catch) p.catch(function(){}); }
+                catch(e){ if (!done){ done = true; clearTimeout(guard); nextOrFallback(); } }
+            })();
+        }
+        playChunk();
+    }
     window.playAudio = (text, event) => {
         if (event) { event.stopPropagation(); event.preventDefault(); }
         const clean = cleanForSpeech(text);
         if (!clean) return;
         stopAudio();
-        const myToken = _token;
-        const chunks = chunkText(clean, 190);
-        let idx = 0; let fellBack = false;
-        function fallbackAll(){
-            if (myToken !== _token || fellBack) return;
-            fellBack = true;
-            speakFallback(clean); // voz do aparelho (reserva)
-        }
-        function playChunk(){
-            if (myToken !== _token || idx >= chunks.length) return;
-            const txt = chunks[idx];
-            let provider = 0;
-            function tryProvider(){
-                if (myToken !== _token) return;
-                let started = false, done = false;
-                const a = new Audio(); _audio = a; a.preload = 'auto';
-                const guard = setTimeout(() => { if (!started && !done){ done = true; nextOrFallback(); } }, 3500);
-                a.oncanplay = () => { started = true; clearTimeout(guard); };
-                a.onended = () => { if (myToken !== _token) return; clearTimeout(guard); idx++; playChunk(); };
-                a.onerror = () => { if (done) return; done = true; clearTimeout(guard); nextOrFallback(); };
-                function nextOrFallback(){
-                    if (myToken !== _token) return;
-                    provider++;
-                    if (provider <= 1) tryProvider(); else fallbackAll();
-                }
-                try {
-                    a.src = ttsUrl(provider, txt);
-                    const p = a.play();
-                    if (p && p.catch) p.catch(() => {});
-                } catch(e){ if (!done){ done = true; clearTimeout(guard); nextOrFallback(); } }
-            }
-            tryProvider();
-        }
-        playChunk();
+        // Celular / tablet / qualquer dispositivo de toque: fala SÍNCRONA (garante o som).
+        if (isMobileDevice || !window.Audio) { speakDevice(clean); return; }
+        // Computador: voz natural na nuvem, com a voz do sistema como reserva.
+        cloudThenDevice(clean);
     };
 
     // ---------- ÍCONES QUE REPRESENTAM CADA PALAVRA (Lucide) ----------
