@@ -615,6 +615,7 @@
             .replace(/ - /g, '. ')
             .replace(/\.\.\./g, '. ')
             .replace(/&quot;/g, ' ')
+            .replace(/\b([A-Z])\b/g, function(m, c){ return c.toLowerCase(); }) // evita a voz dizer "capital I" (ou qualquer letra "capital")
             .replace(/\s+/g, ' ')
             .trim();
     }
