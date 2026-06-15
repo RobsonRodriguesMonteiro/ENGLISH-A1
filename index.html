@@ -810,8 +810,9 @@
         return `<div class="flex items-center justify-center min-h-[100dvh] w-full p-4 relative z-20 animate-fade-in folder-overlay">
             <button onclick="goHome()" class="absolute top-4 md:top-6 left-4 md:left-6 p-3 rounded-full bg-white/40 backdrop-blur-md border border-white/60 text-slate-700 hover:bg-white/60 transition shadow-sm z-50"><i data-lucide="x" class="w-6 h-6"></i></button>
             <div class="folder-container flex flex-col items-center w-full max-w-5xl">
-                <div class="text-center mb-10 mt-8 md:mt-0"><h2 class="text-3xl md:text-4xl font-extrabold text-[#1d1d1f] tracking-tight mb-2">${unit.title}</h2>
+                <div class="text-center mb-6 mt-8 md:mt-0"><h2 class="text-3xl md:text-4xl font-extrabold text-[#1d1d1f] tracking-tight mb-2">${unit.title}</h2>
                 <span class="px-4 py-1.5 bg-white/50 text-[#1d1d1f] text-sm font-bold rounded-full uppercase tracking-widest border border-white/80 shadow-sm inline-block">${unit.subtitle}</span></div>
+                <button onclick="startUnitPractice(${state.activeUnitIdx})" class="practice-btn practice-btn-primary px-6 py-3 rounded-2xl text-sm font-bold flex items-center gap-2 mb-8 mx-auto"><i data-lucide="gamepad-2" class="w-5 h-5 text-white"></i><span class="text-white">Prática da Unidade</span></button>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full px-2 md:px-4 pb-8">${lessonsHTML}</div>
             </div>
         </div>`;
@@ -937,6 +938,195 @@
     }
     function shuffle(a){ return a.slice().sort(() => 0.5 - Math.random()); }
     function sample(arr, n){ return shuffle(arr).slice(0, n); }
+    // ============================================================
+    //  GERADOR DE FRASES — garante, em CADA prática (lição e unidade),
+    //  >= 10 afirmativas, >= 5 negativas e >= 5 interrogativas, a partir do
+    //  conteúdo real (phrases + grammar). Quando faltam, transforma frases
+    //  afirmativas reais em negativas/interrogativas (regras de A1: to be,
+    //  can, going to, presente simples) para manter o sentido e o contexto.
+    // ============================================================
+    function _stripEnd(s){ return (s||'').replace(/\s+/g,' ').trim().replace(/[\s]*[.?!]+$/,''); }
+    function _normSent(s){ return _stripEnd(s).toLowerCase().replace(/[^a-z0-9' ]/g,'').replace(/\s+/g,' ').trim(); }
+    function tokenizeSentence(en){ return _stripEnd(en).split(/\s+/).map(w=>w.replace(/[",.;:!?]+$/,'').replace(/^[",.;:!?]+/,'')).filter(Boolean); }
+    function isUsableSentence(s){
+        s = (s||'').trim();
+        if(!/^[A-Z]/.test(s)) return false;
+        if(/^(yes|no)\b/i.test(s)) return false;                  // descarta respostas curtas
+        if(/[=\/_@()\[\]<>]|->|\.\.\.|[0-9]/.test(s)) return false;
+        if(/[áàâãéêíóôõúüçÁÀÂÃÉÊÍÓÔÕÚÇ]/.test(s)) return false; // descarta trechos em português
+        const words = s.replace(/[.?!]+$/,'').split(/\s+/).filter(Boolean);
+        if(words.length < 2 || words.length > 16) return false;
+        if((s.match(/,/g)||[]).length > 1) return false;          // descarta listas
+        if(/^\w+(,\s*\w+){2,}/.test(s)) return false;
+        return true;
+    }
+    const _WH = ['what','where','when','why','who','which','whose','how'];
+    const _AUXQ = ['do','does','did','is','are','am','was','were','can','could','will','would','should'];
+    function classifySentence(s){
+        s = (s||'').trim();
+        if(/\?\s*$/.test(s)) return 'int';
+        if(/\b(not|never)\b/i.test(s) || /\b(isn't|aren't|wasn't|weren't|don't|doesn't|didn't|can't|cannot|won't)\b/i.test(s)) return 'neg';
+        const first = (s.split(/\s+/)[0]||'').toLowerCase();
+        if(_WH.includes(first)){ if(first==='what' && /^what a\b/i.test(s)) return 'aff'; return 'int'; }
+        if(_AUXQ.includes(first)) return 'int';   // pergunta sem "?" (ex.: "Are you Brazilian")
+        return 'aff';
+    }
+    function _endPunct(type){ return type==='int' ? '?' : '.'; }
+    function _cap(w){ return w ? w.charAt(0).toUpperCase()+w.slice(1) : w; }
+    function thirdToBase(v){
+        const lv = (v||'').toLowerCase();
+        const map = { has:'have', does:'do', goes:'go' };
+        if(map[lv]) return map[lv];
+        if(/ies$/.test(lv)) return lv.slice(0,-3)+'y';
+        if(/(ches|shes|sses|xes|zes|oes)$/.test(lv)) return lv.slice(0,-2);
+        if(/s$/.test(lv) && !/ss$/.test(lv)) return lv.slice(0,-1);
+        return lv;
+    }
+    const _BE = ['am','is','are','was','were'];
+    const _SKIP2 = ['a','an','the','my','your','his','her','our','their','this','that','these','those','to','in','on','at','of','and','but','or','with','for'];
+    function toNegative(en){
+        let w = tokenizeSentence(en); if(w.length < 2) return null;
+        const lw = w.map(x=>x.toLowerCase());
+        if(lw.some(x=>/n't$/.test(x)) || lw.includes('not') || lw.includes('never') || lw.includes('cannot')) return null;
+        // "There is/are X" -> "There is/are no X" (negativa natural)
+        if(lw[0]==='there' && _BE.includes(lw[1]) && w.length>=3){
+            let rest=w.slice(2);
+            if(['a','an','the','some','any'].includes((rest[0]||'').toLowerCase())) rest=rest.slice(1);
+            return _cap(w[0]+' '+w[1]+' no '+rest.join(' '))+'.';
+        }
+        let bi = lw.findIndex(x=>_BE.includes(x));
+        if(bi !== -1){ w.splice(bi+1,0,'not'); return _cap(w.join(' '))+'.'; }
+        let ci = lw.indexOf('can');
+        if(ci !== -1){ w[ci] = (/[A-Z]/.test(w[ci][0])) ? "Can't" : "can't"; return _cap(w.join(' '))+'.'; }
+        const pron = ['i','you','we','they','he','she','it'];
+        if(pron.includes(lw[0]) && w.length>=2){
+            let verb = lw[1];
+            if(_SKIP2.includes(verb)) return null;
+            if(['he','she','it'].includes(lw[0])) return _cap(w[0]+" doesn't "+thirdToBase(verb)+(w.slice(2).length?' '+w.slice(2).join(' '):''))+'.';
+            return _cap(w[0]+" don't "+w.slice(1).join(' '))+'.';
+        }
+        return null;
+    }
+    function toQuestion(en){
+        let w = tokenizeSentence(en); if(w.length < 2) return null;
+        const lw = w.map(x=>x.toLowerCase());
+        if(lw.some(x=>/n't$/.test(x)) || lw.includes('not')) return null;
+        let bi = lw.findIndex(x=>_BE.includes(x));
+        if(bi !== -1){
+            let rest = w.slice(0,bi).concat(w.slice(bi+1));
+            rest = rest.map((x,i)=> i===0 ? (x.toLowerCase()==='i'?'I':x.toLowerCase()) : x);
+            return _cap(lw[bi])+' '+rest.join(' ')+'?';
+        }
+        let ci = lw.indexOf('can');
+        if(ci !== -1){
+            let rest = w.slice(0,ci).concat(w.slice(ci+1));
+            rest = rest.map((x,i)=> i===0 ? (x.toLowerCase()==='i'?'I':x.toLowerCase()) : x);
+            return 'Can '+rest.join(' ')+'?';
+        }
+        const pron = ['i','you','we','they','he','she','it'];
+        if(pron.includes(lw[0]) && w.length>=2){
+            let verb = lw[1];
+            if(_SKIP2.includes(verb)) return null;
+            let subj = (lw[0]==='i')?'I':lw[0];
+            if(['he','she','it'].includes(lw[0])) return 'Does '+subj+' '+thirdToBase(verb)+(w.slice(2).length?' '+w.slice(2).join(' '):'')+'?';
+            return 'Do '+subj+' '+w.slice(1).join(' ')+'?';
+        }
+        return null;
+    }
+    // ----- modelos garantidos a partir de verbos e substantivos (frases simples e sensatas) -----
+    function actionBase(v){
+        let base=(v.en||'').replace(/\([^)]*\)/g,'').replace(/^to\s+/,'').trim().toLowerCase();
+        if(!base || base.length<2) return null;
+        if(base==='be' || base==='have' || base==='can') return null; // formas isoladas precisam de complemento
+        let head=base.split(' ')[0];
+        if(head==='be') return null;
+        return base;
+    }
+    const _UNCOUNTABLE = new Set(['information','news','furniture','money','water','milk','coffee','tea','sugar','snow','rain','homework','work','nature','music','data','time','bread','food','luggage','baggage','advice','fun','chaos','noise','art','history','technology','travel','transportation','weather','grass','help','traffic','meat','beef','sand','space','health']);
+    function nounWord(n){
+        let base=(n.en||'').replace(/\([^)]*\)/g,'').split('/')[0].trim().toLowerCase();
+        if(!base || base.length<2 || /[^a-z' ]/.test(base)) return null;
+        return base;
+    }
+    function nounTpl(n, type){
+        const base=nounWord(n); if(!base) return null;
+        const firstW=base.split(' ')[0], lastW=base.split(' ').pop();
+        const unc=_UNCOUNTABLE.has(firstW)||_UNCOUNTABLE.has(lastW);
+        const plural=/[^s]s$/.test(lastW) && !unc;        // termina em s (não ss) => plural, sem artigo
+        const art=plural?'':(/^[aeiou]/.test(base)?'an ':'a ');
+        const obj=(unc||plural)?base:(art+base);
+        if(type==='aff') return 'I have '+obj+'.';
+        if(type==='neg') return "I don't have "+obj+'.';
+        return 'Do you have '+obj+'?';
+    }
+    function verbTpl(v, type){
+        const b=actionBase(v); if(!b) return null;
+        if(type==='aff') return 'I '+b+'.';
+        if(type==='neg') return "I don't "+b+'.';
+        return 'Do you '+b+'?';
+    }
+    function harvestSentences(lessons){
+        const out=[]; const seen=new Set();
+        function add(rawEn, pt){
+            let s=(rawEn||'').trim();
+            if(!isUsableSentence(s)) return;
+            const type=classifySentence(s);
+            const core=_stripEnd(s);
+            const key=type+'|'+_normSent(core);
+            if(!core || seen.has(key)) return; seen.add(key);
+            out.push({ en: core+_endPunct(type), pt: pt||null, type:type });
+        }
+        lessons.forEach(lesson=>{
+            (lesson.phrases||[]).forEach(p=> add(p.en, p.pt));
+            (lesson.content.grammar||[]).forEach(g=>{
+                (g.rules||[]).forEach(line=>{
+                    let en=line, pt=null;
+                    if(line.indexOf('=')!==-1){
+                        const i=line.indexOf('='); en=line.slice(0,i).trim();
+                        const after=line.slice(i+1).trim();
+                        if(/[áàâãéêíóôõúüçÁ-Ú]/.test(after)) pt=after.replace(/[.]+$/,'').trim();
+                    }
+                    const parts=en.split(/(?<=[.?!])\s+/);
+                    parts.forEach(sp=> add(sp, parts.length===1?pt:null));
+                });
+            });
+        });
+        return out;
+    }
+    function buildSentenceBank(lessons){
+        const harvested=harvestSentences(lessons);
+        let aff=shuffle(harvested.filter(x=>x.type==='aff'));
+        let neg=shuffle(harvested.filter(x=>x.type==='neg'));
+        let interro=shuffle(harvested.filter(x=>x.type==='int'));
+        const verbs=[], nouns=[];
+        lessons.forEach(l=>{ (l.content.verbs||[]).forEach(v=>verbs.push(v)); (l.content.nouns||[]).forEach(n=>nouns.push(n)); });
+        function pushU(arr, en, type, used){ if(!en) return false; const k=_normSent(en); if(k && !used.has(k)){ used.add(k); arr.push({en:en,pt:null,type:type}); return true; } return false; }
+        // 1) negativas/interrogativas naturais transformando AFIRMATIVAS reais (mantém contexto)
+        const usedNeg=new Set(neg.map(x=>_normSent(x.en)));
+        for(let i=0;i<aff.length && neg.length<5;i++) pushU(neg, toNegative(aff[i].en), 'neg', usedNeg);
+        const usedInt=new Set(interro.map(x=>_normSent(x.en)));
+        for(let i=0;i<aff.length && interro.length<5;i++) pushU(interro, toQuestion(aff[i].en), 'int', usedInt);
+        // 2) preenchimento GARANTIDO com modelos do conteúdo da lição (verbos e substantivos)
+        const usedAff=new Set(aff.map(x=>_normSent(x.en)));
+        shuffle(verbs).forEach(v=>{ if(aff.length<10) pushU(aff, verbTpl(v,'aff'), 'aff', usedAff); });
+        shuffle(nouns).forEach(n=>{ if(aff.length<10) pushU(aff, nounTpl(n,'aff'), 'aff', usedAff); });
+        shuffle(verbs).forEach(v=>{ if(neg.length<5) pushU(neg, verbTpl(v,'neg'), 'neg', usedNeg); });
+        shuffle(nouns).forEach(n=>{ if(neg.length<5) pushU(neg, nounTpl(n,'neg'), 'neg', usedNeg); });
+        shuffle(verbs).forEach(v=>{ if(interro.length<5) pushU(interro, verbTpl(v,'int'), 'int', usedInt); });
+        shuffle(nouns).forEach(n=>{ if(interro.length<5) pushU(interro, nounTpl(n,'int'), 'int', usedInt); });
+        return { aff:aff, neg:neg, int:interro };
+    }
+    function makeOrderActivity(s, vocab){
+        const answer=tokenizeSentence(s.en);
+        const lowerSet=answer.map(w=>w.toLowerCase());
+        const distract=sample((vocab||[]).filter(v=> lowerSet.indexOf(v.en.toLowerCase())<0), 2).map(v=> v.en.split(/\s+/)[0]);
+        return { type:'orderSentence', subtype:s.type, en:s.en, pt:s.pt||null, answer:answer, pool:shuffle(answer.concat(distract)) };
+    }
+    function sentenceActivities(lessons, vocab){
+        const bank=buildSentenceBank(lessons);
+        const chosen=[...bank.aff.slice(0,10), ...bank.neg.slice(0,5), ...bank.int.slice(0,5)];
+        return chosen.map(s=> makeOrderActivity(s, vocab));
+    }
     function generateActivitiesForLesson(unitIdx, lessonIdx){
         const lesson = courseData[unitIdx].lessons[lessonIdx];
         const content = lesson.content;
@@ -984,12 +1174,43 @@
             let opts = [correct, ...sample(vocab.filter(v=>v.en.toLowerCase()!==correct.toLowerCase()),3).map(x=>x.en.split(/\s+/)[0])];
             acts.push({ type:'fillBlank', en:p.en, pt:p.pt, words:words, gapIndex:gi, answer:correct, options: shuffle(opts) });
         });
+        // 10. GARANTIDO: 10 frases afirmativas + 5 negativas + 5 interrogativas da lição
+        acts.push(...sentenceActivities([lesson], vocab));
         return shuffle(acts);
+    }
+    function generateActivitiesForUnit(unitIdx){
+        const unit = courseData[unitIdx];
+        const lessons = unit.lessons;
+        let vocab = [];
+        lessons.forEach(l => vocab.push(...buildVocabPool(l.content)));
+        const seen = new Set(); vocab = vocab.filter(x => !seen.has(x.en) && seen.add(x.en));
+        if (vocab.length < 4) return [];
+        let acts = [];
+        acts.push({ type:'memory', pairs: sample(vocab,3) });
+        acts.push({ type:'match', pairs: sample(vocab,4) });
+        sample(vocab,3).forEach(it => { let opts=[it.pt,...sample(vocab.filter(x=>x.pt!==it.pt),3).map(x=>x.pt)]; acts.push({type:'choosePt',item:it,options:shuffle(opts)}); });
+        sample(vocab,3).forEach(it => { let opts=[it.en,...sample(vocab.filter(x=>x.en!==it.en),3).map(x=>x.en)]; acts.push({type:'chooseEn',item:it,options:shuffle(opts)}); });
+        sample(vocab,3).forEach(it => { let opts=[it.en,...sample(vocab.filter(x=>x.en!==it.en),3).map(x=>x.en)]; acts.push({type:'listen',item:it,options:shuffle(opts)}); });
+        sample(vocab,3).forEach(it => acts.push({type:'typeRead',item:it}));
+        // GARANTIDO: 10 afirmativas + 5 negativas + 5 interrogativas do conteúdo geral da unidade
+        acts.push(...sentenceActivities(lessons, vocab));
+        return shuffle(acts);
+    }
+    function startUnitPractice(unitIdx){
+        practiceState.activities = generateActivitiesForUnit(unitIdx);
+        if (practiceState.activities.length === 0){ alert("Conteúdo insuficiente para gerar a prática da unidade."); return; }
+        practiceState.active = true; practiceState.currentIndex = 0;
+        practiceState.hearts = Math.max(5, Math.ceil(practiceState.activities.length / 3));
+        document.getElementById('heartsCount').innerText = practiceState.hearts;
+        document.getElementById('practiceProgress').style.width = '0%';
+        document.getElementById('practiceModal').classList.remove('hidden');
+        document.getElementById('practiceModal').classList.add('flex');
+        loadActivity();
     }
     function startPractice(unitIdx, lessonIdx){
         practiceState.activities = generateActivitiesForLesson(unitIdx, lessonIdx);
         if (practiceState.activities.length === 0){ alert("Conteúdo insuficiente para gerar atividades nesta lição."); return; }
-        practiceState.active = true; practiceState.currentIndex = 0; practiceState.hearts = 5;
+        practiceState.active = true; practiceState.currentIndex = 0; practiceState.hearts = Math.max(5, Math.ceil(practiceState.activities.length / 3));
         document.getElementById('heartsCount').innerText = practiceState.hearts;
         document.getElementById('practiceProgress').style.width = '0%';
         document.getElementById('practiceModal').classList.remove('hidden');
@@ -1014,8 +1235,10 @@
         const title = document.getElementById('activityTitle');
         container.innerHTML = '';
         const titles = { match:"Associe os pares", memory:"Encontre os pares (Memória)", listen:"O que você ouviu?", choosePt:"Qual é a tradução?", chooseEn:"Como se diz em inglês?", translateEn:"Traduza para o inglês", fillBlank:"Complete a frase", typeHear:"Digite o que você ouviu", typeRead:"Digite a tradução em inglês" };
-        title.innerText = titles[activity.type] || '';
-        if (activity.type==='match') renderMatch(activity, container);
+        if (activity.type==='orderSentence') title.innerText = { aff:"Monte a frase afirmativa", neg:"Monte a frase negativa", int:"Monte a pergunta" }[activity.subtype] || "Monte a frase";
+        else title.innerText = titles[activity.type] || '';
+        if (activity.type==='orderSentence') renderOrderSentence(activity, container);
+        else if (activity.type==='match') renderMatch(activity, container);
         else if (activity.type==='memory') renderMemory(activity, container);
         else if (activity.type==='listen') renderListen(activity, container);
         else if (activity.type==='choosePt') renderChoose(activity, container, 'pt');
@@ -1203,6 +1426,35 @@
         updateTranslateCheckButton();
     }
     function updateTranslateCheckButton(){ enableCheckButton(document.getElementById('dropZone').children.length > 0); }
+    // ----- ORDENAR FRASE (afirmativa / negativa / interrogativa) -----
+    function renderOrderSentence(activity, container){
+        practiceState.listenSelection = null;
+        const badge = { aff:['Afirmativa','bg-teal-100 text-teal-700'], neg:['Negativa','bg-rose-100 text-rose-700'], int:['Interrogativa','bg-blue-100 text-blue-700'] }[activity.subtype] || ['Frase','bg-slate-100 text-slate-700'];
+        const head = document.createElement('div');
+        head.className = 'w-full max-w-2xl mx-auto p-5 md:p-6 bg-white/60 backdrop-blur-xl border border-white/80 rounded-[2rem] shadow-sm mb-8 text-center flex flex-col items-center gap-3';
+        head.innerHTML = `<span class="px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest ${badge[1]}">${badge[0]}</span>`
+            + (activity.pt ? `<div class="text-lg md:text-xl font-extrabold text-[#1d1d1f] tracking-tight leading-snug">${activity.pt}</div>` : `<p class="text-sm text-slate-500 font-medium">Ouça e monte a frase em inglês</p>`)
+            + `<button onclick="window.playAudio('${activity.en.replace(/'/g,"\\'")}', event)" class="w-12 h-12 bg-blue-50/80 text-[#0066cc] rounded-xl flex items-center justify-center hover:bg-blue-100 transition shadow-sm border border-blue-100"><i data-lucide="volume-2" class="w-5 h-5"></i></button>`;
+        container.appendChild(head);
+        const dropZone = document.createElement('div'); dropZone.id = 'dropZone';
+        dropZone.className = 'drop-zone flex flex-wrap gap-2 w-full max-w-2xl mx-auto mb-10 justify-center'; container.appendChild(dropZone);
+        const poolZone = document.createElement('div'); poolZone.className = 'flex flex-wrap justify-center gap-2.5 w-full max-w-2xl mx-auto';
+        activity.pool.forEach((word, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'word-block rounded-xl py-2.5 px-5 text-base md:text-lg font-bold text-slate-700';
+            btn.innerText = word; btn.id = `word-${index}`;
+            btn.onclick = () => {
+                if (practiceState.isChecking) return;
+                const clone = btn.cloneNode(true); clone.id = `clone-${index}`;
+                clone.onclick = () => { if (practiceState.isChecking) return; clone.remove(); btn.classList.remove('used'); updateTranslateCheckButton(); };
+                dropZone.appendChild(clone); btn.classList.add('used'); window.playAudio(word, null); updateTranslateCheckButton();
+            };
+            poolZone.appendChild(btn);
+        });
+        container.appendChild(poolZone);
+        updateTranslateCheckButton();
+        setTimeout(() => window.playAudio(activity.en, null), 350);
+    }
     // ----- FILL THE BLANK -----
     function renderFillBlank(activity, container){
         practiceState.listenSelection = null;
@@ -1249,7 +1501,7 @@
         if (practiceState.isChecking){ practiceState.currentIndex++; loadActivity(); return; }
         const activity = practiceState.activities[practiceState.currentIndex];
         let isCorrect = false; let correctAnswerText = ""; let audioText = "";
-        if (activity.type === 'translateEn'){
+        if (activity.type === 'translateEn' || activity.type === 'orderSentence'){
             const dropZone = document.getElementById('dropZone');
             const userWords = Array.from(dropZone.children).map(b => b.innerText.trim());
             isCorrect = userWords.join(' ').toLowerCase() === activity.answer.join(' ').toLowerCase();
